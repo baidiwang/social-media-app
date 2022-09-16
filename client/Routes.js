@@ -1,7 +1,8 @@
 import React, {Component, Fragment} from 'react'
 import {connect} from 'react-redux'
 import {withRouter, Route, Switch, Redirect} from 'react-router-dom'
-import { Login, Signup } from './components/AuthForm';
+import { Login } from './components/AuthForm';
+import { Signup } from './components/UserCreateForm';
 import Home from './components/Home';
 import {me} from './store'
 
@@ -12,7 +13,16 @@ class Routes extends Component {
   componentDidMount() {
     this.props.loadInitialData()
   }
+  componentDidUpdate(prevProps){
+    if(!prevProps.isLoggedIn && this.props.isLoggedIn){
+      //if we logged in, load startup data
 
+    }
+    if(prevProps.isLoggedIn && !this.props.isLoggedIn){
+      //if user logout
+
+    }
+  }
   render() {
     const {isLoggedIn} = this.props
 
@@ -48,9 +58,10 @@ const mapState = state => {
 
 const mapDispatch = dispatch => {
   return {
-    loadInitialData() {
+    loadInitialData: () => {
       dispatch(me())
-    }
+    },
+    //add load data with fetch startup datas i.e. messages, users, posts, likes
   }
 }
 
