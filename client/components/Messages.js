@@ -1,10 +1,9 @@
-//should be able to change/add avatar/profile picture of user
-//be able to use as a helper component
+//should be able to display chat from sender to receiver
 
 import React from 'react';
 import { connect } from 'react-redux';
 
-const ProfilePhoto = () => {
+const Messages = () => {
     return (
         <hr />
     )
@@ -19,4 +18,4 @@ const mapDispatch = dispatch => {
 
     }
 };
-export default connect(mapState, mapDispatch)(ProfilePhoto);
+export default connect(mapState, mapDispatch)(Messages);

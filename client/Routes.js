@@ -1,10 +1,17 @@
-import React, {Component, Fragment} from 'react'
-import {connect} from 'react-redux'
-import {withRouter, Route, Switch, Redirect} from 'react-router-dom'
+import React, {Component, Fragment} from 'react';
+import {connect} from 'react-redux';
+import {withRouter, Route, Switch, Redirect} from 'react-router-dom';
 import { Login } from './components/AuthForm';
 import { Signup } from './components/UserCreateForm';
 import Home from './components/Home';
-import {me} from './store'
+import {me} from './store';
+import UserUpdateForm from './components/UserUpdateForm';
+import ProfilePhotoForm from './components/ProfilePhotoForm';
+import UserPhotosPage from './components/UserPhotosPage';
+import Messages from './components/Messages';
+import PostCreateForm from './components/PostCreateForm';
+import PostUpdateForm form './components/PostUpdateForm';
+import UserProfilePage from './components/UserProfilePage';
 
 /**
  * COMPONENT
@@ -29,10 +36,18 @@ class Routes extends Component {
     return (
       <div>
         {isLoggedIn ? (
-          <Switch>
-            <Route path="/home" component={Home} />
-            <Redirect to="/home" />
-          </Switch>
+          <div>
+            { window.location.pathname === '' ? <Redirect to='/home' /> : null }
+            <Route exact path='/home' component={ Home } />
+            <Route exact path='/profile/:id' component={ UserProfilePage } />
+            <Route exact path='/profile/:id' component={ UserUpdateForm } />
+            <Route exact path='/profile/:id' component={ ProfilePhotoForm } />
+            <Route exact path='/profile/:id' component={ UserPhotosPage } />
+            <Route exact path='/profile/:id' component={ Messages } />
+            <Route exact path='posts' component={ PostCreateForm } />
+            <Route exact path='/posts/:id' component={ PostUpdateForm } />
+            <Route exact path='/posts/:id' component={ PhotosForPost } />
+          </div>
         ) : (
           <Switch>
             <Route path='/' exact component={ Login } />
