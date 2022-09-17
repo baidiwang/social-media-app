@@ -1,85 +1,84 @@
-import React, {Component, Fragment} from 'react';
-import {connect} from 'react-redux';
-import {withRouter, Route, Switch, Redirect} from 'react-router-dom';
-import { Login } from './components/AuthForm';
-import { Signup } from './components/UserCreateForm';
-import Home from './components/Home';
-import {me} from './store';
-import UserUpdateForm from './components/UserUpdateForm';
-import ProfilePhotoForm from './components/ProfilePhotoForm';
-import UserPhotosPage from './components/UserPhotosPage';
-import Messages from './components/Messages';
-import PostCreateForm from './components/PostCreateForm';
-import PostUpdateForm form './components/PostUpdateForm';
-import UserProfilePage from './components/UserProfilePage';
+import React, { Component, Fragment } from "react";
+import { connect } from "react-redux";
+import { withRouter, Route, Switch, Redirect } from "react-router-dom";
+import { Login } from "./components/AuthForm";
+import { Signup } from "./components/UserCreateForm";
+import Home from "./components/Home";
+import { me } from "./store";
+import UserUpdateForm from "./components/UserUpdateForm";
+import ProfilePhotoForm from "./components/ProfilePhotoForm";
+import UserPhotosPage from "./components/UserPhotosPage";
+import Messages from "./components/Messages";
+import PostCreateForm from "./components/PostCreateForm";
+import PostUpdateForm from "./components/PostUpdateForm";
+import UserProfilePage from "./components/UserProfilePage";
 
 /**
  * COMPONENT
  */
 class Routes extends Component {
   componentDidMount() {
-    this.props.loadInitialData()
+    this.props.loadInitialData();
   }
-  componentDidUpdate(prevProps){
-    if(!prevProps.isLoggedIn && this.props.isLoggedIn){
+  componentDidUpdate(prevProps) {
+    if (!prevProps.isLoggedIn && this.props.isLoggedIn) {
       //if we logged in, load startup data
-
     }
-    if(prevProps.isLoggedIn && !this.props.isLoggedIn){
+    if (prevProps.isLoggedIn && !this.props.isLoggedIn) {
       //if user logout
-
     }
   }
   render() {
-    const {isLoggedIn} = this.props
+    const { isLoggedIn } = this.props;
 
     return (
       <div>
         {isLoggedIn ? (
           <div>
-            { window.location.pathname === '' ? <Redirect to='/home' /> : null }
-            <Route exact path='/home' component={ Home } />
-            <Route exact path='/profile/:id' component={ UserProfilePage } />
-            <Route exact path='/profile/:id' component={ UserUpdateForm } />
-            <Route exact path='/profile/:id' component={ ProfilePhotoForm } />
-            <Route exact path='/profile/:id' component={ UserPhotosPage } />
-            <Route exact path='/profile/:id' component={ Messages } />
-            <Route exact path='posts' component={ PostCreateForm } />
-            <Route exact path='/posts/:id' component={ PostUpdateForm } />
-            <Route exact path='/posts/:id' component={ PhotosForPost } />
+            {window.location.pathname === "" ? <Redirect to="/home" /> : null}
+            <Route exact path="/home" component={Home} />
+            <Route exact path="/profile/:id" component={UserProfilePage} />
+            <Route exact path="/profile/:id" component={UserUpdateForm} />
+            <Route exact path="/profile/:id" component={ProfilePhotoForm} />
+            <Route exact path="/profile/:id" component={UserPhotosPage} />
+            <Route exact path="/profile/:id" component={Messages} />
+            <Route exact path="posts" component={PostCreateForm} />
+            <Route exact path="/posts/:id" component={PostUpdateForm} />
+            <Route exact path="/posts/:id" component={PhotosForPost} />
           </div>
         ) : (
           <Switch>
-            <Route path='/' exact component={ Login } />
+            <Route path="/" exact component={Login} />
+            {/* <Route path="/" exact component={Messages} /> */}
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
           </Switch>
         )}
       </div>
-    )
+    );
   }
 }
 
 /**
  * CONTAINER
  */
-const mapState = state => {
+const mapState = (state) => {
   return {
     // Being 'logged in' for our purposes will be defined has having a state.auth that has a truthy id.
     // Otherwise, state.auth will be an empty object, and state.auth.id will be falsey
-    isLoggedIn: !!state.auth.id
-  }
-}
+    isLoggedIn: !!state.auth.id,
+  };
+};
 
-const mapDispatch = dispatch => {
+const mapDispatch = (dispatch) => {
   return {
     loadInitialData: () => {
-      dispatch(me())
+      dispatch(me());
     },
     //add load data with fetch startup datas i.e. messages, users, posts, likes
-  }
-}
+  };
+};
 
 // The `withRouter` wrapper makes sure that updates are not blocked
 // when the url changes
-export default withRouter(connect(mapState, mapDispatch)(Routes))
+export default withRouter(connect(mapState, mapDispatch)(Routes));
