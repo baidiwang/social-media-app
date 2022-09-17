@@ -1,6 +1,6 @@
 'use strict'
-
-const {db, models: {User} } = require('../server/db')
+const { faker } = require('@faker-js/faker');
+const {db, models: {User, Photo, Post, Message, Comment, Like} } = require('../server/db')
 
 /**
  * seed - this function clears the database, updates tables to
@@ -72,35 +72,35 @@ async function seed() {
     Comment.create({body: faker.random.words(20), userId: 1, postId: 4}),
   ]);
   //creating photos
-  const photos = await Promize.all([
-    Photo.create({photoUrl: faker.images.cats(240, 240, true), userId: 1, postId: 1}),
-    Photo.create({photoUrl: faker.images.cats(240, 240, true), userId: 1, postId: 1}),
-    Photo.create({photoUrl: faker.images.cats(240, 240, true), userId: 1, postId: 1}),
-    Photo.create({photoUrl: faker.images.cats(240, 240, true), userId: 1, postId: 1}),
-    Photo.create({photoUrl: faker.images.cats(240, 240, true), userId: 1, postId: 1}),
-    Photo.create({photoUrl: faker.images.cats(240, 240, true), userId: 1, postId: 1}),
-    Photo.create({photoUrl: faker.images.cats(240, 240, true), userId: 1, postId: 1}),
-    Photo.create({photoUrl: faker.images.cats(240, 240, true), userId: 1, postId: 1}),
-    Photo.create({photoUrl: faker.images.cats(240, 240, true), userId: 1, postId: 1}),
-    Photo.create({photoUrl: faker.images.cats(240, 240, true), userId: 1, postId: 1}),
-    Photo.create({photoUrl: faker.images.cats(240, 240, true), userId: 1, postId: 1}),
-    Photo.create({photoUrl: faker.images.cats(240, 240, true), userId: 1, postId: 1}),
-    Photo.create({photoUrl: faker.images.cats(240, 240, true), userId: 1, postId: 1}),
+  const photos = await Promise.all([
+    Photo.create({photoUrl: faker.image.cats(240, 240, true), userId: 1, postId: 1}),
+    Photo.create({photoUrl: faker.image.cats(240, 240, true), userId: 1, postId: 1}),
+    Photo.create({photoUrl: faker.image.cats(240, 240, true), userId: 1, postId: 1}),
+    Photo.create({photoUrl: faker.image.cats(240, 240, true), userId: 1, postId: 1}),
+    Photo.create({photoUrl: faker.image.cats(240, 240, true), userId: 1, postId: 1}),
+    Photo.create({photoUrl: faker.image.cats(240, 240, true), userId: 1, postId: 1}),
+    Photo.create({photoUrl: faker.image.cats(240, 240, true), userId: 1, postId: 1}),
+    Photo.create({photoUrl: faker.image.cats(240, 240, true), userId: 1, postId: 1}),
+    Photo.create({photoUrl: faker.image.cats(240, 240, true), userId: 1, postId: 1}),
+    Photo.create({photoUrl: faker.image.cats(240, 240, true), userId: 1, postId: 1}),
+    Photo.create({photoUrl: faker.image.cats(240, 240, true), userId: 1, postId: 1}),
+    Photo.create({photoUrl: faker.image.cats(240, 240, true), userId: 1, postId: 1}),
+    Photo.create({photoUrl: faker.image.cats(240, 240, true), userId: 1, postId: 1}),
   ]);
   const messages = await Promise.all([
-    Message.create({text: faker.randomw.words(10), receiverId: 1, senderId: 2}),
-    Message.create({text: faker.randomw.words(10), receiverId: 2, senderId: 1}),
-    Message.create({text: faker.randomw.words(10), receiverId: 1, senderId: 2}),
-    Message.create({text: faker.randomw.words(10), receiverId: 2, senderId: 1}),
-    Message.create({text: faker.randomw.words(10), receiverId: 1, senderId: 2}),
-    Message.create({text: faker.randomw.words(10), receiverId: 4, senderId: 3}),
-    Message.create({text: faker.randomw.words(10), receiverId: 3, senderId: 4}),
-    Message.create({text: faker.randomw.words(10), receiverId: 4, senderId: 3}),
-    Message.create({text: faker.randomw.words(10), receiverId: 3, senderId: 4}),
-    Message.create({text: faker.randomw.words(10), receiverId: 6, senderId: 5}),
-    Message.create({text: faker.randomw.words(10), receiverId: 5, senderId: 6}),
-    Message.create({text: faker.randomw.words(10), receiverId: 6, senderId: 5}),
-    Message.create({text: faker.randomw.words(10), receiverId: 5, senderId: 6}),
+    Message.create({text: faker.random.words(10), receiverId: 1, senderId: 2}),
+    Message.create({text: faker.random.words(10), receiverId: 2, senderId: 1}),
+    Message.create({text: faker.random.words(10), receiverId: 1, senderId: 2}),
+    Message.create({text: faker.random.words(10), receiverId: 2, senderId: 1}),
+    Message.create({text: faker.random.words(10), receiverId: 1, senderId: 2}),
+    Message.create({text: faker.random.words(10), receiverId: 4, senderId: 3}),
+    Message.create({text: faker.random.words(10), receiverId: 3, senderId: 4}),
+    Message.create({text: faker.random.words(10), receiverId: 4, senderId: 3}),
+    Message.create({text: faker.random.words(10), receiverId: 3, senderId: 4}),
+    Message.create({text: faker.random.words(10), receiverId: 6, senderId: 5}),
+    Message.create({text: faker.random.words(10), receiverId: 5, senderId: 6}),
+    Message.create({text: faker.random.words(10), receiverId: 6, senderId: 5}),
+    Message.create({text: faker.random.words(10), receiverId: 5, senderId: 6}),
   ]);
   console.log(`seeded ${users.length} users`)
   console.log(`seeded successfully`)

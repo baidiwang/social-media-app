@@ -1,17 +1,17 @@
 import axios from 'axios';
 
-const users = (state = {}, action)=> {
+const users = (state = [], action)=> {
   if (action.type === 'SET_USERS'){
-    return action.users  
+    return action.users;
   }
   if(action.type === 'CREATE_USER'){
-    return [action.user, ...state]
+    return [action.user, ...state];
   }
   if(action.type === 'UPDATE_USERS'){
-    return state.map(user => user.id === action.user.id ? action.user : user)
+    return state.map(user => user.id === action.user.id ? action.user : user);
   }
   if(action.type === 'DELETE_USER') {
-    return state.filter((user)=> user.id !== action.user.id)
+    return state.filter((user)=> user.id !== action.user.id);
   }
   return state; 
 };
@@ -30,16 +30,19 @@ export const createUser = (credentials) => {
         console.log(error);
       }
     }
-    }
-  };
-
-export const setUsers = () => {
-    return async(dispatch)=>{
-        const users = (await axios.get('/api/users')).data;
-        dispatch({type: "SET_USERS", users})
-    }
+  }
 };
-
+export const setUsers = () => {
+    return async(dispatch) => {
+      const users = (await axios.get('/api/users', {
+        headers: {
+          authorization: window.localStorage.getItem('token')
+        }
+    })).data;
+    console.log(users)
+    dispatch({type: 'SET_USERS', users});
+  }
+};
 export const updateUsers = (user) => {
   return async(dispatch) => {
     try{
