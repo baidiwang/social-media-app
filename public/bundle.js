@@ -3166,13 +3166,18 @@ const UserProfilePage = ({
   user,
   auth
 }) => {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, auth.id === user.id ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "User and auth is same person") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "not the same"));
+  console.log(user);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, user.username, "'s profile", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
+    src: user.avatar
+  }), auth.id === user.id ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "User and auth is same person") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, "not the same"));
 };
 
 const mapState = (state, {
   match
 }) => {
-  const user = state.users.find(user => user.id === match.params.id * 1) || {};
+  const user = state.users.find(user => user.id === match.params.id) || {};
+  console.log(state.auth);
+  console.log(user);
   return {
     user,
     auth: state.auth

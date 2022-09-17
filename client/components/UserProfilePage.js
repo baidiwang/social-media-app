@@ -7,8 +7,11 @@ import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 const UserProfilePage = ({user, auth}) => {
+    console.log(user);
     return (
         <div>
+            {user.username}'s profile
+            <img src={user.avatar}></img>
             {
                 auth.id === user.id ?
                 <p>User and auth is same person</p>
@@ -19,7 +22,9 @@ const UserProfilePage = ({user, auth}) => {
     )
 };
 const mapState = (state, { match })=> {
-    const user = state.users.find(user => user.id === match.params.id*1) || {};
+    const user = state.users.find(user => user.id === match.params.id) || {};
+    console.log(state.auth);
+    console.log(user);
     return {
         user,
         auth: state.auth
