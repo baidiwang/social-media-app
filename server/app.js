@@ -45,3 +45,12 @@ app.use((err, req, res, next) => {
   console.error(err.stack)
   res.status(err.status || 500).send(err.message || 'Internal server error.')
 })
+
+app.get('/api/users', async(req,res,next)=>{
+  try{
+    res.status(200).send(await User.findAll());
+
+  }catch(er){
+    next(er);
+  }
+});
