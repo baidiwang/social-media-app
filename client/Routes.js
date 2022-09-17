@@ -4,14 +4,16 @@ import {withRouter, Route, Switch, Redirect} from 'react-router-dom';
 import { Login } from './components/AuthForm';
 import { Signup } from './components/UserCreateForm';
 import Home from './components/Home';
-import {me} from './store';
+import { me, setUsers } from './store';
 import UserUpdateForm from './components/UserUpdateForm';
 import ProfilePhotoForm from './components/ProfilePhotoForm';
 import UserPhotosPage from './components/UserPhotosPage';
 import Messages from './components/Messages';
 import PostCreateForm from './components/PostCreateForm';
-import PostUpdateForm form './components/PostUpdateForm';
+import PostUpdateForm from './components/PostUpdateForm';
 import UserProfilePage from './components/UserProfilePage';
+import PhotosForPost from './components/PhotosForPost';
+
 
 /**
  * COMPONENT
@@ -23,6 +25,7 @@ class Routes extends Component {
   componentDidUpdate(prevProps){
     if(!prevProps.isLoggedIn && this.props.isLoggedIn){
       //if we logged in, load startup data
+      this.props.loadData()
 
     }
     if(prevProps.isLoggedIn && !this.props.isLoggedIn){
@@ -77,6 +80,10 @@ const mapDispatch = dispatch => {
       dispatch(me())
     },
     //add load data with fetch startup datas i.e. messages, users, posts, likes
+    loadData: () => {
+      dispatch(setUsers())
+      //dispatch(setPosts())
+    }
   }
 }
 
