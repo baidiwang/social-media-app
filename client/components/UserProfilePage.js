@@ -6,31 +6,23 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-const UserProfilePage = ({users}) => {
-
-
-
-        const {id} = useParams();
-        console.log(users);
-        
-        const user_list = users || [];
-        const user = user_list.find(( u => u.id === id*1))
-
-        return (
-            <h1>{user.username}</h1>
-    
-        )
-
-
-
-
-
+const UserProfilePage = ({user, auth}) => {
+    return (
+        <div>
+            {
+                auth.id === user.id ?
+                <p>User and auth is same person</p>
+                :
+                <p>not the same</p>
+            }
+        </div>
+    )
 };
-const mapState = state => {
-    console.log(state);
-
+const mapState = (state, { match })=> {
+    const user = state.users.find(user => user.id === match.params.id*1) || {};
     return {
-        users: state.users 
+        user,
+        auth: state.auth
     }
 };
 const mapDispatch = dispatch => {
@@ -38,4 +30,4 @@ const mapDispatch = dispatch => {
 
     }
 };
-export default connect(mapState, mapDispatch)(UserProfilePage);
+export default connect(mapState)(UserProfilePage);
