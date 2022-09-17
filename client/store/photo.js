@@ -1,0 +1,44 @@
+import axios from 'axios';
+
+const photos = (state = [], action) => {
+    if(action.type === 'SET_PHOTOS'){
+        return action.photos;
+    }
+    else if(action.type === 'ADD_PHOTO'){
+        return [action.photo, ...state];
+    }
+    else if(action.type === 'DELETE_PHOTO'){
+        return state.filter(photo => photo.id !== action.photo.id);
+    }
+    return state;
+};
+
+export const setPhotos = () => {
+    return async(dispatch) => {
+        const photos = (await axios.get('/api/photos', {
+            headers: {
+                authorization: window.localStorage.getItem('token')
+            }
+        })).data;
+        console.log(photos);
+        dispatch({type: 'SET_PHOTOS', photos});
+    }
+};
+export const addPhoto = (photo, postId, authId) => {
+    return async(dispatch) => {
+        photo = (await axios.post('/api/photos', {
+            photoUrl : photo,
+            userId: authId,
+            postId: postId,
+            date: new Date()
+        },
+        {
+            headers: {
+                authorization: window.localStorage.getItem('token')
+            }
+        })).data;
+        console.log(photo);
+        dispatch({type: 'ADD_PHOTO', photo});
+    }
+}
+export default photos;

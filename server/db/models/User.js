@@ -42,7 +42,15 @@ User.prototype.correctPassword = function(candidatePwd) {
 User.prototype.generateToken = function() {
   return jwt.sign({id: this.id}, process.env.JWT)
 }
-
+//get all photos
+User.prototype.getPhotos = async function(){
+  const photos = await db.models.photo.findAll();
+  return photos;
+};
+User.prototype.addPhoto = async function(photo){
+  photo = await db.models.photo.create(photo);
+  return photo;
+}
 /**
  * classMethods
  */

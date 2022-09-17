@@ -4,7 +4,7 @@ import {withRouter, Route, Switch, Redirect} from 'react-router-dom';
 import { Login } from './components/AuthForm';
 import { Signup } from './components/UserCreateForm';
 import Home from './components/Home';
-import { me, setUsers } from './store';
+import { me, setUsers, setPhotos } from './store';
 import UserUpdateForm from './components/UserUpdateForm';
 import ProfilePhotoForm from './components/ProfilePhotoForm';
 import UserPhotosPage from './components/UserPhotosPage';
@@ -82,6 +82,7 @@ const mapDispatch = dispatch => {
     //add load data with fetch startup datas i.e. messages, users, posts, likes
     loadData: () => {
       dispatch(setUsers())
+      dispatch(setPhotos())
       //dispatch(setPosts())
     }
   }

@@ -2628,7 +2628,8 @@ const mapDispatch = dispatch => {
     },
     //add load data with fetch startup datas i.e. messages, users, posts, likes
     loadData: () => {
-      dispatch((0,_store__WEBPACK_IMPORTED_MODULE_5__.setUsers)()); //dispatch(setPosts())
+      dispatch((0,_store__WEBPACK_IMPORTED_MODULE_5__.setUsers)());
+      dispatch((0,_store__WEBPACK_IMPORTED_MODULE_5__.setPhotos)()); //dispatch(setPosts())
     }
   };
 }; // The `withRouter` wrapper makes sure that updates are not blocked
@@ -2909,21 +2910,98 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../store */ "./client/store/index.js");
 //should be able to upload images using this component
 //should be able to use it as a helper component for post / update post
 
 
 
-const PhotosForPost = () => {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("hr", null);
-};
 
-const mapState = state => {
-  return {};
+class PhotosForPost extends (react__WEBPACK_IMPORTED_MODULE_0___default().Component) {
+  constructor() {
+    super();
+    this.state = {
+      photos: []
+    };
+    this.onChangePhoto = this.onChangePhoto.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  onChangePhoto = e => {
+    console.log(e.target.files);
+    const photo = e.target.files[0];
+    const reader = new FileReader();
+    reader.addEventListener('load', () => {
+      this.setState({
+        photos: [...this.state.photos, reader.result]
+      });
+    });
+    reader.readAsDataURL(photo);
+  };
+  handleSubmit = e => {
+    e.preventDefault();
+    console.log(this.state.photos);
+    this.state.photos.map(photo => {
+      this.props.addPhoto(photo, this.props.post.id);
+    });
+    this.setState({
+      photos: []
+    });
+  };
+
+  render() {
+    const {
+      onChangePhoto,
+      handleSubmit
+    } = this;
+    const {
+      photos
+    } = this.state;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
+      onSubmit: handleSubmit
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("label", null, "Photo:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
+      type: "file",
+      multiple: true,
+      onChange: onChangePhoto
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", {
+      className: "form-photos-display"
+    }, photos.map(photo => {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", {
+        key: photo
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
+        src: photo ? photo : null,
+        width: "120",
+        height: "120"
+      }));
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+      type: "submit"
+    }, "Add Photos"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+      onClick: () => this.setState({
+        photos: []
+      })
+    }, "Reset"));
+  }
+
+}
+
+;
+
+const mapState = (state, {
+  match
+}) => {
+  const post = state.posts.find(post => post.id === match?.params.id * 1) || {};
+  return {
+    post,
+    auth: state.auth
+  };
 };
 
 const mapDispatch = dispatch => {
-  return {};
+  return {
+    addPhoto: (image, postId) => {
+      dispatch((0,_store__WEBPACK_IMPORTED_MODULE_2__.addPhoto)(image, postlId));
+    }
+  };
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_redux__WEBPACK_IMPORTED_MODULE_1__.connect)(mapState, mapDispatch)(PhotosForPost));
@@ -2934,33 +3012,9 @@ const mapDispatch = dispatch => {
 /*!*********************************************!*\
   !*** ./client/components/PostCreateForm.js ***!
   \*********************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/***/ (() => {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-//solely to create a post and add photosforpost component as helper compoent
-
-
-
-const PostCreateForm = () => {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("hr", null);
-};
-
-const mapState = state => {
-  return {};
-};
-
-const mapDispatch = dispatch => {
-  return {};
-};
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_redux__WEBPACK_IMPORTED_MODULE_1__.connect)(mapState, mapDispatch)(PostCreateForm));
+throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: /Users/dididances29/capstone-social-media/client/components/PostCreateForm.js: Unexpected keyword 'this'. (36:30)\n\n\u001b[0m \u001b[90m 34 |\u001b[39m     handleSubmit \u001b[33m=\u001b[39m (e) \u001b[33m=>\u001b[39m {\u001b[0m\n\u001b[0m \u001b[90m 35 |\u001b[39m         e\u001b[33m.\u001b[39mpreventDefault()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 36 |\u001b[39m         \u001b[36mconst\u001b[39m { photos\u001b[33m,\u001b[39m body\u001b[33m,\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprops\u001b[33m.\u001b[39mauth } \u001b[33m=\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mstate\u001b[33m;\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    |\u001b[39m                               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 37 |\u001b[39m         \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mprops\u001b[33m.\u001b[39mcreatePostWithImages()\u001b[0m\n\u001b[0m \u001b[90m 38 |\u001b[39m         \u001b[90m// addPost(body, this.props.auth.id)\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 39 |\u001b[39m         \u001b[90m// console.log(this.state.photos)\u001b[39m\u001b[0m\n    at instantiate (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:72:32)\n    at constructor (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:367:12)\n    at JSXParserMixin.raise (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:3684:19)\n    at JSXParserMixin.checkReservedWord (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:14343:12)\n    at JSXParserMixin.parseObjectProperty (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:13970:12)\n    at JSXParserMixin.parseObjPropValue (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:13998:100)\n    at JSXParserMixin.parseBindingProperty (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:12202:17)\n    at JSXParserMixin.parseObjectLike (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:13804:21)\n    at JSXParserMixin.parseBindingAtom (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:12128:21)\n    at JSXParserMixin.parseVarId (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:15611:20)\n    at JSXParserMixin.parseVar (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:15586:12)\n    at JSXParserMixin.parseVarStatement (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:15389:10)\n    at JSXParserMixin.parseStatementContent (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:14915:21)\n    at JSXParserMixin.parseStatement (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:14840:17)\n    at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:15499:25)\n    at JSXParserMixin.parseBlockBody (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:15490:10)\n    at JSXParserMixin.parseBlock (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:15474:10)\n    at JSXParserMixin.parseFunctionBody (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:14148:24)\n    at JSXParserMixin.parseArrowExpression (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:14119:10)\n    at JSXParserMixin.parseParenAndDistinguishExpression (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:13618:12)\n    at JSXParserMixin.parseExprAtom (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:13176:23)\n    at JSXParserMixin.parseExprAtom (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:8181:20)\n    at JSXParserMixin.parseExprSubscripts (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:12848:23)\n    at JSXParserMixin.parseUpdate (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:12827:21)\n    at JSXParserMixin.parseMaybeUnary (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:12797:23)\n    at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:12588:61)\n    at JSXParserMixin.parseExprOps (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:12595:23)\n    at JSXParserMixin.parseMaybeConditional (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:12565:23)\n    at JSXParserMixin.parseMaybeAssign (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:12517:21)\n    at /Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:12475:39\n    at JSXParserMixin.allowInAnd (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:14543:16)\n    at JSXParserMixin.parseMaybeAssignAllowIn (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:12475:17)\n    at JSXParserMixin.parseInitializer (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:16055:38)\n    at JSXParserMixin.parseClassProperty (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:16040:10)\n    at JSXParserMixin.pushClassProperty (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:15988:30)\n    at JSXParserMixin.parseClassMemberWithIsStatic (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:15871:14)\n    at JSXParserMixin.parseClassMember (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:15796:10)\n    at /Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:15736:14\n    at JSXParserMixin.withSmartMixTopicForbiddingContext (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:14520:14)\n    at JSXParserMixin.parseClassBody (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:15711:10)\n    at JSXParserMixin.parseClass (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:15685:22)\n    at JSXParserMixin.parseStatementContent (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:14888:21)\n    at JSXParserMixin.parseStatement (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:14840:17)\n    at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:15499:25)\n    at JSXParserMixin.parseBlockBody (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:15490:10)\n    at JSXParserMixin.parseProgram (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:14758:10)\n    at JSXParserMixin.parseTopLevel (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:14745:25)\n    at JSXParserMixin.parse (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:16768:10)\n    at parse (/Users/dididances29/capstone-social-media/node_modules/@babel/parser/lib/index.js:16820:38)\n    at parser (/Users/dididances29/capstone-social-media/node_modules/@babel/core/lib/parser/index.js:52:34)");
 
 /***/ }),
 
@@ -3125,12 +3179,36 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const UserPhotosPage = () => {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("hr", null);
+const UserPhotosPage = ({
+  user,
+  photos,
+  auth
+}) => {
+  return (
+    /*#__PURE__*/
+    // <div>
+    //     {
+    //         photos.map(photo => {
+    //             return (
+    //                 <img src={photo.photoUrl} width='200' height='200' />
+    //             )
+    //         })
+    //     }
+    // </div>
+    react__WEBPACK_IMPORTED_MODULE_0___default().createElement("hr", null)
+  );
 };
 
-const mapState = state => {
-  return {};
+const mapState = (state, {
+  match
+}) => {
+  const user = state.users.find(user => user.id === match.params.id * 1) || {};
+  const photos = state.photos.filter(photo => photo.userId === user.id) || [];
+  return {
+    user,
+    photos,
+    auth: state.auth
+  };
 };
 
 const mapDispatch = dispatch => {
@@ -3346,6 +3424,7 @@ const logout = () => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "addPhoto": () => (/* reexport safe */ _photo__WEBPACK_IMPORTED_MODULE_6__.addPhoto),
 /* harmony export */   "authenticate": () => (/* reexport safe */ _auth__WEBPACK_IMPORTED_MODULE_1__.authenticate),
 /* harmony export */   "createUser": () => (/* reexport safe */ _user__WEBPACK_IMPORTED_MODULE_7__.createUser),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
@@ -3353,6 +3432,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "loadUser": () => (/* reexport safe */ _user__WEBPACK_IMPORTED_MODULE_7__.loadUser),
 /* harmony export */   "logout": () => (/* reexport safe */ _auth__WEBPACK_IMPORTED_MODULE_1__.logout),
 /* harmony export */   "me": () => (/* reexport safe */ _auth__WEBPACK_IMPORTED_MODULE_1__.me),
+/* harmony export */   "setPhotos": () => (/* reexport safe */ _photo__WEBPACK_IMPORTED_MODULE_6__.setPhotos),
 /* harmony export */   "setUsers": () => (/* reexport safe */ _user__WEBPACK_IMPORTED_MODULE_7__.setUsers),
 /* harmony export */   "updateUsers": () => (/* reexport safe */ _user__WEBPACK_IMPORTED_MODULE_7__.updateUsers)
 /* harmony export */ });
@@ -3370,7 +3450,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _post__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./post */ "./client/store/post.js");
 /* harmony import */ var _post__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_post__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _photo__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./photo */ "./client/store/photo.js");
-/* harmony import */ var _photo__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_photo__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _user__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./user */ "./client/store/user.js");
 /* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
 /* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _message__WEBPACK_IMPORTED_MODULE_4__) if(["default","authenticate","logout","me"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _message__WEBPACK_IMPORTED_MODULE_4__[__WEBPACK_IMPORT_KEY__]
@@ -3382,10 +3461,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _comment__WEBPACK_IMPORTED_MODULE_2__) if(["default","authenticate","logout","me"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _comment__WEBPACK_IMPORTED_MODULE_2__[__WEBPACK_IMPORT_KEY__]
 /* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
 /* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _photo__WEBPACK_IMPORTED_MODULE_6__) if(["default","authenticate","logout","me"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _photo__WEBPACK_IMPORTED_MODULE_6__[__WEBPACK_IMPORT_KEY__]
-/* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
-/* harmony reexport (unknown) */ var __WEBPACK_REEXPORT_OBJECT__ = {};
-/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _post__WEBPACK_IMPORTED_MODULE_5__) if(["default","authenticate","logout","me"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _post__WEBPACK_IMPORTED_MODULE_5__[__WEBPACK_IMPORT_KEY__]
+/* harmony reexport (unknown) */ for(const __WEBPACK_IMPORT_KEY__ in _post__WEBPACK_IMPORTED_MODULE_5__) if(["default","authenticate","logout","me","addPhoto","setPhotos"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) __WEBPACK_REEXPORT_OBJECT__[__WEBPACK_IMPORT_KEY__] = () => _post__WEBPACK_IMPORTED_MODULE_5__[__WEBPACK_IMPORT_KEY__]
 /* harmony reexport (unknown) */ __webpack_require__.d(__webpack_exports__, __WEBPACK_REEXPORT_OBJECT__);
 
 
@@ -3403,7 +3479,7 @@ const reducer = (0,redux__WEBPACK_IMPORTED_MODULE_8__.combineReducers)({
   likes: (_like__WEBPACK_IMPORTED_MODULE_3___default()),
   messages: (_message__WEBPACK_IMPORTED_MODULE_4___default()),
   posts: (_post__WEBPACK_IMPORTED_MODULE_5___default()),
-  photos: (_photo__WEBPACK_IMPORTED_MODULE_6___default()),
+  photos: _photo__WEBPACK_IMPORTED_MODULE_6__["default"],
   users: _user__WEBPACK_IMPORTED_MODULE_7__["default"]
 });
 const middleware = (0,redux__WEBPACK_IMPORTED_MODULE_8__.applyMiddleware)(redux_thunk__WEBPACK_IMPORTED_MODULE_9__["default"], (0,redux_logger__WEBPACK_IMPORTED_MODULE_0__.createLogger)({
@@ -3445,9 +3521,65 @@ const store = (0,redux__WEBPACK_IMPORTED_MODULE_8__.createStore)(reducer, middle
 /*!*******************************!*\
   !*** ./client/store/photo.js ***!
   \*******************************/
-/***/ (() => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "addPhoto": () => (/* binding */ addPhoto),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   "setPhotos": () => (/* binding */ setPhotos)
+/* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 
 
+const photos = (state = [], action) => {
+  if (action.type === 'SET_PHOTOS') {
+    return action.photos;
+  } else if (action.type === 'ADD_PHOTO') {
+    return [action.photo, ...state];
+  } else if (action.type === 'DELETE_PHOTO') {
+    return state.filter(photo => photo.id !== action.photo.id);
+  }
+
+  return state;
+};
+
+const setPhotos = () => {
+  return async dispatch => {
+    const photos = (await axios__WEBPACK_IMPORTED_MODULE_0___default().get('/api/photos', {
+      headers: {
+        authorization: window.localStorage.getItem('token')
+      }
+    })).data;
+    console.log(photos);
+    dispatch({
+      type: 'SET_PHOTOS',
+      photos
+    });
+  };
+};
+const addPhoto = (photo, postId, authId) => {
+  return async dispatch => {
+    photo = (await axios__WEBPACK_IMPORTED_MODULE_0___default().post('/api/photos', {
+      photoUrl: photo,
+      userId: authId,
+      postId: postId,
+      date: new Date()
+    }, {
+      headers: {
+        authorization: window.localStorage.getItem('token')
+      }
+    })).data;
+    console.log(photo);
+    dispatch({
+      type: 'ADD_PHOTO',
+      photo
+    });
+  };
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (photos);
 
 /***/ }),
 
