@@ -31,6 +31,9 @@ const User = db.define('user', {
     validate: {
       isEmail: true
     }
+  },
+  githubId: {
+    type: Sequelize.INTEGER
   }
 })
 
