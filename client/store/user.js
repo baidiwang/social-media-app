@@ -44,6 +44,7 @@ export const setUsers = () => {
   }
 };
 export const updateUsers = (user) => {
+  console.log(user.id);
   return async(dispatch) => {
     try{
       await axios.put(`/api/users/${user.id}`, user);
