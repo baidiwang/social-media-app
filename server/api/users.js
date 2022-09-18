@@ -16,3 +16,15 @@ router.get('/', isLoggedIn, async (req, res, next) => {
     next(err)
   }
 })
+
+router.put('/:id', async(req,res,next) => {
+  console.log(req.body);
+  try{
+    const user = await User.findByPk(req.params.id);
+    await user.update(req.body);
+    res.status(200).send(user);
+  }
+  catch(err){
+    next(err);
+  }
+});
