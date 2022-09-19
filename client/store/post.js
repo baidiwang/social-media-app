@@ -17,7 +17,6 @@ export const setPosts = () => {
                 authorization: window.localStorage.getItem('token')
             }
         })).data;
-        console.log(posts);
         dispatch({type: 'SET_POSTS', posts})
     }
 };
@@ -28,10 +27,15 @@ export const createPost = (body, auth) => {
             body: body,
             userId: auth.id,
             date: new Date()
+        },
+        {
+            headers: {
+                authorization: window.localStorage.getItem('token')
+            }
         })).data;
-        console.log(post);
-        dispatch({type: 'CREATE_POST', post})
+        dispatch({type: 'CREATE_POST', post});
+        return post;
     }
-}
+};
 
 export default posts;

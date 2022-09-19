@@ -24,12 +24,12 @@ export const setPhotos = () => {
         dispatch({type: 'SET_PHOTOS', photos});
     }
 };
-export const addPhoto = (photo, postId, authId) => {
+export const addPhoto = (photo, post, auth) => {
     return async(dispatch) => {
         photo = (await axios.post('/api/photos', {
             photoUrl : photo,
-            userId: authId,
-            postId: postId,
+            userId: auth.id,
+            postId: post.id,
             date: new Date()
         },
         {

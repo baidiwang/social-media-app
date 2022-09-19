@@ -8,11 +8,10 @@ import { useParams } from 'react-router-dom';
 import {Link} from 'react-router-dom'
 
 const UserProfilePage = ({user, auth}) => {
-
     return (
         <div>
             <h1>{user.username}'s profile</h1>
-            <img src={user.avatar}></img>
+            <img src={user.avatar} width='160' height='160'/>
             <h2>About me:</h2>
             <p>{user.bio}</p>
             {
@@ -32,7 +31,6 @@ const mapState = (state, { match })=> {
 };
 const mapDispatch = dispatch => {
     return {
-
     }
 };
-export default connect(mapState)(UserProfilePage);
+export default connect(mapState, mapDispatch)(UserProfilePage);
