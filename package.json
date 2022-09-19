@@ -16,7 +16,11 @@
   "author": "Fullstack Academy of Code",
   "license": "MIT",
   "dependencies": {
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
     "@faker-js/faker": "^7.5.0",
+    "@mui/icons-material": "^5.10.6",
+    "@mui/material": "^5.10.6",
     "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
     "dotenv-webpack": "^8.0.1",
