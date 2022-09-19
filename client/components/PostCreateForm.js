@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
+import { addPhoto, createPost } from './store';
 
 class PostCreateForm extends React.Component {
     constructor(){
@@ -33,8 +34,8 @@ class PostCreateForm extends React.Component {
     // }
     handleSubmit = (e) => {
         e.preventDefault();
-        const { photos, body, this.props.auth } = this.state;
-        this.props.createPostWithImages()
+        const { photos, body } = this.state;
+        this.props.createPostWithImages(photos, body, this.props.auth)
         // addPost(body, this.props.auth.id)
         // console.log(this.state.photos)
         // //get the id of the post just created in this form
@@ -42,11 +43,11 @@ class PostCreateForm extends React.Component {
         // this.state.photos.map(photo => {
         //     this.props.addPhoto(photo, this.props.post.id)
         // });
-        this.setState({photos: []});
+        this.setState({photos: [], body: ''});
     }
     render(){
-        const { body } = this.state;
-        const { onChange, handleSubmit } = this;
+        const { body, photos } = this.state;
+        const { onChange, onChangePhoto, handleSubmit } = this;
         return (
             <form onSubmit={ handleSubmit }>
                 <button type='submit'>Add Post</button>
@@ -85,7 +86,13 @@ const mapState = state => {
 };
 const mapDispatch = dispatch => {
     return {
-
+        createPostWithImages: (photos, body, auth) => {
+            const post = dispatch(createPost(body, auth));
+            photos.map(photo => {
+                dispatch(addPhoto(photo, post, auth))
+            })
+        }
     }
+
 };
 export default connect(mapState, mapDispatch)(PostCreateForm);
