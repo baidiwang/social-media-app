@@ -50,7 +50,27 @@ User.prototype.correctPassword = function(candidatePwd) {
 User.prototype.generateToken = function() {
   return jwt.sign({id: this.id}, process.env.JWT)
 }
-
+//get all photos
+User.prototype.getPhotos = async function(){
+  const photos = await db.models.photo.findAll();
+  return photos;
+};
+//add photo
+User.prototype.addPhoto = async function(photo){
+  photo = await db.models.photo.create(photo);
+  return photo;
+};
+//get posts
+User.prototype.getPosts = async function(){
+  const posts = await db.models.post.findAll({
+    include: [{model: db.models.photo}, {model: User}]
+  });
+  return posts;
+};
+User.prototype.addPost = async function(body){
+  const post = await db.models.post.create(body);
+  return post;
+};
 /**
  * classMethods
  */

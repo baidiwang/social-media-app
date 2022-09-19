@@ -3,14 +3,29 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-const UserPhotosPage = () => {
+const UserPhotosPage = ({ user, photos, auth}) => {
     return (
-        <hr />
+        <div>
+            Photos
+            <ul>
+            {
+                photos.map(photo => {
+                    return (
+                        <li key={photo.id}><img src={photo.photoUrl} width='80' height='80' /></li>
+                    )
+                })
+            }
+            </ul>
+        </div>
     )
 };
-const mapState = state => {
+const mapState = (state, { match }) => {
+    const user = state.users.find(user => user.id === match.params.id) || {};
+    const photos = state.photos.filter(photo => photo.userId === user.id) || [];
     return {
-
+        user,
+        photos,
+        auth: state.auth
     }
 };
 const mapDispatch = dispatch => {

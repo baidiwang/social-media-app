@@ -1,4 +1,5 @@
 import axios from 'axios';
+import history from '../history';
 
 const users = (state = [], action)=> {
   if (action.type === 'SET_USERS'){
@@ -23,7 +24,6 @@ export const createUser = (credentials) => {
         dispatch({ type: 'CREATE_USER', user });
     }
     catch(error) {
-        console.log(error.response);
       if (error.response.data === 'Cannot add duplicate email') {
         alert('Cannot add duplicate email')
       } else {
@@ -44,11 +44,17 @@ export const setUsers = () => {
   }
 };
 export const updateUsers = (user) => {
-  console.log(user.id);
   return async(dispatch) => {
     try{
-      await axios.put(`/api/users/${user.id}`, user);
+      console.log(user)
+      user = (await axios.put(`/api/users/${user.id}`,
+      user, {
+        headers: {
+          authorization: window.localStorage.getItem('token')
+        }
+      })).data;
       dispatch({type: "UPDATE_USERS", user})
+      history.push(`/profile/${user.id}`)
     }
     catch(ex){
       console.log(ex)

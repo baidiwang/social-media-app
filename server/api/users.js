@@ -17,7 +17,7 @@ router.get('/', isLoggedIn, async (req, res, next) => {
   }
 })
 
-router.put('/:id', async(req,res,next) => {
+router.put('/:id', isLoggedIn, async(req,res,next) => {
   console.log(req.body);
   try{
     const user = await User.findByPk(req.params.id);

@@ -4,7 +4,7 @@ import {withRouter, Route, Switch, Redirect} from 'react-router-dom';
 import { Login } from './components/AuthForm';
 import { Signup } from './components/UserCreateForm';
 import Home from './components/Home';
-import { me, setUsers } from './store';
+import { me, setUsers, setPhotos, setPosts } from './store';
 import UserUpdateForm from './components/UserUpdateForm';
 import ProfilePhotoForm from './components/ProfilePhotoForm';
 import UserPhotosPage from './components/UserPhotosPage';
@@ -12,7 +12,6 @@ import Messages from './components/Messages';
 import PostCreateForm from './components/PostCreateForm';
 import PostUpdateForm from './components/PostUpdateForm';
 import UserProfilePage from './components/UserProfilePage';
-import PhotosForPost from './components/PhotosForPost';
 
 
 /**
@@ -40,7 +39,7 @@ class Routes extends Component {
       <div>
         {isLoggedIn ? (
           <div>
-            { window.location.pathname === '' ? <Redirect to='/home' /> : null }
+            { window.location.pathname === '/' ? <Redirect to='/home' /> : null }
             <Route exact path='/home' component={ Home } />
             <Route exact path='/profile/:id' component={ UserProfilePage } />
             <Route exact path='/profile/:id/update' component={ UserUpdateForm } />
@@ -49,7 +48,6 @@ class Routes extends Component {
             <Route exact path='/profile/:id' component={ Messages } />
             <Route exact path='posts' component={ PostCreateForm } />
             <Route exact path='/posts/:id' component={ PostUpdateForm } />
-            <Route exact path='/posts/:id' component={ PhotosForPost } />
           </div>
         ) : (
           <Switch>
@@ -82,7 +80,8 @@ const mapDispatch = dispatch => {
     //add load data with fetch startup datas i.e. messages, users, posts, likes
     loadData: () => {
       dispatch(setUsers())
-      //dispatch(setPosts())
+      dispatch(setPhotos())
+      dispatch(setPosts())
     }
   }
 }
