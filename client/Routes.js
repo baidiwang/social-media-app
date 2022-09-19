@@ -43,7 +43,7 @@ class Routes extends Component {
             { window.location.pathname === '' ? <Redirect to='/home' /> : null }
             <Route exact path='/home' component={ Home } />
             <Route exact path='/profile/:id' component={ UserProfilePage } />
-            <Route exact path='/profile/:id' component={ UserUpdateForm } />
+            <Route exact path='/profile/:id/update' component={ UserUpdateForm } />
             <Route exact path='/profile/:id' component={ ProfilePhotoForm } />
             <Route exact path='/profile/:id' component={ UserPhotosPage } />
             <Route exact path='/profile/:id' component={ Messages } />
