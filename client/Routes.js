@@ -41,15 +41,14 @@ class Routes extends Component {
             <Route exact path="/profile/:id" component={UserUpdateForm} />
             <Route exact path="/profile/:id" component={ProfilePhotoForm} />
             <Route exact path="/profile/:id" component={UserPhotosPage} />
-            <Route exact path="/profile/:id" component={Messages} />
+            <Route exact path="/message/:id" component={Messages} />
             <Route exact path="posts" component={PostCreateForm} />
             <Route exact path="/posts/:id" component={PostUpdateForm} />
             <Route exact path="/posts/:id" component={PhotosForPost} />
           </div>
         ) : (
           <Switch>
-            {/* <Route path="/" exact component={Login} /> */}
-            <Route path="/" exact component={Messages} />
+            <Route path="/" exact component={Login} />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
           </Switch>

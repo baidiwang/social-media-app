@@ -55,6 +55,7 @@ form div {
 }
 
 .message-item {
+  position: relative;
   display: flex;
   padding: 12px 10px;
   color: #333;
@@ -62,8 +63,24 @@ form div {
   background-color: #f9e7bc;
   max-width: 80%;
   width: fit-content;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   border-radius: 10px 10px 10px 0;
+}
+
+.message-item .quick-emojis {
+  position: absolute;
+  right: 0;
+  bottom: -15px;
+  display: none;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 30%);
+}
+.message-item:hover .quick-emojis {
+  display: flex;
+}
+.quick-emojis .quick-emojis-item {
+  cursor: pointer;
 }
 
 .message-item img {
@@ -78,9 +95,11 @@ form div {
 
 .message-footer {
   padding: 0 15px;
+  margin-bottom: 10px;
 }
 
 .message-input-wrapper {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -99,4 +118,34 @@ form div {
   height: 25px;
   border: none;
   outline: none;
+}
+
+.message-emoji-list {
+  position: absolute;
+  bottom: 50px;
+  left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  width: 312px;
+  background-color: #ffffff;
+  padding: 10px;
+  border: 1px solid #333;
+  border-radius: 10px;
+  z-index: 9;
+}
+
+.message-emoji-item {
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.message-emoji-item:hover {
+  border: 1px solid #e1e1e1;
+}
+.message-emoji-shadow {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
 }
