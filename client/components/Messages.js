@@ -2,7 +2,7 @@
 
 //npm install react-icons --save
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { connect } from "react-redux";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { FaMicrophoneAlt } from "react-icons/fa";
@@ -26,17 +26,29 @@ const Messages = () => {
   const [text, setText] = useState('');
   const [messages, setMessages] = useState(mockMessages);
 
+  const messagesEnd = useRef();
+
   useEffect(() => {
     socket.on("message", (data) => {
       setMessages(prevMessages => [...prevMessages, data]);
     });
   }, [])
 
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
   const sendMessage = () => {
     if (text.trim() !== '') {
       socket.emit('message', { id: Date.now(), text, creator: userId });
       setMessages(prevMessages => [...prevMessages, { id: Date.now(), text, creator: userId }]);
       setText('');
+    }
+  }
+
+  const scrollToBottom = () => {
+    if (messagesEnd.current) {
+      messagesEnd.current.scrollIntoView({ behavior: "smooth" });
     }
   }
 
@@ -65,6 +77,7 @@ const Messages = () => {
           ></div>
         ))}
       </div>
+      <div style={{ float:"left", clear: "both" }} ref={messagesEnd}></div>
       <div className="message-footer">
         <div className="message-input-wrapper">
           <div>
