@@ -2,12 +2,13 @@
 
 //npm install react-icons --save
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from 'react'
 import { connect } from "react-redux";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { FaMicrophoneAlt } from "react-icons/fa";
 import { MdSend } from "react-icons/md";
 import { faker } from "@faker-js/faker";
+import { io } from "socket.io-client";
 
 const otherId = faker.database.mongodbObjectId();
 const userId = faker.database.mongodbObjectId();
@@ -19,8 +20,25 @@ const mockMessages = [
   { id: 5, text: faker.random.words(), creator: userId },
 ];
 
+let socket = io();
+
 const Messages = () => {
+  const [text, setText] = useState('');
   const [messages, setMessages] = useState(mockMessages);
+
+  useEffect(() => {
+    socket.on("message", (data) => {
+      setMessages(prevMessages => [...prevMessages, data]);
+    });
+  }, [])
+
+  const sendMessage = () => {
+    if (text.trim() !== '') {
+      socket.emit('message', { id: Date.now(), text, creator: userId });
+      setMessages(prevMessages => [...prevMessages, { id: Date.now(), text, creator: userId }]);
+      setText('');
+    }
+  }
 
   return (
     <div className="message-container">
@@ -53,10 +71,10 @@ const Messages = () => {
             <FaMicrophoneAlt style={{ color: "#b4b4b4", fontSize: 20 }} />
           </div>
           <div className="message-input">
-            <input placeholder="Type message here..." />
+            <input placeholder="Type message here..." value={text} onChange={e => setText(e.target.value)} />
           </div>
           <div>
-            <MdSend style={{ color: "#b3c5e7", fontSize: 20 }} />
+            <MdSend style={{ color: "#b3c5e7", fontSize: 20 }} onClick={() => sendMessage()} />
           </div>
         </div>
       </div>
