@@ -33,6 +33,7 @@ export const createPost = (body, auth) => {
                 authorization: window.localStorage.getItem('token')
             }
         })).data;
+        console.log(post)
         dispatch({type: 'CREATE_POST', post});
         return post;
     }

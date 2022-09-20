@@ -74,6 +74,7 @@ const mapDispatch = dispatch => {
     return {
         createPostWithImages: async(photos, body, auth) => {
             const post = await dispatch(createPost(body, auth));
+            console.log(post)
             photos.map(photo => {
                 dispatch(addPhoto(photo, post, auth))
             })
