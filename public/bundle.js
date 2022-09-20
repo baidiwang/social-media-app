@@ -16940,7 +16940,7 @@ const Feed = ({
         key: photo.id,
         component: "img",
         height: "20%",
-        image: photo.photoURL
+        image: photo.photoUrl
       });
     }) : null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material_CardContent__WEBPACK_IMPORTED_MODULE_12__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material_Typography__WEBPACK_IMPORTED_MODULE_13__["default"], {
       variant: "body2",
@@ -16952,19 +16952,7 @@ const Feed = ({
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_icons_material_Favorite__WEBPACK_IMPORTED_MODULE_15__["default"], null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material_IconButton__WEBPACK_IMPORTED_MODULE_9__["default"], {
       "aria-label": "share"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_icons_material_Share__WEBPACK_IMPORTED_MODULE_16__["default"], null))));
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", null, posts.map(post => {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", {
-      key: post.id
-    }, post.photos ? post.photos.map(photo => {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", {
-        key: photo.id
-      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
-        src: photo.photoUrl,
-        width: "200",
-        height: "200"
-      }));
-    }) : null);
-  })));
+  }));
 };
 /**
  * CONTAINER
