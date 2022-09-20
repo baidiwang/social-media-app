@@ -23,7 +23,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 /**
  * COMPONENT
  */
-export const Feed = ({ username, posts, users, auth }) => {
+export const Feed = ({ username, posts, users, auth, photos }) => {
   return (
     <Box flex={5} p={1}>
       <h3>Welcome, {username}</h3>
@@ -32,8 +32,9 @@ export const Feed = ({ username, posts, users, auth }) => {
 
         return (
           <Card key={post.id}>
-            
-            <CardHeader
+            {
+              post.user ? 
+              <CardHeader
               avatar={
                 
                 <Link to={`/profile/${post.user.id}`}>
@@ -49,10 +50,10 @@ export const Feed = ({ username, posts, users, auth }) => {
               }
               title={post.user.username}
               subheader={post.date}
-            />
-            {post.photos
-              ? post.photos.map((photo) => {
-                  console.log("photo", photo);
+            />: null
+            }
+            {
+            photos.filter(photo => photo.postId === post.id).map((photo) => {
                   return (
                     <CardMedia
                       key={photo.id}
@@ -60,9 +61,9 @@ export const Feed = ({ username, posts, users, auth }) => {
                       height="20%"
                       image={photo.photoUrl}
                     />
-                  );
+                  )
                 })
-              : null}
+              }
 
             <CardContent>
               <Typography variant="body2" color="text.secondary">
@@ -80,7 +81,23 @@ export const Feed = ({ username, posts, users, auth }) => {
           </Card>
         );
       })}
-
+      <ul>
+        {posts.map((post) => {
+          return (
+            <ul key={post.id}>
+              {post.photos
+                ? post.photos.map((photo) => {
+                    return (
+                      <li key={photo.id}>
+                        <img src={photo.photoUrl} width="200" height="200" />
+                      </li>
+                    );
+                  })
+                : null}
+            </ul>
+          );
+        })}
+      </ul>
     </Box>
   );
 };
@@ -97,6 +114,7 @@ const mapState = (state) => {
     posts: state.posts,
     users: state.users,
     auth: state.auth,
+    photos: state.photos
   };
 };
 

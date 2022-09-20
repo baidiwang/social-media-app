@@ -63,12 +63,22 @@ User.prototype.addPhoto = async function(photo){
 //get posts
 User.prototype.getPosts = async function(){
   const posts = await db.models.post.findAll({
-    include: [{model: db.models.photo}, {model: User}]
+    include: [{model: db.models.photo}, {model: User}],
+    order: [['id', 'DESC']]
   });
   return posts;
 };
 User.prototype.addPost = async function(body){
-  const post = await db.models.post.create(body);
+  let post = await db.models.post.create(body);
+  post = await db.models.post.findOne({
+    where: {
+      id: post.id
+    },
+    include: [
+      {model: db.models.photo},
+      {model: User}
+    ]
+  });
   return post;
 };
 /**

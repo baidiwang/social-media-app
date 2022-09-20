@@ -16912,7 +16912,8 @@ const Feed = ({
   username,
   posts,
   users,
-  auth
+  auth,
+  photos
 }) => {
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material__WEBPACK_IMPORTED_MODULE_3__["default"], {
     flex: 5,
@@ -16920,7 +16921,7 @@ const Feed = ({
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "Welcome, ", username), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_PostCreateForm__WEBPACK_IMPORTED_MODULE_2__["default"], null), posts.map(post => {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material_Card__WEBPACK_IMPORTED_MODULE_4__["default"], {
       key: post.id
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material_CardHeader__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    }, post.user ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material_CardHeader__WEBPACK_IMPORTED_MODULE_5__["default"], {
       avatar: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_6__.Link, {
         to: `/profile/${post.user.id}`
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material_Avatar__WEBPACK_IMPORTED_MODULE_7__["default"], {
@@ -16934,15 +16935,14 @@ const Feed = ({
       }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_icons_material_MoreVert__WEBPACK_IMPORTED_MODULE_10__["default"], null)),
       title: post.user.username,
       subheader: post.date
-    }), post.photos ? post.photos.map(photo => {
-      console.log("photo", photo);
+    }) : null, photos.filter(photo => photo.postId === post.id).map(photo => {
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material_CardMedia__WEBPACK_IMPORTED_MODULE_11__["default"], {
         key: photo.id,
         component: "img",
         height: "20%",
         image: photo.photoUrl
       });
-    }) : null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material_CardContent__WEBPACK_IMPORTED_MODULE_12__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material_Typography__WEBPACK_IMPORTED_MODULE_13__["default"], {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material_CardContent__WEBPACK_IMPORTED_MODULE_12__["default"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material_Typography__WEBPACK_IMPORTED_MODULE_13__["default"], {
       variant: "body2",
       color: "text.secondary"
     }, post.body)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material_CardActions__WEBPACK_IMPORTED_MODULE_14__["default"], {
@@ -16965,7 +16965,8 @@ const mapState = state => {
     username: state.auth.username,
     posts: state.posts,
     users: state.users,
-    auth: state.auth
+    auth: state.auth,
+    photos: state.photos
   };
 };
 
@@ -17276,6 +17277,7 @@ const mapDispatch = dispatch => {
   return {
     createPostWithImages: async (photos, body, auth) => {
       const post = await dispatch((0,_store__WEBPACK_IMPORTED_MODULE_2__.createPost)(body, auth));
+      console.log(post);
       photos.map(photo => {
         dispatch((0,_store__WEBPACK_IMPORTED_MODULE_2__.addPhoto)(photo, post, auth));
       });
@@ -18073,6 +18075,7 @@ const createPost = (body, auth) => {
         authorization: window.localStorage.getItem('token')
       }
     })).data;
+    console.log(post);
     dispatch({
       type: 'CREATE_POST',
       post
