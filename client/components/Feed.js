@@ -21,7 +21,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CommentHelper from "./CommentHelper";
-import { addLike } from '../store';
+import { addLike } from "../store";
 /**
  * COMPONENT
  */
@@ -32,8 +32,8 @@ const Feed = ({ username, posts, auth, photos, addLike }) => {
       <PostCreateForm />
       {posts.map((post) => {
         return (
-          <Card key={post.id}>
-              <CardHeader
+          <Card sx={{ margin: 5 }} key={post.id}>
+            <CardHeader
               avatar={
                 <Link to={`/profile/${post.user.id}`}>
                   <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -49,98 +49,78 @@ const Feed = ({ username, posts, auth, photos, addLike }) => {
               title={post.user.username}
               subheader={post.date}
             />
-            {
-            photos.filter(photo => photo.postId === post.id).map((photo) => {
-                  return (
-                    <CardMedia
-                      key={photo.id}
-                      component="img"
-                      height="20%"
-                      image={photo.photoUrl}
-                    />
-                  )
-                })
-              }
-
+            {photos
+              .filter((photo) => photo.postId === post.id)
+              .map((photo) => {
+                return (
+                  <CardMedia
+                    key={photo.id}
+                    component="img"
+                    height="20%"
+                    image={photo.photoUrl}
+                  />
+                );
+              })}
             <CardContent>
               <Typography variant="body2" color="text.secondary">
                 {post.body}
               </Typography>
             </CardContent>
             <CardActions disableSpacing>
-
-              {
-              (post.likes.find(like => like.userId === auth.id))?
-              <IconButton aria-label="add to favorites">
-              <FavoriteIcon sx={{ color: pink[500] }} /> 
-              {post.likes.length} likes
-              </IconButton> :
-              <div>
-              <IconButton aria-label="add to favorites">
-                <FavoriteIcon sx={{ color: grey[100] }} />
-
-              {post.likes.length} likes
-              </IconButton>
-              <button onClick={() => addLike(auth.id, post.id)}>Like</button>
-              </div>
-              }
+              {post.likes.find((like) => like.userId === auth.id) ? (
+                <IconButton aria-label="add to favorites">
+                  <FavoriteIcon sx={{ color: pink[500] }} />
+                  {post.likes.length} likes
+                </IconButton>
+              ) : (
+                <div>
+                  <IconButton aria-label="add to favorites">
+                    <FavoriteIcon sx={{ color: grey[100] }} />
+                    {post.likes.length} likes
+                  </IconButton>
+                  <button onClick={() => addLike(auth.id, post.id)}>
+                    Like
+                  </button>
+                </div>
+              )}
               <IconButton aria-label="share">
                 <ShareIcon />
               </IconButton>
-
             </CardActions>
-            ---------Comments--------------<br />
-            {
-              post.comments.map(comment => {
-                return (
-                  <Card key={comment.id}>
-                    <CardHeader
-                      avatar={
-                        <Link to={`/profile/${comment.user.id}`}>
-                          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                            {comment.user.avatar}
-                          </Avatar>
-                        </Link>
-                      }
-                      action={
-                        <IconButton aria-label="settings">
-                          <MoreVertIcon />
-                        </IconButton>
-                      }
-                      title={comment.user.username}
-                      subheader={comment.date}
-                    />
-                    <CardContent>
-                      <Typography variant="body2" color="text.secondary">
-                        {comment.body}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                )
-              })
-            }
+            ---------Comments--------------
+            <br />
+            {post.comments.map((comment) => {
+              return (
+                <Card key={comment.id}>
+                  <CardHeader
+                    avatar={
+                      <Link to={`/profile/${comment.user.id}`}>
+                        <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                          {comment.user.avatar}
+                        </Avatar>
+                      </Link>
+                    }
+                    action={
+                      <IconButton aria-label="settings">
+                        <MoreVertIcon />
+                      </IconButton>
+                    }
+                    title={comment.user.username}
+                    subheader={comment.date}
+                  />
+                  <CardContent>
+                    <Typography variant="body2" color="text.secondary">
+                      {comment.body}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              );
+            })}
             <CommentHelper authId={auth.id} postId={post.id} />
             <hr />
           </Card>
         );
       })}
-      {/* <ul>
-        {posts.map((post) => {
-          return (
-            <ul key={post.id}>
-              {post.photos
-                ? post.photos.map((photo) => {
-                    return (
-                      <li key={photo.id}>
-                        <img src={photo.photoUrl} width="200" height="200" />
-                      </li>
-                    );
-                  })
-                : null}
-            </ul>
-          );
-        })}
-      </ul> */}
     </Box>
   );
 };
@@ -150,28 +130,35 @@ const Feed = ({ username, posts, auth, photos, addLike }) => {
  */
 const mapState = (state) => {
   const followedList = [];
-state.connections.map(connection => {
-  if(connection.followingId === state.auth.id && connection.isAccepted === true){
-    followedList.push(connection.followerId)
-  }
-});
-console.log("followedList", followedList);
-  const posts = state.posts.filter(post => followedList.includes(post.userId) || post.userId === state.auth.id) || [];
-  console.log("posts", posts)
+  state.connections.map((connection) => {
+    if (
+      connection.followingId === state.auth.id &&
+      connection.isAccepted === true
+    ) {
+      followedList.push(connection.followerId);
+    }
+  });
+  console.log("followedList", followedList);
+  const posts =
+    state.posts.filter(
+      (post) =>
+        followedList.includes(post.userId) || post.userId === state.auth.id
+    ) || [];
+  console.log("posts", posts);
   return {
     username: state.auth.username,
     posts,
     users: state.users,
     auth: state.auth,
-    photos: state.photos
+    photos: state.photos,
   };
 };
-const mapDispatch = dispatch => {
+const mapDispatch = (dispatch) => {
   return {
     addLike: (authId, postId) => {
-      addLike(authId, postId)
-    }
-  }
-}
+      addLike(authId, postId);
+    },
+  };
+};
 
 export default connect(mapState, mapDispatch)(Feed);

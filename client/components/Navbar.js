@@ -1,61 +1,100 @@
-import React from 'react'
-import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
-import {logout} from '../store'
-import { setUsers } from '../store/user'
+import React, { useState } from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { logout } from "../store";
+import { setUsers } from "../store/user";
+import { AppBar, Toolbar, styled, Avatar, Box } from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
+import MessageIcon from "@mui/icons-material/Message";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import VideocamIcon from "@mui/icons-material/Videocam";
 
-const Navbar = ({handleClick, isLoggedIn, auth}) => (
-  <div>
-    <h1>FS-App-Template</h1>
-    <nav>
-      {isLoggedIn ? (
-        <div>
-          {/* The navbar will show these links after you log in */}
-          <Link to="/home">
-            <span className="material-symbols-outlined">
-              home
-            </span> Home
-          </Link>
-          <Link to={`/profile/${auth.id}`}>
-            <span className="material-symbols-outlined">
-              person
-            </span> Profile
-          </Link>
-          <a href="#" onClick={handleClick}>
-            <span className="material-symbols-outlined">
-              logout
-            </span> Logout
-          </a>
-        </div>
-      ) : (
-        <div>
-          {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-        </div>
-      )}
-    </nav>
-    <hr />
-  </div>
-)
-
+const Navbar = ({ handleClick, isLoggedIn, auth }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <AppBar position="sticky">
+      {isLoggedIn
+        ? [
+            <Toolbar
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <Link style={{ color: "white" }} to="/home">
+                Social App
+              </Link>
+              <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+                <Link style={{ color: "white" }} to="/videos">
+                  <VideocamIcon style={{ fontSize: "1.5rem" }} />
+                </Link>
+                <Link style={{ color: "white" }} to="/messages">
+                  <MessageIcon style={{ fontSize: "1.2rem" }} />
+                </Link>
+                <Avatar
+                  sx={{ height: "30px", width: "30px" }}
+                  src={auth.avatar}
+                  onClick={(event) => setOpen(true)}
+                />
+              </Box>
+            </Toolbar>,
+            <Menu
+              id="demo-positioned-menu"
+              aria-labelledby="demo-positioned-button"
+              open={open}
+              onClose={(event) => setOpen(false)}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+            >
+              <Link to={`/profile/${auth.id}`}>
+                <MenuItem>Profile</MenuItem>
+              </Link>
+              <Link to="#" onClick={handleClick}>
+                <MenuItem>Logout</MenuItem>
+              </Link>
+            </Menu>,
+          ]
+        : [
+            <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Link style={{ color: "white" }} to="/home">
+                Social App
+              </Link>
+              <Box sx={{ display: "flex", gap: 5 }}>
+                <Link style={{ color: "white" }} to="/login">
+                  Login
+                </Link>
+                <Link style={{ color: "white" }} to="signup">
+                  Register
+                </Link>
+              </Box>
+            </Toolbar>,
+          ]}
+    </AppBar>
+  );
+};
 /**
  * CONTAINER
  */
-const mapState = state => {
-
+const mapState = (state) => {
   return {
     auth: state.auth,
-    isLoggedIn: !!state.auth.id
-  }
-}
+    isLoggedIn: !!state.auth.id,
+  };
+};
 
-const mapDispatch = dispatch => {
+const mapDispatch = (dispatch) => {
   return {
     handleClick() {
-      dispatch(logout())
-    }
-  }
-}
+      dispatch(logout());
+    },
+  };
+};
 
-export default connect(mapState, mapDispatch)(Navbar)
+export default connect(mapState, mapDispatch)(Navbar);
