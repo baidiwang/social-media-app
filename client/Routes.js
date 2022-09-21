@@ -45,7 +45,7 @@ class Routes extends Component {
             <Route exact path='/profile/:id/update' component={ UserUpdateForm } />
             <Route exact path='/profile/:id' component={ ProfilePhotoForm } />
             <Route exact path='/profile/:id' component={ UserPhotosPage } />
-            <Route exact path='/profile/:id' component={ Messages } />
+            <Route exact path='/message/:id' component={ Messages } />
             <Route exact path='posts' component={ PostCreateForm } />
             <Route exact path='/posts/:id' component={ PostUpdateForm } />
           </div>

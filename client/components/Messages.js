@@ -45,7 +45,9 @@ const quickEmojis = ['👍', '😍', '🤩', '❤️']
 
 let socket = io();
 
-const Messages = () => {
+const roomId = 'mockRooId';
+
+const Messages = ({ user }) => {
   const [text, setText] = useState('');
   const [show, setShow] = useState(false);
   const [messages, setMessages] = useState(mockMessages);
@@ -53,6 +55,9 @@ const Messages = () => {
   const messagesEnd = useRef();
 
   useEffect(() => {
+    // TODO Generate roomId according to friends
+    socket.emit('createRoom', { roomId })
+
     socket.on("message", (data) => {
       setMessages(prevMessages => [...prevMessages, data]);
     });
@@ -65,7 +70,7 @@ const Messages = () => {
   const sendMessage = (directText) => {
     const sendText = directText || text.trim();
     if (sendText !== '') {
-      socket.emit('message', { id: Date.now(), text: sendText, creator: userId });
+      socket.emit('message', { id: Date.now(), text: sendText, creator: userId, roomId });
       setMessages(prevMessages => [...prevMessages, { id: Date.now(), text: sendText, creator: userId }]);
       setText('');
     }
@@ -90,9 +95,9 @@ const Messages = () => {
             style={{ fontSize: 50, color: "#747474" }}
           />
         </div>
-        <div>Tiara Andini</div>
+        <div>{user.username}</div>
         <div>
-          <img className="avatar" src={faker.image.avatar()} alt="avatar" />
+          <img className="avatar" src={user.avatar} alt="avatar" />
         </div>
       </div>
       <div className="message-list">
@@ -154,7 +159,9 @@ const Messages = () => {
 };
 
 const mapState = (state) => {
-  return {};
+  return {
+    user: state.auth
+  };
 };
 const mapDispatch = (dispatch) => {
   return {};
