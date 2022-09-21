@@ -20,7 +20,6 @@ export const setPhotos = () => {
                 authorization: window.localStorage.getItem('token')
             }
         })).data;
-        console.log(photos);
         dispatch({type: 'SET_PHOTOS', photos});
     }
 };
@@ -37,7 +36,6 @@ export const addPhoto = (photo, post, auth) => {
                 authorization: window.localStorage.getItem('token')
             }
         })).data;
-        console.log(photo);
         dispatch({type: 'ADD_PHOTO', photo});
     }
 }
