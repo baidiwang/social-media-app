@@ -29,12 +29,14 @@ export const Feed = ({ username, posts, users, auth, photos }) => {
       <h3>Welcome, {username}</h3>
       <PostCreateForm />
       {posts.map((post) => {
+
         return (
           <Card key={post.id}>
             {
               post.user ? 
               <CardHeader
               avatar={
+                
                 <Link to={`/profile/${post.user.id}`}>
                   <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
                     {post.user.avatar}
@@ -79,7 +81,7 @@ export const Feed = ({ username, posts, users, auth, photos }) => {
           </Card>
         );
       })}
-      {/* <ul>
+      <ul>
         {posts.map((post) => {
           return (
             <ul key={post.id}>
@@ -95,7 +97,7 @@ export const Feed = ({ username, posts, users, auth, photos }) => {
             </ul>
           );
         })}
-      </ul> */}
+      </ul>
     </Box>
   );
 };
@@ -106,6 +108,7 @@ export const Feed = ({ username, posts, users, auth, photos }) => {
 const mapState = (state) => {
   console.log("posts", state.posts);
   console.log("auth", state.users);
+
   return {
     username: state.auth.username,
     posts: state.posts,
