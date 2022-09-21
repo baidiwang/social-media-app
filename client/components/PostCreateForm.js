@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { addPhoto, createPost } from '../store';
+import { addPhoto, createPost, getSinglePost } from '../store';
 
 class PostCreateForm extends React.Component {
     constructor(){
@@ -74,10 +74,15 @@ const mapDispatch = dispatch => {
     return {
         createPostWithImages: async(photos, body, auth) => {
             const post = await dispatch(createPost(body, auth));
-            console.log(post)
-            photos.map(photo => {
-                dispatch(addPhoto(photo, post, auth))
-            })
+            photos.map(async(photo, index) => {
+                if(index !== photos.length - 1){
+                    await dispatch(addPhoto(photo, post, auth))
+                } else {
+                    await dispatch(addPhoto(photo, post, auth))
+                    await dispatch(getSinglePost(post));
+                }
+            });
+            
         }
     };
 };

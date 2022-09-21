@@ -4,7 +4,7 @@ import {withRouter, Route, Switch, Redirect} from 'react-router-dom';
 import { Login } from './components/AuthForm';
 import { Signup } from './components/UserCreateForm';
 import Home from './components/Home';
-import { me, setUsers, setPhotos, setPosts } from './store';
+import { me, setUsers, setPhotos, setPosts, setConnections } from './store';
 import UserUpdateForm from './components/UserUpdateForm';
 import ProfilePhotoForm from './components/ProfilePhotoForm';
 import UserPhotosPage from './components/UserPhotosPage';
@@ -86,6 +86,7 @@ const mapDispatch = dispatch => {
       dispatch(setUsers())
       dispatch(setPhotos())
       dispatch(setPosts())
+      dispatch(setConnections())
     }
   }
 }

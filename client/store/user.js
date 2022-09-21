@@ -39,7 +39,6 @@ export const setUsers = () => {
           authorization: window.localStorage.getItem('token')
         }
     })).data;
-    console.log(users)
     dispatch({type: 'SET_USERS', users});
   }
 };
@@ -69,12 +68,12 @@ export const deleteUser = (id) => {
   }
 }
 
-export const loadUser = (user) => {
-  return async(dispatch) => {
-    await axios.get(`/api/users/${user.id}`);
-    dispatch({ type: 'SET_USER', user})
-  }
-}
+// export const loadUser = (user) => {
+//   return async(dispatch) => {
+//     await axios.get(`/api/users/${user.id}`);
+//     dispatch({ type: 'SET_USER', user})
+//   }
+// }
 
 
 export default users;

@@ -4,15 +4,7 @@ const { isLoggedIn } = require('../middleware')
 
 router.get('/', isLoggedIn, async (req, res, next) => {
   try {
-    res.send(await req.user.getPosts());
-  } catch (err) {
-    next(err)
-  }
-});
-
-router.get('/:id', isLoggedIn, async (req, res, next) => {
-  try {
-    res.send(await req.user.getSinglePost(req.params.id*1));
+    res.send(await req.user.getConnections());
   } catch (err) {
     next(err)
   }
@@ -20,7 +12,7 @@ router.get('/:id', isLoggedIn, async (req, res, next) => {
 
 router.post('/', isLoggedIn, async(req, res, next) => {
   try{
-    res.send(await req.user.addPost(req.body));
+    res.send(await req.user.addConnection(req.body));
   } catch(err){
     next(err)
   }
