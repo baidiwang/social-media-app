@@ -3,10 +3,22 @@ const db = require('../db')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt');
 const axios = require('axios');
+const crypto = require('crypto');
+const Token = require('./Token');
+const nodemailer = require("nodemailer");
+const handlebars = require("handlebars");
+const fs = require("fs");
+const path = require("path");
+const { Dvr } = require('@mui/icons-material');
 
 const SALT_ROUNDS = 5;
 
 const User = db.define('user', {
+  id: {
+    type: Sequelize.UUID,
+    defaultValue: Sequelize.UUIDV4,
+    primaryKey: true
+  },
   username: {
     type: Sequelize.STRING,
     unique: true,
@@ -26,34 +38,136 @@ const User = db.define('user', {
     validate: {
       isEmail: true
     }
+  },
+  githubId: {
+    type: Sequelize.INTEGER
   }
 })
 
 module.exports = User
+// ****************************************************************************************************************************************
+//----------------------hooks--------------------------------
+const hashPassword = async(user) => {
+  //in case the password has been changed, we want to encrypt it with bcrypt
+  if (user.changed('password')) {
+    user.password = await bcrypt.hash(user.password, SALT_ROUNDS);
+  }
+};
 
-/**
- * instanceMethods
- */
+User.beforeCreate(hashPassword)
+User.beforeUpdate(hashPassword)
+User.beforeBulkCreate(users => Promise.all(users.map(hashPassword)))
+// **************************************************************** PHOTOS *****************************************************************
+//get all photos
+User.prototype.getPhotos = async function(){
+  return (await db.models.photo.findAll());
+};
+//add photo
+User.prototype.addPhoto = async function(photo){
+  return (await db.models.photo.create(photo));
+};
+// ***************************************************************** POSTS *******************************************************************
+//get all posts including users that owned them
+User.prototype.getPosts = async function(){
+  const posts = await db.models.post.findAll({
+    include: [
+      {model: User},
+      {model: db.models.photo},
+      {
+        model: db.models.like,
+        include: [
+          {model: User}
+        ]
+      },
+      {
+        model: db.models.comment,
+        include: [{model: User}]
+      }
+    ],
+    order: [['id', 'DESC']]
+  });
+  return posts;
+};
+//get specific post
+User.prototype.getSinglePost = async function(postId){
+  const post = await db.models.post.findOne({
+    where: {
+      id: postId
+    },
+    include: [
+      {model: User},
+      {model: db.models.photo},
+      {
+        model: db.models.like,
+        include: [
+          {model: User}
+        ]
+      },
+      {
+        model: db.models.comment,
+        include: [{model: User}]
+      }
+    ]
+  });
+  return post;
+};
+//add post
+User.prototype.addPost = async function(body){
+  const post = await db.models.post.create(body);
+  return this.getSinglePost(post.id);
+};
+//***************************************************************** COMMENTS ******************************************************************
+//get all comments
+User.prototype.getComments = async function(){
+  return (await db.models.comment.findAll());
+};
+//add a comment
+User.prototype.addComment = async function(body){
+  const comment = await db.models.comment.create(body);
+  return this.getSinglePost(comment.postId);
+};
+//***************************************************************** LIKES *********************************************************************
+//get all likes
+User.prototype.getLikes = async function(){
+  return (await db.models.like.findAll());
+};
+//add a like
+User.prototype.addLike = async function(body){
+  const like = await db.models.like.create(body);
+  return this.getSinglePost(like.postId);
+};
+//***************************************************************** CONNECTIONS ******************************************************************
+//get all connections
+User.prototype.getConnections = async function(){
+  return (await db.models.connection.findAll())
+};
+//add connection
+User.prototype.addConnection = async function(body){
+  return (await db.models.create(body));
+};
+//***************************************************************** MESSAGES ******************************************************************
+
+//***************************************************************** USERS *********************************************************************
+
+//******************************************************* PASSWORD / AUTH RELATED *************************************************************
+
 User.prototype.correctPassword = function(candidatePwd) {
   //we need to compare the plain version to an encrypted version of the password
   return bcrypt.compare(candidatePwd, this.password);
-}
+};
 
 User.prototype.generateToken = function() {
   return jwt.sign({id: this.id}, process.env.JWT)
-}
+};
 
-/**
- * classMethods
- */
 User.authenticate = async function({ username, password }){
-    const user = await this.findOne({where: { username }})
-    if (!user || !(await user.correctPassword(password))) {
-      const error = Error('Incorrect username/password');
-      error.status = 401;
-      throw error;
-    }
-    return user.generateToken();
+  const user = await this.findOne({where: { username }})
+  if (!user || !(await user.correctPassword(password))) {
+    const error = Error('Incorrect username/password');
+    error.status = 401;
+    throw error;
+  }
+  return user.generateToken();
 };
 
 User.findByToken = async function(token) {
@@ -69,18 +183,99 @@ User.findByToken = async function(token) {
     error.status = 401
     throw error
   }
-}
+};
 
-/**
- * hooks
- */
-const hashPassword = async(user) => {
-  //in case the password has been changed, we want to encrypt it with bcrypt
-  if (user.changed('password')) {
-    user.password = await bcrypt.hash(user.password, SALT_ROUNDS);
+const sendEmail = async (email, subject, payload, template) => {
+  try {
+    // create reusable transporter object using the default SMTP transport
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      port: 465,
+      auth: {
+        user: "retrosgamesnyc@gmail.com",
+        pass: "smkgzqutvsggeuar" // naturally, replace both with your real credentials or an application-specific password
+      },
+      tls:{
+        rejectUnauthorized: false
+    } 
+    });
+
+    const source = fs.readFileSync(path.join(__dirname, template), "utf8");
+    const compiledTemplate = handlebars.compile(source);
+    const options = () => {
+      return {
+        from: "retrosgamesnyc@gmail.com",
+        to: email,
+        subject: subject,
+        html: compiledTemplate(payload),
+      };
+    };
+
+    // Send email
+    transporter.sendMail(options(), (error, info) => {
+      if (error) {
+        console.log(error);
+        return error;
+      } else {
+        return res.status(200).json({
+          success: true,
+        });
+      }
+    });
+  } catch (error) {
+    return error;
   }
-}
+};
 
-User.beforeCreate(hashPassword)
-User.beforeUpdate(hashPassword)
-User.beforeBulkCreate(users => Promise.all(users.map(hashPassword)))
+User.requestPasswordReset = async (user_email) => {
+  const user = await User.findOne({
+    where: {
+      email: user_email
+    }
+  });
+  if(!user) throw new Error("User does not exist");
+  let resetToken = crypto.randomBytes(32).toString("hex");
+  const hash = await bcrypt.hash(resetToken, 5);
+
+  await new Token({
+    userId: user.id,
+    token: hash,
+    createdAt: Date.now(),
+  }).save();
+  const clientURL = "http://localhost:8080"
+  const link = `${clientURL}/passwordreset/${resetToken}/${user.username}/${user.id}`;
+  sendEmail(user.email,"Password Reset Request",{name: user.name,link: link,},"./template/requestResetPassword.handlebars");
+  return link;
+};
+
+User.resetPassword = async (userId, token, password) => {
+  console.log('here')
+  let passwordResetToken = await Token.findOne({
+    where: {
+      userId: userId
+    }
+  });
+  if (!passwordResetToken) {
+    throw new Error("Invalid or expired password reset token");
+  }
+  console.log(passwordResetToken);
+  const isValid = await bcrypt.compare(token, passwordResetToken.token);
+  if (!isValid) {
+    throw new Error("Invalid or expired password reset token");
+  }
+
+  const user = await User.findByPk(userId);
+  await user.update(
+    { password: password }
+  );
+  sendEmail(
+    user.email,
+    "Password Reset Successfully",
+    {
+      name: user.name,
+    },
+    "./template/resetPassword.handlebars"
+  );
+  await passwordResetToken.destroy();
+  return true;
+};

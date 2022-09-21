@@ -1,7 +1,17 @@
+try{
+  require('../.env.js');
+}
+catch(ex){
+  console.log('running locally? create .env file');
+  console.log('deployed? set env variables');
+}
+
+
 const { db } = require('./db')
 const PORT = process.env.PORT || 8080
 const server = require('./socket');
 const seed = require('../script/seed');
+
 
 const init = async () => {
   try {

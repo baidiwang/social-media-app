@@ -5,21 +5,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import {Link} from 'react-router-dom'
 
 const UserProfilePage = ({user, auth}) => {
     return (
         <div>
+            <h1>{user.username}'s profile</h1>
+            <img src={user.avatar} width='160' height='160'/>
+            <h2>About me:</h2>
+            <p>{user.bio}</p>
             {
                 auth.id === user.id ?
-                <p>User and auth is same person</p>
-                :
-                <p>not the same</p>
+                <Link to={`/profile/${auth.id}/update`}> Edit my profile </Link> : ''
             }
         </div>
     )
 };
 const mapState = (state, { match })=> {
-    const user = state.users.find(user => user.id === match.params.id*1) || {};
+    const user = state.users.find(user => user.id === match.params.id) || {};
+
     return {
         user,
         auth: state.auth
@@ -27,7 +31,6 @@ const mapState = (state, { match })=> {
 };
 const mapDispatch = dispatch => {
     return {
-
     }
 };
 export default connect(mapState)(UserProfilePage);

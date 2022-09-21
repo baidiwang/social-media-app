@@ -2,15 +2,17 @@ import React from "react";
 
 import Navbar from "./components/Navbar";
 import Routes from "./Routes";
-// import Footer from "./Footer";
+
+import Footer from "./components/Footer";
+import { Box } from "@mui/material";
 
 const App = () => {
   return (
-    <div>
+    <Box>
       <Navbar />
       <Routes />
-      {/* <Footer /> */}
-    </div>
+      <Footer />
+    </Box>
   );
 };
 
