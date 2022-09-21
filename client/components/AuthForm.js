@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {authenticate} from '../store'
-
+import axios from 'axios';
 /**
  * COMPONENT
  */
@@ -41,6 +41,9 @@ Sign in with GitHub
         </div>
         {error && error.response && <div> {error.response.data} </div>}
       </form>
+      <div>
+      <a href="/passwordResetRequest"> Forgot password?  Click here </a>
+      </div>
     </div>
   )
 }

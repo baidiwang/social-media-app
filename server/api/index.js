@@ -6,6 +6,9 @@ router.use('/users', require('./users'))
 // router.use('/comments', require('./comments'))
 router.use('/photos', require('./photos'))
 router.use('/posts', require('./posts'))
+router.use('/tokens', require('./tokens'));
+router.use('/passwordReset', require('./passwordReset'));
+router.use('/passwordResetRequest', require('./passwordResetRequest'));
 // router.use('/messages', require('./messages'))
 
 router.use((req, res, next) => {

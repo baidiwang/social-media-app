@@ -16586,7 +16586,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/esm/react-router.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/esm/react-router.js");
 /* harmony import */ var _components_AuthForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/AuthForm */ "./client/components/AuthForm.js");
 /* harmony import */ var _components_UserCreateForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/UserCreateForm */ "./client/components/UserCreateForm.js");
 /* harmony import */ var _components_Home__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Home */ "./client/components/Home.js");
@@ -16598,6 +16598,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_PostCreateForm__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/PostCreateForm */ "./client/components/PostCreateForm.js");
 /* harmony import */ var _components_PostUpdateForm__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/PostUpdateForm */ "./client/components/PostUpdateForm.js");
 /* harmony import */ var _components_UserProfilePage__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/UserProfilePage */ "./client/components/UserProfilePage.js");
+/* harmony import */ var _components_PasswordReset__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/PasswordReset */ "./client/components/PasswordReset.js");
+/* harmony import */ var _components_PasswordResetRequest__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/PasswordResetRequest */ "./client/components/PasswordResetRequest.js");
+
+
 
 
 
@@ -16635,50 +16639,56 @@ class Routes extends react__WEBPACK_IMPORTED_MODULE_0__.Component {
     const {
       isLoggedIn
     } = this.props;
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, isLoggedIn ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, window.location.pathname === '/' ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Redirect, {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, isLoggedIn ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, window.location.pathname === '/' ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Redirect, {
       to: "/home"
-    }) : null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Route, {
+    }) : null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
       exact: true,
       path: "/home",
       component: _components_Home__WEBPACK_IMPORTED_MODULE_4__["default"]
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Route, {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
       exact: true,
       path: "/profile/:id",
       component: _components_UserProfilePage__WEBPACK_IMPORTED_MODULE_12__["default"]
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Route, {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
       exact: true,
       path: "/profile/:id/update",
       component: _components_UserUpdateForm__WEBPACK_IMPORTED_MODULE_6__["default"]
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Route, {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
       exact: true,
       path: "/profile/:id",
       component: _components_ProfilePhotoForm__WEBPACK_IMPORTED_MODULE_7__["default"]
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Route, {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
       exact: true,
       path: "/profile/:id",
       component: _components_UserPhotosPage__WEBPACK_IMPORTED_MODULE_8__["default"]
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Route, {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
       exact: true,
       path: "/profile/:id",
       component: _components_Messages__WEBPACK_IMPORTED_MODULE_9__["default"]
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Route, {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
       exact: true,
       path: "posts",
       component: _components_PostCreateForm__WEBPACK_IMPORTED_MODULE_10__["default"]
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Route, {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
       exact: true,
       path: "/posts/:id",
       component: _components_PostUpdateForm__WEBPACK_IMPORTED_MODULE_11__["default"]
-    })) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Switch, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Route, {
+    })) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Switch, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
       path: "/",
       exact: true,
       component: _components_AuthForm__WEBPACK_IMPORTED_MODULE_2__.Login
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Route, {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
       path: "/login",
       component: _components_AuthForm__WEBPACK_IMPORTED_MODULE_2__.Login
-    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__.Route, {
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
       path: "/signup",
       component: _components_UserCreateForm__WEBPACK_IMPORTED_MODULE_3__.Signup
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
+      path: "/passwordResetRequest",
+      component: _components_PasswordResetRequest__WEBPACK_IMPORTED_MODULE_14__["default"]
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_15__.Route, {
+      path: "/passwordreset/:token/:username/:id",
+      component: _components_PasswordReset__WEBPACK_IMPORTED_MODULE_13__["default"]
     })));
   }
 
@@ -16712,7 +16722,7 @@ const mapDispatch = dispatch => {
 // when the url changes
 
 
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_router_dom__WEBPACK_IMPORTED_MODULE_13__.withRouter)((0,react_redux__WEBPACK_IMPORTED_MODULE_1__.connect)(mapState, mapDispatch)(Routes)));
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_router_dom__WEBPACK_IMPORTED_MODULE_15__.withRouter)((0,react_redux__WEBPACK_IMPORTED_MODULE_1__.connect)(mapState, mapDispatch)(Routes)));
 
 /***/ }),
 
@@ -16770,6 +16780,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../store */ "./client/store/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
+
 
 
 
@@ -16810,7 +16823,9 @@ const AuthForm = props => {
     type: "password"
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     type: "submit"
-  }, displayName)), error && error.response && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, " ", error.response.data, " ")));
+  }, displayName)), error && error.response && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, " ", error.response.data, " ")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", {
+    href: "/passwordResetRequest"
+  }, " Forgot password?  Click here ")));
 };
 /**
  * CONTAINER
@@ -16952,7 +16967,19 @@ const Feed = ({
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_icons_material_Favorite__WEBPACK_IMPORTED_MODULE_15__["default"], null)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_material_IconButton__WEBPACK_IMPORTED_MODULE_9__["default"], {
       "aria-label": "share"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_mui_icons_material_Share__WEBPACK_IMPORTED_MODULE_16__["default"], null))));
-  }));
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", null, posts.map(post => {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", {
+      key: post.id
+    }, post.photos ? post.photos.map(photo => {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", {
+        key: photo.id
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
+        src: photo.photoUrl,
+        width: "200",
+        height: "200"
+      }));
+    }) : null);
+  })));
 };
 /**
  * CONTAINER
@@ -17161,6 +17188,190 @@ const mapDispatch = dispatch => {
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_redux__WEBPACK_IMPORTED_MODULE_1__.connect)(mapState, mapDispatch)(Navbar));
+
+/***/ }),
+
+/***/ "./client/components/PasswordReset.js":
+/*!********************************************!*\
+  !*** ./client/components/PasswordReset.js ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router/esm/react-router.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+//be able to update user info
+
+
+
+
+
+class PasswordReset extends (react__WEBPACK_IMPORTED_MODULE_0___default().Component) {
+  constructor() {
+    super();
+    this.state = {
+      userId: '',
+      username: '',
+      token: '',
+      password: ''
+    };
+    this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({
+      userId: this.props.id,
+      username: this.props.username,
+      token: this.props.token
+    });
+  }
+
+  onChange(ev) {
+    this.setState({
+      [ev.target.name]: ev.target.value
+    });
+  }
+
+  async onSubmit(ev) {
+    ev.preventDefault();
+
+    try {
+      await axios__WEBPACK_IMPORTED_MODULE_2___default().post('/api/passwordReset', this.state);
+      this.setState({
+        success: true
+      });
+    } catch (ex) {
+      alert("Password reset link invalid.");
+      console.log(ex);
+    }
+  }
+
+  render() {
+    const {
+      onChange,
+      onSubmit
+    } = this;
+    const {
+      username,
+      password
+    } = this.state;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, this.state.success ? "Thank you for resetting your password" : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
+      onSubmit: onSubmit
+    }, "Change Password for ", username, " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), "Password:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
+      type: "password",
+      name: "password",
+      value: password,
+      onChange: onChange
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
+      type: "submit"
+    }, "Change Password")));
+  }
+
+}
+
+const mapState = () => {
+  const {
+    token,
+    username,
+    id
+  } = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_3__.useParams)();
+  console.log(token);
+  return {
+    token,
+    username,
+    id
+  };
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_redux__WEBPACK_IMPORTED_MODULE_1__.connect)(mapState, null)(PasswordReset));
+
+/***/ }),
+
+/***/ "./client/components/PasswordResetRequest.js":
+/*!***************************************************!*\
+  !*** ./client/components/PasswordResetRequest.js ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+//be able to update user info
+
+
+
+
+class PasswordResetRequest extends (react__WEBPACK_IMPORTED_MODULE_0___default().Component) {
+  constructor() {
+    super();
+    this.state = {
+      email: '',
+      password_email_sent: false
+    };
+    this.updatepassword = this.updatepassword.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(ev) {
+    this.setState({
+      [ev.target.name]: ev.target.value
+    });
+  }
+
+  async updatepassword(ev) {
+    try {
+      ev.preventDefault();
+      await axios__WEBPACK_IMPORTED_MODULE_2___default().post('/api/passwordResetRequest', this.state);
+      this.setState({
+        password_email_sent: true
+      });
+      this.setState({
+        password_reset: false
+      });
+    } catch (ex) {
+      alert("No user found with that email");
+      console.log(ex);
+    }
+  }
+
+  render() {
+    const {
+      handleChange,
+      updatepassword
+    } = this;
+    const {
+      password_email_sent,
+      email
+    } = this.state;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, password_email_sent ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, "Check your email to continue with password reset.") : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("form", {
+      onSubmit: updatepassword
+    }, "Password Reset: What is the email associated with your account? ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), "Email:", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("input", {
+      name: "email",
+      onChange: handleChange,
+      value: email
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", null, "Reset Password")));
+  }
+
+}
+
+;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,react_redux__WEBPACK_IMPORTED_MODULE_1__.connect)(null, null)(PasswordResetRequest));
 
 /***/ }),
 

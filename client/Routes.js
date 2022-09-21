@@ -12,7 +12,8 @@ import Messages from './components/Messages';
 import PostCreateForm from './components/PostCreateForm';
 import PostUpdateForm from './components/PostUpdateForm';
 import UserProfilePage from './components/UserProfilePage';
-
+import PasswordReset from './components/PasswordReset';
+import PasswordResetRequest from './components/PasswordResetRequest';
 
 /**
  * COMPONENT
@@ -48,12 +49,15 @@ class Routes extends Component {
             <Route exact path='/profile/:id' component={ Messages } />
             <Route exact path='posts' component={ PostCreateForm } />
             <Route exact path='/posts/:id' component={ PostUpdateForm } />
+            
           </div>
         ) : (
           <Switch>
             <Route path='/' exact component={ Login } />
             <Route path="/login" component={Login} />
             <Route path="/signup" component={Signup} />
+            <Route path="/passwordResetRequest" component={PasswordResetRequest}/>
+            <Route path='/passwordreset/:token/:username/:id' component={ PasswordReset }/>
           </Switch>
         )}
       </div>

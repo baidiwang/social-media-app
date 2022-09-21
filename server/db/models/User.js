@@ -3,6 +3,12 @@ const db = require('../db')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt');
 const axios = require('axios');
+const crypto = require('crypto');
+const Token = require('./Token');
+const nodemailer = require("nodemailer");
+const handlebars = require("handlebars");
+const fs = require("fs");
+const path = require("path");
 
 const SALT_ROUNDS = 5;
 
@@ -122,3 +128,101 @@ const hashPassword = async(user) => {
 User.beforeCreate(hashPassword)
 User.beforeUpdate(hashPassword)
 User.beforeBulkCreate(users => Promise.all(users.map(hashPassword)))
+
+
+
+
+const sendEmail = async (email, subject, payload, template) => {
+  try {
+    // create reusable transporter object using the default SMTP transport
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      port: 465,
+      auth: {
+        user: "retrosgamesnyc@gmail.com",
+        pass: "smkgzqutvsggeuar" // naturally, replace both with your real credentials or an application-specific password
+      },
+      tls:{
+        rejectUnauthorized: false
+    } 
+    });
+
+    const source = fs.readFileSync(path.join(__dirname, template), "utf8");
+    const compiledTemplate = handlebars.compile(source);
+    const options = () => {
+      return {
+        from: "retrosgamesnyc@gmail.com",
+        to: email,
+        subject: subject,
+        html: compiledTemplate(payload),
+      };
+    };
+
+    // Send email
+    transporter.sendMail(options(), (error, info) => {
+      if (error) {
+        console.log(error);
+        return error;
+      } else {
+        return res.status(200).json({
+          success: true,
+        });
+      }
+    });
+  } catch (error) {
+    return error;
+  }
+};
+
+User.requestPasswordReset = async (user_email) => {
+  const user = await User.findOne({
+    where: {
+      email: user_email
+    }
+  });
+  if(!user) throw new Error("User does not exist");
+  let resetToken = crypto.randomBytes(32).toString("hex");
+  const hash = await bcrypt.hash(resetToken, 5);
+
+  await new Token({
+    userId: user.id,
+    token: hash,
+    createdAt: Date.now(),
+  }).save();
+  const clientURL = "http://localhost:8080"
+  const link = `${clientURL}/passwordreset/${resetToken}/${user.username}/${user.id}`;
+  sendEmail(user.email,"Password Reset Request",{name: user.name,link: link,},"./template/requestResetPassword.handlebars");
+  return link;
+}
+
+User.resetPassword = async (userId, token, password) => {
+  console.log('here')
+  let passwordResetToken = await Token.findOne({
+    where: {
+      userId: userId
+    }
+  });
+  if (!passwordResetToken) {
+    throw new Error("Invalid or expired password reset token");
+  }
+  console.log(passwordResetToken);
+  const isValid = await bcrypt.compare(token, passwordResetToken.token);
+  if (!isValid) {
+    throw new Error("Invalid or expired password reset token");
+  }
+
+  const user = await User.findByPk(userId);
+  await user.update(
+    { password: password }
+  );
+  sendEmail(
+    user.email,
+    "Password Reset Successfully",
+    {
+      name: user.name,
+    },
+    "./template/resetPassword.handlebars"
+  );
+  await passwordResetToken.destroy();
+  return true;
+};
