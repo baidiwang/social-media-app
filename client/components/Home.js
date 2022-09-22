@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { Box, Stack } from "@mui/material";
 import Feed from "./Feed";
 import SideMenu from "./SideMenu";
+import FAB from "./FAB";
 
 /**
  * COMPONENT
@@ -18,6 +19,7 @@ export const Home = ({ username, posts }) => {
         <SideMenu />
         <Feed />
       </Stack>
+      <FAB />
     </Box>
   );
 };
