@@ -1,4 +1,5 @@
 const app = require('./app')
+const {db} = require('./db')
 const server = require('http').createServer(app);
 
 const io = require('socket.io')(server);
@@ -11,8 +12,14 @@ io.on('connection', (socket) => {
 		socket.join(data.roomId);
 	});
 
-	socket.on('message', (data) => {
-		socket.to(data.roomId).emit("message", data);
+	socket.on('message', async (data) => {
+		const message = await db.models.user.prototype.addMessage({
+			text: data.text,
+			senderId: data.senderId,
+			receiverId: data.receiverId,
+			date: new Date()
+		});
+		socket.to(data.roomId).emit("message", message);
 	});
 });
 

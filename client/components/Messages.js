@@ -5,21 +5,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { connect } from "react-redux";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
-import { FaMicrophoneAlt } from "react-icons/fa";
 import { BsEmojiSmileFill } from "react-icons/bs";
 import { MdSend } from "react-icons/md";
-import { faker } from "@faker-js/faker";
 import { io } from "socket.io-client";
-
-const otherId = faker.database.mongodbObjectId();
-const userId = faker.database.mongodbObjectId();
-const mockMessages = [
-  { id: 1, text: faker.random.words(), creator: userId },
-  { id: 2, text: faker.random.words(), creator: otherId },
-  { id: 3, text: faker.random.words(), creator: otherId },
-  { id: 4, text: `<img src="${faker.image.animals()}"/>`, creator: otherId },
-  { id: 5, text: faker.random.words(), creator: userId },
-];
+import { useParams } from 'react-router-dom'
+import { getFriend, getMessages } from '../store'
 
 const emojis = [
   "😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂",
@@ -45,33 +35,37 @@ const quickEmojis = ['👍', '😍', '🤩', '❤️']
 
 let socket = io();
 
-const roomId = 'mockRooId';
-
-const Messages = ({ user }) => {
+const Messages = ({ user, messages, getMessages, addMessage, getFriend }) => {
   const [text, setText] = useState('');
   const [show, setShow] = useState(false);
-  const [messages, setMessages] = useState(mockMessages);
+  // const [messages, setMessages] = useState([]);
 
   const messagesEnd = useRef();
 
+  const { id } = useParams();
+
+  const roomId = user.id > id ? `${user.id}-${id}`: `${id}-${user.id}`;
+
   useEffect(() => {
-    // TODO Generate roomId according to friends
+    getFriend(id);
+    getMessages(id);
+
     socket.emit('createRoom', { roomId })
 
     socket.on("message", (data) => {
-      setMessages(prevMessages => [...prevMessages, data]);
+      addMessage(data);
     });
   }, [])
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages.messages]);
 
   const sendMessage = (directText) => {
     const sendText = directText || text.trim();
     if (sendText !== '') {
-      socket.emit('message', { id: Date.now(), text: sendText, creator: userId, roomId });
-      setMessages(prevMessages => [...prevMessages, { id: Date.now(), text: sendText, creator: userId }]);
+      socket.emit('message', { text: sendText, senderId: user.id, receiverId: id, roomId });
+      addMessage({ id: Date.now(), text: sendText, senderId: user.id, receiverId: id });
       setText('');
     }
   }
@@ -93,25 +87,26 @@ const Messages = ({ user }) => {
         <div>
           <IoArrowBackCircleOutline
             style={{ fontSize: 50, color: "#747474" }}
+            onClick={() => history.back()}
           />
         </div>
-        <div>{user.username}</div>
+        <div>{messages.friend && messages.friend.username}</div>
         <div>
-          <img className="avatar" src={user.avatar} alt="avatar" />
+          <img className="avatar" src={messages.friend && messages.friend.avatar} alt="avatar" />
         </div>
       </div>
       <div className="message-list">
-        {messages.map((message) => (
+        {messages.messages.map((message) => (
           <div
             key={message.id}
             className={[
               "message-item",
-              message.creator === userId ? "me" : "",
+              message.senderId === user.id ? "me" : "",
             ].join(" ")}
           >
             {message.text}
             {
-              message.creator !== userId && (
+              message.senderId !== user.id && (
                 <div className="quick-emojis">
                   {
                     quickEmojis.map(emoji =>
@@ -147,7 +142,10 @@ const Messages = ({ user }) => {
             }
           </>
           <div className="message-input">
-            <input placeholder="Type message here..." value={text} onChange={e => setText(e.target.value)} />
+            <input placeholder="Type message here..."
+                   value={text}
+                   onChange={e => setText(e.target.value)}
+                   onKeyDown={e => e.key === 'Enter' && sendMessage()} />
           </div>
           <div>
             <MdSend style={{ color: "#b3c5e7", fontSize: 20 }} onClick={() => sendMessage()} />
@@ -160,10 +158,15 @@ const Messages = ({ user }) => {
 
 const mapState = (state) => {
   return {
-    user: state.auth
+    user: state.auth,
+    messages: state.messages
   };
 };
 const mapDispatch = (dispatch) => {
-  return {};
+  return {
+    getMessages: (messageId) => dispatch(getMessages(messageId)),
+    addMessage: (message) => dispatch({type: 'CREATE_MESSAGE', message}),
+    getFriend: (friendId) => dispatch(getFriend(friendId))
+  };
 };
 export default connect(mapState, mapDispatch)(Messages);

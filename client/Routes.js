@@ -14,6 +14,7 @@ import PostUpdateForm from './components/PostUpdateForm';
 import UserProfilePage from './components/UserProfilePage';
 import PasswordReset from './components/PasswordReset';
 import PasswordResetRequest from './components/PasswordResetRequest';
+import Friends from './components/Friends'
 
 /**
  * COMPONENT
@@ -46,6 +47,7 @@ class Routes extends Component {
             <Route exact path='/profile/:id' component={ ProfilePhotoForm } />
             <Route exact path='/profile/:id' component={ UserPhotosPage } />
             <Route exact path='/message/:id' component={ Messages } />
+            <Route exact path='/friends' component={ Friends } />
             <Route exact path='posts' component={ PostCreateForm } />
             <Route exact path='/posts/:id' component={ PostUpdateForm } />
           </div>

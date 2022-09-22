@@ -1,11 +1,22 @@
 import axios from 'axios';
 
-const messages = (state=[], action) => {
+const messages = (state= { messages: [], friend: null }, action) => {
 	if(action.type === 'SET_MESSAGES'){
-		return action.messages;
+		return {
+			...state,
+			messages: action.messages
+		};
 	}
 	else if(action.type === 'CREATE_MESSAGE'){
-		return [action.message, ...state];
+		return {
+			...state,
+			messages: [...state.messages, action.message]
+		};
+	} else if (action.type === 'SET_FRIEND') {
+		return {
+			...state,
+			friend: action.friend
+		}
 	}
 	return state;
 };
@@ -40,5 +51,18 @@ export const getMessages = (messageId) => {
 		dispatch({type: 'SET_MESSAGES', messages});
 	}
 };
+
+// get friend information
+export const getFriend = (friendId) => {
+	return async(dispatch) => {
+		const friend = (await axios.get('/api/users/' + friendId,
+			{
+				headers: {
+					authorization: window.localStorage.getItem('token')
+				}
+			})).data;
+		dispatch({type: 'SET_FRIEND', friend});
+	}
+}
 
 export default messages;
