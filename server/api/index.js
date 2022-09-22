@@ -10,7 +10,7 @@ router.use('/tokens', require('./tokens'));
 router.use('/passwordReset', require('./passwordReset'));
 router.use('/passwordResetRequest', require('./passwordResetRequest'));
 router.use('/connections', require('./connections'));
-// router.use('/messages', require('./messages'))
+router.use('/messages', require('./messages'))
 
 router.use((req, res, next) => {
   const error = new Error('Not Found')
