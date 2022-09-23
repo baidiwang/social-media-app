@@ -17,3 +17,11 @@ router.post('/', isLoggedIn, async(req, res, next) => {
     next(err)
   }
 });
+
+router.put('/:id', isLoggedIn, async(req, res, next) => {
+  try{
+    res.send(await req.user.deleteLike(req.params.id*1, req.body));
+  } catch(err){
+    next(err)
+  }
+});

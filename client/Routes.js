@@ -12,6 +12,7 @@ import Messages from './components/Messages';
 import PostCreateForm from './components/PostCreateForm';
 import PostUpdateForm from './components/PostUpdateForm';
 import UserProfilePage from './components/UserProfilePage';
+import UserPostsPage from './components/UserPostsPage';
 import PasswordReset from './components/PasswordReset';
 import PasswordResetRequest from './components/PasswordResetRequest';
 import Friends from './components/Friends'
