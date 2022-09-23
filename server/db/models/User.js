@@ -152,7 +152,7 @@ User.prototype.addConnection = async function(body){
   return (await db.models.create(body));
 };
 //***************************************************************** MESSAGES ******************************************************************
-User.prototype.getMessages = async function(messageId) {
+User.prototype.getFriendMessages = async function(messageId) {
   return await db.models.message.findAll({
     where: {
       [Op.or]: [
@@ -166,6 +166,15 @@ User.prototype.getMessages = async function(messageId) {
         }
       ]
     }
+  });
+}
+User.prototype.getMessages = async function() {
+  return await db.models.message.findAll({
+    where: { receiverId: this.id },
+    include: [
+      {model: User, as: "sender"}
+    ],
+    order: [['createdAt', 'DESC'],]
   });
 }
 User.prototype.addMessage = async function(body) {

@@ -20,6 +20,11 @@ io.on('connection', (socket) => {
 			date: new Date()
 		});
 		socket.to(data.roomId).emit("message", message);
+		socket.broadcast.emit("messages", message);
+	});
+
+	socket.on('forceDisconnect', () => {
+		socket.disconnect();
 	});
 });
 
