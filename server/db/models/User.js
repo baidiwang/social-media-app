@@ -137,6 +137,11 @@ User.prototype.addLike = async function(body){
   const like = await db.models.like.create(body);
   return this.getSinglePost(like.postId);
 };
+User.prototype.deleteLike = async function(id, body){
+  const like = await db.models.like.findByPk(id);
+  await like.destroy();
+  return this.getSinglePost(body.postId);
+};
 //***************************************************************** CONNECTIONS ******************************************************************
 //get all connections
 User.prototype.getConnections = async function(){

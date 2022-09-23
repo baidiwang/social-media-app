@@ -55,11 +55,11 @@ export const getSinglePost = (post) => {
     }
 };
 //add like
-export const addLike = (post, auth) => {
+export const addLike = (authId, postId) => {
     return async(dispatch) => {
-        post = (await axios.post('/api/likes', {
-            userId: auth.id,
-            postId: post.id
+        const post = (await axios.post('/api/likes', {
+            userId: authId,
+            postId: postId
         },
         {
             headers: {
@@ -67,6 +67,18 @@ export const addLike = (post, auth) => {
             }
         })).data;
         dispatch({type: 'UPDATE_POST', post});
+    }
+};
+//delete like
+export const deleteLike = (likeId, postId) => {
+    return async(dispatch) => {
+        const post = (await axios.put(`/api/likes/${likeId}`, { postId }, {
+            headers: {
+                authorization: window.localStorage.getItem('token')
+            }
+        })).data;
+        console.log(post)
+        dispatch({type: 'UPDATE_POST', post})
     }
 };
 //add comment
