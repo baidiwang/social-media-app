@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Tooltip, Fab, Box, Modal, Typography } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import PostCreateForm from "./PostCreateForm";
 
 const FAB = () => {
   const [open, setOpen] = useState(false);
@@ -27,14 +28,19 @@ const FAB = () => {
         aria-describedby="modal-modal-description"
       >
         <Box
-          width={400}
-          height={300}
+          width={450}
+          height={800}
           borderRadius="8px"
-          backgroundColor="white"
+          backgroundColor={"background.default"}
+          color={"text.primary"}
+          textAlign="center"
         >
-          <Typography variant="span" align="center">
+          <Typography marginTop={2} color={"gray"} variant="h5">
             Create New Post
           </Typography>
+          <Box sx={{ marginTop: 5 }}>
+            <PostCreateForm />
+          </Box>
         </Box>
       </Modal>
     </Box>

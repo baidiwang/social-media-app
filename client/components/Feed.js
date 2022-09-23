@@ -28,8 +28,7 @@ import { addLike } from "../store";
 const Feed = ({ username, posts, auth, photos, addLike }) => {
   return (
     <Box flex={5} p={1}>
-      <h3>Welcome, {username}</h3>
-      <PostCreateForm />
+      {/* <PostCreateForm /> */}
       {posts.map((post) => {
         return (
           <Card sx={{ margin: 5 }} key={post.id}>
@@ -57,6 +56,7 @@ const Feed = ({ username, posts, auth, photos, addLike }) => {
                     key={photo.id}
                     component="img"
                     height="20%"
+                    width="20%"
                     image={photo.photoUrl}
                   />
                 );
