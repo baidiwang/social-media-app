@@ -27,7 +27,6 @@ import { addLike, deleteLike } from "../store";
 const PostHelper = ({ posts, auth, photos, addLike, deleteLike }) => {
   const checkLike = (post, auth) => {
     const like = post.likes.find(like => like.userId === auth.id);
-    console.log(like)
     return like;
   };
   const unLike = (auth, post) => {

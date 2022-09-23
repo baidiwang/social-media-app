@@ -6,6 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {Link} from 'react-router-dom';
+import auth from '../store/auth';
 
 const UserProfilePage = ({user, auth}) => {
     return (
@@ -23,6 +24,12 @@ const UserProfilePage = ({user, auth}) => {
 };
 const mapState = (state, { match })=> {
     const user = state.users.find(user => user.id === match.params.id) || {};
+    // const connections = state.connections.filter(connection => {
+    //     connection.followingId === user.id &&
+    //     connection.followerId === state.auth.id ||
+    //     connection.followingId === state.auth.id && 
+    //     connectio
+    // })
     return {
         user,
         auth: state.auth
