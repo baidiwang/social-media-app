@@ -14,7 +14,7 @@ const users = (state = [], action)=> {
   if(action.type === 'DELETE_USER') {
     return state.filter((user)=> user.id !== action.user.id);
   }
-  return state; 
+  return state;
 };
 
 export const createUser = (credentials) => {

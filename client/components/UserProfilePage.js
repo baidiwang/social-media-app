@@ -33,4 +33,4 @@ const mapDispatch = dispatch => {
     return {
     }
 };
-export default connect(mapState, mapDispatch)(UserProfilePage);
+export default connect(mapState)(UserProfilePage);

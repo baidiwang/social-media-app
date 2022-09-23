@@ -10,6 +10,7 @@ const handlebars = require("handlebars");
 const fs = require("fs");
 const path = require("path");
 const { Dvr } = require('@mui/icons-material');
+const {Op} = require('sequelize')
 
 const SALT_ROUNDS = 5;
 
@@ -146,7 +147,25 @@ User.prototype.addConnection = async function(body){
   return (await db.models.create(body));
 };
 //***************************************************************** MESSAGES ******************************************************************
-
+User.prototype.getMessages = async function(messageId) {
+  return await db.models.message.findAll({
+    where: {
+      [Op.or]: [
+        {
+          senderId: this.id,
+          receiverId: messageId
+        },
+        {
+          senderId: messageId,
+          receiverId: this.id
+        }
+      ]
+    }
+  });
+}
+User.prototype.addMessage = async function(body) {
+  return await db.models.message.create(body)
+}
 //***************************************************************** USERS *********************************************************************
 
 //******************************************************* PASSWORD / AUTH RELATED *************************************************************
@@ -197,7 +216,7 @@ const sendEmail = async (email, subject, payload, template) => {
       },
       tls:{
         rejectUnauthorized: false
-    } 
+    }
     });
 
     const source = fs.readFileSync(path.join(__dirname, template), "utf8");
