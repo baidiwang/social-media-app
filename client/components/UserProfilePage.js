@@ -5,7 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {Link} from 'react-router-dom'
+import {Link} from 'react-router-dom';
 
 const UserProfilePage = ({user, auth}) => {
     return (
@@ -23,14 +23,9 @@ const UserProfilePage = ({user, auth}) => {
 };
 const mapState = (state, { match })=> {
     const user = state.users.find(user => user.id === match.params.id) || {};
-
     return {
         user,
         auth: state.auth
-    }
-};
-const mapDispatch = dispatch => {
-    return {
     }
 };
 export default connect(mapState)(UserProfilePage);
