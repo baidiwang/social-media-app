@@ -1,172 +1,100 @@
-//should be able to display chat from sender to receiver
+import React, { useEffect } from 'react'
+import {
+  Avatar,
+  Box,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Typography
+} from '@mui/material'
+import { connect } from 'react-redux'
+import { useHistory } from 'react-router-dom'
+import { getMessages } from '../store'
+import ReplyIcon from '@mui/icons-material/Reply';
+import { io } from 'socket.io-client'
 
-//npm install react-icons --save
+let socket;
 
-import React, { useEffect, useRef, useState } from 'react'
-import { connect } from "react-redux";
-import { IoArrowBackCircleOutline } from "react-icons/io5";
-import { BsEmojiSmileFill } from "react-icons/bs";
-import { MdSend } from "react-icons/md";
-import { io } from "socket.io-client";
-import { useParams } from 'react-router-dom'
-import { getFriend, getMessages } from '../store'
-
-const emojis = [
-  "😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂",
-  "🙃", "😉", "😊", "😇", "🥰", "😍", "🤩", "😘", "😗",
-  "☺️", "😚", "😙", "🥲", "😋", "😛", "😜", "🤪", "😝",
-  "🤑", "🤗", "🤭", "🤫", "🤔", "🤐", "🤨", "😐", "😑",
-  "😶", "😶‍🌫️", "😏", "😒", "🙄", "😬", "😮‍💨", "🤥", "😌",
-  "😔", "😪", "🤤", "😴", "😷", "🤒", "🤕", "🤢", "🤮",
-  "🤧", "🥵", "🥶", "🥴", "😵", "😵‍💫", "🤯", "🤠", "🥳",
-  "🥸", "😎", "🤓", "🧐", "😕", "😟", "🙁", "☹️", "😮",
-  "😯", "😲", "😳", "🥺", "😦", "😧", "😨", "😰", "😥",
-  "😢", "😭", "😱", "😖", "😣", "😞", "😓", "😩", "😫",
-  "🥱", "😤", "😡", "😠", "🤬", "😈", "👿", "💀", "☠️",
-  "💩", "🤡", "👹", "👺", "👻", "👽", "👾", "🤖", "😺", "😸",
-  "😹", "😻", "😼", "😽", "🙀", "😿", "😾", "🙈", "🙉", "🙊",
-  "💋", "💌", "💘", "💝", "💖", "💗", "💓", "💞", "💕", "💟",
-  "❣️", "💔", "❤️‍🔥", "❤️‍🩹", "❤️", "🧡", "💛",
-  "💚", "💙", "💜", "🤎", "🖤", "🤍", "💯", "💢", "💥", "💫",
-  "💦", "💨", "🕳️", "💣", "💬", "👁️‍🗨️", "🗨️", "🗯️", "💭", "💤"
-]
-
-const quickEmojis = ['👍', '😍', '🤩', '❤️']
-
-let socket = io();
-
-const Messages = ({ user, messages, getMessages, addMessage, getFriend }) => {
-  const [text, setText] = useState('');
-  const [show, setShow] = useState(false);
-  // const [messages, setMessages] = useState([]);
-
-  const messagesEnd = useRef();
-
-  const { id } = useParams();
-
-  const roomId = user.id > id ? `${user.id}-${id}`: `${id}-${user.id}`;
+const Messages = ({ user, messages, getMessages }) => {
+  const history = useHistory();
 
   useEffect(() => {
-    getFriend(id);
-    getMessages(id);
+    getMessages();
 
-    socket.emit('createRoom', { roomId })
+    socket = io()
 
-    socket.on("message", (data) => {
-      addMessage(data);
+    socket.on("messages", (message) => {
+      if (user.id === message.receiverId) {
+        getMessages();
+      }
     });
+
+    return () => socket.emit('forceDisconnect');
   }, [])
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages.messages]);
-
-  const sendMessage = (directText) => {
-    const sendText = directText || text.trim();
-    if (sendText !== '') {
-      socket.emit('message', { text: sendText, senderId: user.id, receiverId: id, roomId });
-      addMessage({ id: Date.now(), text: sendText, senderId: user.id, receiverId: id });
-      setText('');
-    }
+  const sendMessage = (friendId) => {
+    history.push('/conversation/' + friendId);
   }
 
-  const scrollToBottom = () => {
-    if (messagesEnd.current) {
-      messagesEnd.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }
-
-  const handleEmojiClick = (emoji) => {
-    setText(prevText => prevText + emoji);
-    setShow(false);
-  }
+  const receivedSenders = [];
 
   return (
-    <div className="message-container">
-      <div className="message-header">
-        <div>
-          <IoArrowBackCircleOutline
-            style={{ fontSize: 50, color: "#747474" }}
-            onClick={() => history.back()}
-          />
-        </div>
-        <div>{messages.friend && messages.friend.username}</div>
-        <div>
-          <img className="avatar" src={messages.friend && messages.friend.avatar} alt="avatar" />
-        </div>
-      </div>
-      <div className="message-list">
-        {messages.messages.map((message) => (
-          <div
-            key={message.id}
-            className={[
-              "message-item",
-              message.senderId === user.id ? "me" : "",
-            ].join(" ")}
-          >
-            {message.text}
-            {
-              message.senderId !== user.id && (
-                <div className="quick-emojis">
-                  {
-                    quickEmojis.map(emoji =>
-                      <div key={emoji}
-                           className="quick-emojis-item"
-                           onClick={() => sendMessage(emoji)}>
-                        {emoji}
-                      </div>
-                    )
-                  }
-                </div>
-              )
+    <div>
+      <List>
+        {
+          messages.messages.filter(message => {
+            if (receivedSenders.includes(message.sender.id)) {
+              return false;
+            } else {
+              receivedSenders.push(message.sender.id);
+              return true;
             }
-          </div>
-        ))}
-      </div>
-      <div style={{ float:"left", clear: "both" }} ref={messagesEnd}></div>
-      <div className="message-footer">
-        <div className="message-input-wrapper">
-          <>
-            <BsEmojiSmileFill style={{ color: "#b4b4b4", fontSize: 20, cursor: 'pointer' }} onClick={() => setShow(true)}/>
-            {
-              show && (
-                <>
-                  <div className="message-emoji-list">
-                    {
-                      emojis.map(emoji => <div key={emoji} className="message-emoji-item" onClick={() => handleEmojiClick(emoji)}>{emoji}</div>)
-                    }
-                  </div>
-                  <div className="message-emoji-shadow" onClick={() => setShow(false)}></div>
-                </>
-              )
-            }
-          </>
-          <div className="message-input">
-            <input placeholder="Type message here..."
-                   value={text}
-                   onChange={e => setText(e.target.value)}
-                   onKeyDown={e => e.key === 'Enter' && sendMessage()} />
-          </div>
-          <div>
-            <MdSend style={{ color: "#b3c5e7", fontSize: 20 }} onClick={() => sendMessage()} />
-          </div>
-        </div>
-      </div>
+          }).map(message => (
+            <ListItem disablePadding key={message.id} secondaryAction={
+              <IconButton edge="end" aria-label="delete" onClick={() => sendMessage(message.sender.id)}>
+                <ReplyIcon />
+              </IconButton>
+            }>
+              <ListItemButton>
+                <ListItemIcon>
+                  <Avatar
+                    alt="avatar"
+                    src={message.sender.avatar}
+                    sx={{ width: 56, height: 56 }}
+                  />
+                </ListItemIcon>
+                <ListItemText primary={
+                  <Box ml={2}>
+                    <Typography variant="subtitle2" sx={{fontSize: 18, fontWeight: 600}}>
+                      {message.sender.username}
+                    </Typography>
+                    <Typography variant="body2">{message.text}</Typography>
+                    <Typography variant="caption" display="block" sx={{color: '#a1a1a1'}}>
+                      {message.date}
+                    </Typography>
+                  </Box>
+                } />
+              </ListItemButton>
+            </ListItem>
+          ))
+        }
+      </List>
     </div>
-  );
-};
+  )
+}
 
 const mapState = (state) => {
   return {
     user: state.auth,
     messages: state.messages
-  };
-};
+  }
+}
 const mapDispatch = (dispatch) => {
   return {
-    getMessages: (messageId) => dispatch(getMessages(messageId)),
-    addMessage: (message) => dispatch({type: 'CREATE_MESSAGE', message}),
-    getFriend: (friendId) => dispatch(getFriend(friendId))
-  };
-};
-export default connect(mapState, mapDispatch)(Messages);
+    getMessages: () => dispatch(getMessages())
+  }
+}
+export default connect(mapState, mapDispatch)(Messages)

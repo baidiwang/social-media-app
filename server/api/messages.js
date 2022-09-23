@@ -4,7 +4,15 @@ const { isLoggedIn } = require('../middleware')
 
 router.get('/', isLoggedIn, async (req, res, next) => {
   try {
-    res.send(await req.user.getMessages(req.query.messageId));
+    res.send(await req.user.getMessages());
+  } catch (err) {
+    next(err)
+  }
+});
+
+router.get('/friend', isLoggedIn, async (req, res, next) => {
+  try {
+    res.send(await req.user.getFriendMessages(req.query.messageId));
   } catch (err) {
     next(err)
   }
