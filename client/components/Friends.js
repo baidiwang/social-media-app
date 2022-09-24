@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { Box, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material'
-import SendIcon from '@mui/icons-material/Send';
+import {
+	Box,
+	Button,
+	List,
+	ListItem,
+	ListItemButton,
+	ListItemIcon,
+	ListItemText,
+	Typography
+} from '@mui/material'
 import { connect } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { addConnection, deleteConnection } from '../store'
 
-const Friends = ({ user }) => {
-	const [friends, setFriends] = useState([])
-
-	const history = useHistory();
+const Friends = ({ user, connections, deleteConnection, addConnection }) => {
+	const [friends, setFriends] = useState([]);
 
 	useEffect(() => {
 		const token = window.localStorage.getItem('token')
@@ -21,8 +27,24 @@ const Friends = ({ user }) => {
 		})
 	}, [])
 
-	const sendMessage = (friendId) => {
-		history.push('/conversation/' + friendId);
+	const getFollowAction = (friend) => {
+		const findConnection = connections.find(
+			connection => connection.followerId === friend.id &&
+				connection.followingId === user.id);
+		if (findConnection) {
+			return (
+				<Button variant="contained"
+				        onClick={() => deleteConnection(findConnection)}>
+					Unfollow
+				</Button>
+			);
+		}
+		return (
+			<Button variant="contained"
+							onClick={() => addConnection(user, friend)}>
+				Follow
+			</Button>
+		);
 	}
 
 	return (
@@ -30,11 +52,7 @@ const Friends = ({ user }) => {
 			<List>
 				{
 					friends.filter(friend => friend.id !== user.id).map(friend => (
-						<ListItem disablePadding key={friend.id} secondaryAction={
-							<IconButton edge="end" aria-label="delete" onClick={() => sendMessage(friend.id)}>
-								<SendIcon />
-							</IconButton>
-						}>
+						<ListItem disablePadding key={friend.id} secondaryAction={getFollowAction(friend)}>
 							<ListItemButton>
 								<ListItemIcon>
 									<img src={friend.avatar} alt="avatar" />
@@ -59,10 +77,14 @@ const Friends = ({ user }) => {
 
 const mapState = (state) => {
 	return {
-		user: state.auth
+		user: state.auth,
+		connections: state.connections
 	}
 }
 const mapDispatch = (dispatch) => {
-	return {}
+	return {
+		deleteConnection: (connection) => dispatch(deleteConnection(connection)),
+		addConnection: (following, follower) => dispatch(addConnection(following, follower)),
+	}
 }
 export default connect(mapState, mapDispatch)(Friends)
