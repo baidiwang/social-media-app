@@ -26,7 +26,7 @@ import { addLike, deleteLike } from "../store";
  */
 const PostHelper = ({ posts, auth, photos, addLike, deleteLike }) => {
   const checkLike = (post, auth) => {
-    const like = post.likes.find(like => like.userId === auth.id);
+    const like = post.likes.find((like) => like.userId === auth.id);
     return like;
   };
   const unLike = (auth, post) => {
@@ -35,7 +35,8 @@ const PostHelper = ({ posts, auth, photos, addLike, deleteLike }) => {
   };
   return (
     <Box flex={5} p={1}>
-        {posts.map((post) => {
+      {posts.map((post) => {
+        console.log("postHelp", post);
         return (
           <Card sx={{ margin: 5 }} key={post.id}>
             <CardHeader
@@ -51,7 +52,7 @@ const PostHelper = ({ posts, auth, photos, addLike, deleteLike }) => {
                   <MoreVertIcon />
                 </IconButton>
               }
-              title={post.user.username}
+              title={<Link to={`/posts/${post.id}`}>{post.user.username}</Link>}
               subheader={post.date}
             />
             {photos
@@ -74,15 +75,12 @@ const PostHelper = ({ posts, auth, photos, addLike, deleteLike }) => {
             <CardActions disableSpacing>
               {checkLike(post, auth) ? (
                 <div>
-                    <IconButton aria-label="add to favorites">
+                  <IconButton aria-label="add to favorites">
                     <FavoriteIcon sx={{ color: pink[500] }} />
                     {post.likes.length} likes
                   </IconButton>
-                  <button onClick={() => unLike(auth, post)}>
-                    Liked
-                  </button>
+                  <button onClick={() => unLike(auth, post)}>Liked</button>
                 </div>
-                
               ) : (
                 <div>
                   <IconButton aria-label="add to favorites">
@@ -142,8 +140,8 @@ const mapDispatch = (dispatch) => {
       dispatch(addLike(authId, postId));
     },
     deleteLike: (likeId, postId) => {
-      dispatch(deleteLike(likeId, postId))
-    }
+      dispatch(deleteLike(likeId, postId));
+    },
   };
 };
 
