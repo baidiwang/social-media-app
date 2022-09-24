@@ -9,6 +9,7 @@ import MessageIcon from "@mui/icons-material/Message";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import VideocamIcon from "@mui/icons-material/Videocam";
+import Search from "./Search";
 
 const Navbar = ({ handleClick, isLoggedIn, auth }) => {
   const [open, setOpen] = useState(false);
@@ -25,6 +26,7 @@ const Navbar = ({ handleClick, isLoggedIn, auth }) => {
               <Link style={{ color: "white" }} to="/home">
                 Social App
               </Link>
+              <Search />
               <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                 <Link style={{ color: "white" }} to="/videos">
                   <VideocamIcon style={{ fontSize: "1.5rem" }} />

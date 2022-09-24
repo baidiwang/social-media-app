@@ -34,7 +34,18 @@ export const addConnection = (following, follower) => {
                 authorization: window.localStorage.getItem('token')
             }
         })).data;
+        console.log(connection)
         dispatch({type: 'ADD_CONNECTION', connection});
     }
-}
+};
+export const deleteConnection = (connection) => {
+    return async(dispatch) => {
+        await axios.delete(`/api/connections/${connection.id}`, {
+            headers: {
+                authorization: window.localStorage.getItem('token')
+            }
+        });
+        dispatch({type: 'DELETE_CONNECTION', connection})
+    }
+};
 export default connections;
