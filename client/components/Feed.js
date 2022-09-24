@@ -24,7 +24,8 @@ const mapState = (state) => {
   const followedList = [];
   state.connections.map((connection) => {
     if (
-      connection.followingId === state.auth.id
+      connection.followingId === state.auth.id &&
+      connection.isAccepted === true
     ) {
       followedList.push(connection.followerId);
     }

@@ -12,12 +12,12 @@ async function seed() {
 
   // Creating Users
   const users = await Promise.all([
-    User.create({ id: crypto.randomUUID() ,username: 'cody', password: '123', avatar: faker.image.avatar(), email: 'cody@hotmail.com', bio: faker.random.words(10)}),
-    User.create({ id: crypto.randomUUID() ,username: 'murphy', password: '123', avatar: faker.image.avatar(), email: 'murphy@hotmail.com', bio: faker.random.words(10)}),
-    User.create({id: crypto.randomUUID() ,username: 'didi', password: 'didi', avatar: faker.image.avatar(), email: 'didi@hotmail.com', bio: faker.random.words(10)}),
-    User.create({id: crypto.randomUUID() ,username: 'chris', password: 'chris', avatar: faker.image.avatar(), email: 'chris@hotmail.com', bio: faker.random.words(10)}),
-    User.create({id: crypto.randomUUID() ,username: 'baidi', password: 'baidi', avatar: faker.image.avatar(), email: 'baidi@hotmail.com', bio: faker.random.words(10)}),
-    User.create({id: crypto.randomUUID() ,username: 'erik', password: 'eric', avatar: faker.image.avatar(), email: 'ericblaney@gmail.com', bio: faker.random.words(10)})
+    User.create({ id: crypto.randomUUID() ,username: 'cody', password: '123', avatar: faker.image.avatar(), email: 'cody@hotmail.com', bio: faker.random.words(10), isPrivate: false}),
+    User.create({ id: crypto.randomUUID() ,username: 'murphy', password: '123', avatar: faker.image.avatar(), email: 'murphy@hotmail.com', bio: faker.random.words(10), isPrivate: false}),
+    User.create({id: crypto.randomUUID() ,username: 'didi', password: 'didi', avatar: faker.image.avatar(), email: 'didi@hotmail.com', bio: faker.random.words(10), isPrivate: false}),
+    User.create({id: crypto.randomUUID() ,username: 'chris', password: 'chris', avatar: faker.image.avatar(), email: 'chris@hotmail.com', bio: faker.random.words(10), isPrivate: false}),
+    User.create({id: crypto.randomUUID() ,username: 'baidi', password: 'baidi', avatar: faker.image.avatar(), email: 'baidi@hotmail.com', bio: faker.random.words(10), isPrivate: false}),
+    User.create({id: crypto.randomUUID() ,username: 'erik', password: 'eric', avatar: faker.image.avatar(), email: 'ericblaney@gmail.com', bio: faker.random.words(10), isPrivate:true})
   ]);
   //creating posts
   const posts = await Promise.all([
@@ -103,30 +103,30 @@ async function seed() {
     Message.create({text: faker.random.words(10), receiverId: users[4].id, senderId: users[5].id}),
   ]);
   const connections = await Promise.all([
-    Connection.create({followingId: users[0].id, followerId: users[1].id}),
-    Connection.create({followingId: users[0].id, followerId: users[2].id}),
-    Connection.create({followingId: users[0].id, followerId: users[3].id}),
-    Connection.create({followingId: users[0].id, followerId: users[4].id}),
-    Connection.create({followingId: users[1].id, followerId: users[0].id}),
-    Connection.create({followingId: users[1].id, followerId: users[3].id}),
-    Connection.create({followingId: users[1].id, followerId: users[4].id}),
-    Connection.create({followingId: users[1].id, followerId: users[5].id}),
-    Connection.create({followingId: users[2].id, followerId: users[0].id}),
-    Connection.create({followingId: users[2].id, followerId: users[3].id}),
-    Connection.create({followingId: users[2].id, followerId: users[4].id}),
-    Connection.create({followingId: users[2].id, followerId: users[5].id}),
-    Connection.create({followingId: users[3].id, followerId: users[0].id}),
-    Connection.create({followingId: users[3].id, followerId: users[1].id}),
-    Connection.create({followingId: users[3].id, followerId: users[2].id}),
-    Connection.create({followingId: users[3].id, followerId: users[3].id}),
-    Connection.create({followingId: users[4].id, followerId: users[1].id}),
-    Connection.create({followingId: users[4].id, followerId: users[2].id}),
-    Connection.create({followingId: users[4].id, followerId: users[3].id}),
-    Connection.create({followingId: users[4].id, followerId: users[5].id}),
-    Connection.create({followingId: users[5].id, followerId: users[0].id}),
-    Connection.create({followingId: users[5].id, followerId: users[1].id}),
-    Connection.create({followingId: users[5].id, followerId: users[2].id}),
-    Connection.create({followingId: users[5].id, followerId: users[4].id})
+    Connection.create({followingId: users[0].id, followerId: users[1].id, isAccepted: true,}),
+    Connection.create({followingId: users[0].id, followerId: users[2].id, isAccepted: true,}),
+    Connection.create({followingId: users[0].id, followerId: users[3].id, isAccepted: true,}),
+    Connection.create({followingId: users[0].id, followerId: users[4].id, isAccepted: true,}),
+    Connection.create({followingId: users[1].id, followerId: users[0].id, isAccepted: true,}),
+    Connection.create({followingId: users[1].id, followerId: users[3].id, isAccepted: true,}),
+    Connection.create({followingId: users[1].id, followerId: users[4].id, isAccepted: true,}),
+    Connection.create({followingId: users[1].id, followerId: users[5].id, isAccepted: false,}),
+    Connection.create({followingId: users[2].id, followerId: users[0].id, isAccepted: true,}),
+    Connection.create({followingId: users[2].id, followerId: users[3].id, isAccepted: true,}),
+    Connection.create({followingId: users[2].id, followerId: users[4].id, isAccepted: true,}),
+    Connection.create({followingId: users[2].id, followerId: users[5].id, isAccepted: false,}),
+    Connection.create({followingId: users[3].id, followerId: users[0].id, isAccepted: true,}),
+    Connection.create({followingId: users[3].id, followerId: users[1].id, isAccepted: true,}),
+    Connection.create({followingId: users[3].id, followerId: users[2].id, isAccepted: true,}),
+    Connection.create({followingId: users[3].id, followerId: users[3].id, isAccepted: true,}),
+    Connection.create({followingId: users[4].id, followerId: users[1].id, isAccepted: true,}),
+    Connection.create({followingId: users[4].id, followerId: users[2].id, isAccepted: true,}),
+    Connection.create({followingId: users[4].id, followerId: users[3].id, isAccepted: true,}),
+    Connection.create({followingId: users[4].id, followerId: users[5].id, isAccepted: false,}),
+    Connection.create({followingId: users[5].id, followerId: users[0].id, isAccepted: true,}),
+    Connection.create({followingId: users[5].id, followerId: users[1].id, isAccepted: true,}),
+    Connection.create({followingId: users[5].id, followerId: users[2].id, isAccepted: true,}),
+    Connection.create({followingId: users[5].id, followerId: users[4].id, isAccepted: true,})
   ]);
   console.log(`seeded ${users.length} users`);
   console.log(`seeded successfully`);

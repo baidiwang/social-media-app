@@ -20,7 +20,6 @@ router.post('/', isLoggedIn, async(req, res, next) => {
 });
 
 router.delete('/:id', async(req,res,next) => {
-  console.log(req.params.id)
   try{
     const photo = await Photo.findByPk(req.params.id);
     await photo.destroy();
