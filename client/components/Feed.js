@@ -12,8 +12,6 @@ import PostHelper from "./PostHelper";
 const Feed = ({ posts, auth, photos, addLike }) => {
   return (
     <Box flex={5} p={1}>
-      <h3>Welcome, {auth.username}</h3>
-      <PostCreateForm />
       <PostHelper posts={posts} auth={auth} photos={photos} />
     </Box>
   );
