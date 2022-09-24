@@ -1,7 +1,7 @@
 const router = require('express').Router()
 module.exports = router
 const  Photo  = require('../db/models/Photo');
-const { isLoggedIn } = require('../middleware')
+const { isLoggedIn } = require('../middleware');
 
 router.get('/', isLoggedIn, async (req, res, next) => {
   try {

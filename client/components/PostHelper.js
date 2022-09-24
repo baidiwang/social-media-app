@@ -20,18 +20,21 @@ import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CommentHelper from "./CommentHelper";
-import { addLike, deleteLike, deletePost, deletePhoto } from "../store";
+import { addLike, deleteLike, deletePost, deletePhoto, deleteComment } from "../store";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Popover from "@mui/material/Popover";
+import DeleteIcon from '@mui/icons-material/Delete';
+import Button from '@mui/material/Button';
 
 /**
  * COMPONENT
  */
-const PostHelper = ({ posts, auth, photos, addLike, deleteLike, deletePost }) => {
+const PostHelper = ({ posts, auth, photos, addLike, deleteLike, deletePost, deleteComment }) => {
   const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState();
+  const [anchorEl, setAnchorEl] = useState(false);
   let [targetPost, setTargetPost] = useState({}) ;
+
   
   const checkLike = (post, auth) => {
     const like = post.likes.find(like => like.userId === auth.id);
@@ -50,7 +53,7 @@ const PostHelper = ({ posts, auth, photos, addLike, deleteLike, deletePost }) =>
           
         return (
           <Card sx={{ margin: 5 }} key={post.id}>
-                        {auth.id === post.userId ? 
+                        {auth.id === targetPost.userId ? 
                         <Menu
                         id="demo-positioned-menu"
                         aria-labelledby="demo-positioned-button"
@@ -58,8 +61,8 @@ const PostHelper = ({ posts, auth, photos, addLike, deleteLike, deletePost }) =>
                         open={open}
                         onClose={(event) => setOpen(false)}
                       >
-                        {console.log(targetPost)}
                         <MenuItem onClick={() => {
+                          console.log('here');
                           setOpen(false)
                           deletePost(targetPost, photos)}}>
                           Delete
@@ -77,8 +80,8 @@ const PostHelper = ({ posts, auth, photos, addLike, deleteLike, deletePost }) =>
               action={
                 <IconButton aria-label="settings"
                 onClick={(event) => {
-                  console.log(post);
                   setTargetPost(post);
+
                   setOpen(true)
                   setAnchorEl(event.currentTarget)
                 }}>
@@ -141,6 +144,7 @@ const PostHelper = ({ posts, auth, photos, addLike, deleteLike, deletePost }) =>
             {post.comments.map((comment) => {
               return (
                 <Card key={comment.id}>
+            
                   <CardHeader
                     avatar={
                       <Link to={`/profile/${comment.user.id}`}>
@@ -150,9 +154,17 @@ const PostHelper = ({ posts, auth, photos, addLike, deleteLike, deletePost }) =>
                       </Link>
                     }
                     action={
-                      <IconButton aria-label="settings">
-                        <MoreVertIcon />
-                      </IconButton>
+                     <div>
+                      {auth.id === comment.userId ? <Button variant='outlined' startIcon={<DeleteIcon/>}
+                      onClick={() => {
+
+                        deleteComment(comment)
+
+                      }} >
+                        Delete
+                        </Button> : null}
+                      </div>
+
                     }
                     title={comment.user.username}
                     subheader={comment.date}
@@ -183,14 +195,18 @@ const mapDispatch = (dispatch) => {
       dispatch(deleteLike(likeId, postId))
     },
     deletePost: (post, photos) => {
+      console.log(post);
       const photosToDelete = photos.filter((photo) => photo.postId === post.id)
       console.log(photosToDelete);
       photosToDelete.forEach((photo) => {
-        console.log(photo);
         dispatch(deletePhoto(photo))
       })
       dispatch(deletePost(post))
-    }
+    },
+     deleteComment: (comment) => {
+      console.log(comment);
+      dispatch(deleteComment(comment))
+     }
   };
 };
 

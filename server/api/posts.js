@@ -29,7 +29,6 @@ router.post('/', isLoggedIn, async(req, res, next) => {
 
 router.delete('/:id',  async(req,res,next) => {
   try{
-  
     const post = await Post.findByPk(req.params.id)
     await post.destroy();
     res.sendStatus(204);
