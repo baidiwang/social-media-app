@@ -104,7 +104,7 @@ class PostCreateForm extends React.Component {
             );
           })}
         </PhotoList>
-        <button type='submit' disabled={photos.length === 0}>Add Post</button>
+        <button type='submit' disabled={photos.length === 0}>Post</button>
       </Form>
     );
   }
