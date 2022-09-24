@@ -149,7 +149,11 @@ User.prototype.getConnections = async function(){
 };
 //add connection
 User.prototype.addConnection = async function(body){
-  return (await db.models.create(body));
+  return (await db.models.connection.create(body));
+};
+User.prototype.deleteConnection = async function(id){
+  const connection = await db.models.connection.findByPk(id*1);
+  await connection.destroy();
 };
 //***************************************************************** MESSAGES ******************************************************************
 User.prototype.getFriendMessages = async function(messageId) {
