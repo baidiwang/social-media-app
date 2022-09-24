@@ -1,5 +1,6 @@
 const router = require('express').Router()
 module.exports = router
+const  Photo  = require('../db/models/Photo');
 const { isLoggedIn } = require('../middleware')
 
 router.get('/', isLoggedIn, async (req, res, next) => {
@@ -17,3 +18,15 @@ router.post('/', isLoggedIn, async(req, res, next) => {
     next(err)
   }
 });
+
+router.delete('/:id', async(req,res,next) => {
+  console.log(req.params.id)
+  try{
+    const photo = await Photo.findByPk(req.params.id);
+    await photo.destroy();
+    res.sendStatus(204)
+  }
+  catch(err){
+    next(err)
+  }
+})

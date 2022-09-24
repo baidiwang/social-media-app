@@ -26,6 +26,12 @@ export const setPosts = () => {
         dispatch({type: 'SET_POSTS', posts})
     }
 };
+export const deletePost = (post) => {
+    return async(dispatch) => {
+        await axios.delete(`/api/posts/${post.id}`);
+        dispatch({ type: 'DELETE_POST', post})
+    }
+}
 
 export const createPost = (body, auth) => {
     return async(dispatch) => {

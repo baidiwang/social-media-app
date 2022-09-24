@@ -39,4 +39,11 @@ export const addPhoto = (photo, post, auth) => {
         dispatch({type: 'ADD_PHOTO', photo});
     }
 }
+export const deletePhoto = (photo) => {
+    return async(dispatch) => {
+        await axios.delete(`/api/photos/${photo.id}`);
+        dispatch({ type: 'DELETE_PHOTO', photo})
+    }
+}
+
 export default photos;

@@ -1,6 +1,6 @@
 //landing page / newsfeed
 
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Box } from "@mui/material";
@@ -20,11 +20,19 @@ import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CommentHelper from "./CommentHelper";
-import { addLike, deleteLike } from "../store";
+import { addLike, deleteLike, deletePost, deletePhoto } from "../store";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Popover from "@mui/material/Popover";
+
 /**
  * COMPONENT
  */
-const PostHelper = ({ posts, auth, photos, addLike, deleteLike }) => {
+const PostHelper = ({ posts, auth, photos, addLike, deleteLike, deletePost }) => {
+  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState();
+  let [targetPost, setTargetPost] = useState({}) ;
+  
   const checkLike = (post, auth) => {
     const like = post.likes.find(like => like.userId === auth.id);
     return like;
@@ -33,11 +41,31 @@ const PostHelper = ({ posts, auth, photos, addLike, deleteLike }) => {
     const like = checkLike(post, auth);
     deleteLike(like.id, post.id);
   };
+
+ 
   return (
+    
     <Box flex={5} p={1}>
         {posts.map((post) => {
+          
         return (
           <Card sx={{ margin: 5 }} key={post.id}>
+                        {auth.id === post.userId ? 
+                        <Menu
+                        id="demo-positioned-menu"
+                        aria-labelledby="demo-positioned-button"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={(event) => setOpen(false)}
+                      >
+                        {console.log(targetPost)}
+                        <MenuItem onClick={() => {
+                          setOpen(false)
+                          deletePost(targetPost, photos)}}>
+                          Delete
+                        </MenuItem>
+                      </Menu>
+            : null}
             <CardHeader
               avatar={
                 <Link to={`/profile/${post.user.id}`}>
@@ -47,13 +75,23 @@ const PostHelper = ({ posts, auth, photos, addLike, deleteLike }) => {
                 </Link>
               }
               action={
-                <IconButton aria-label="settings">
-                  <MoreVertIcon />
+                <IconButton aria-label="settings"
+                onClick={(event) => {
+                  console.log(post);
+                  setTargetPost(post);
+                  setOpen(true)
+                  setAnchorEl(event.currentTarget)
+                }}>
+                  <MoreVertIcon/>
+
                 </IconButton>
+                
               }
               title={post.user.username}
               subheader={post.date}
             />
+
+
             {photos
               .filter((photo) => photo.postId === post.id)
               .map((photo) => {
@@ -143,6 +181,15 @@ const mapDispatch = (dispatch) => {
     },
     deleteLike: (likeId, postId) => {
       dispatch(deleteLike(likeId, postId))
+    },
+    deletePost: (post, photos) => {
+      const photosToDelete = photos.filter((photo) => photo.postId === post.id)
+      console.log(photosToDelete);
+      photosToDelete.forEach((photo) => {
+        console.log(photo);
+        dispatch(deletePhoto(photo))
+      })
+      dispatch(deletePost(post))
     }
   };
 };
