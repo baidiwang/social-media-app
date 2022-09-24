@@ -32,7 +32,7 @@ form div {
 .message-container {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 185px);
+  height: calc(100vh - 85px);
 }
 
 .message-header {
@@ -53,6 +53,8 @@ form div {
   display: flex;
   flex-direction: column;
   padding: 15px;
+  max-height: 100%;
+  overflow-y: auto;
 }
 
 .message-item {

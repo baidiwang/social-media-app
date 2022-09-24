@@ -22,7 +22,7 @@ const Friends = ({ user }) => {
 	}, [])
 
 	const sendMessage = (friendId) => {
-		history.push('/message/' + friendId);
+		history.push('/conversation/' + friendId);
 	}
 
 	return (

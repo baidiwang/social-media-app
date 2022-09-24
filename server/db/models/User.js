@@ -137,6 +137,11 @@ User.prototype.addLike = async function(body){
   const like = await db.models.like.create(body);
   return this.getSinglePost(like.postId);
 };
+User.prototype.deleteLike = async function(id, body){
+  const like = await db.models.like.findByPk(id);
+  await like.destroy();
+  return this.getSinglePost(body.postId);
+};
 //***************************************************************** CONNECTIONS ******************************************************************
 //get all connections
 User.prototype.getConnections = async function(){
@@ -144,10 +149,14 @@ User.prototype.getConnections = async function(){
 };
 //add connection
 User.prototype.addConnection = async function(body){
-  return (await db.models.create(body));
+  return (await db.models.connection.create(body));
+};
+User.prototype.deleteConnection = async function(id){
+  const connection = await db.models.connection.findByPk(id*1);
+  await connection.destroy();
 };
 //***************************************************************** MESSAGES ******************************************************************
-User.prototype.getMessages = async function(messageId) {
+User.prototype.getFriendMessages = async function(messageId) {
   return await db.models.message.findAll({
     where: {
       [Op.or]: [
@@ -161,6 +170,15 @@ User.prototype.getMessages = async function(messageId) {
         }
       ]
     }
+  });
+}
+User.prototype.getMessages = async function() {
+  return await db.models.message.findAll({
+    where: { receiverId: this.id },
+    include: [
+      {model: User, as: "sender"}
+    ],
+    order: [['createdAt', 'DESC'],]
   });
 }
 User.prototype.addMessage = async function(body) {

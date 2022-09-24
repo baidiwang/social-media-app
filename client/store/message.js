@@ -1,16 +1,20 @@
 import axios from 'axios';
 
-const messages = (state= { messages: [], friend: null }, action) => {
+const messages = (state= { messages: [], friendMessages: [], friend: null }, action) => {
 	if(action.type === 'SET_MESSAGES'){
 		return {
 			...state,
 			messages: action.messages
 		};
-	}
-	else if(action.type === 'CREATE_MESSAGE'){
+	} else if(action.type === 'SET_FRIEND_MESSAGES'){
 		return {
 			...state,
-			messages: [...state.messages, action.message]
+			friendMessages: action.messages
+		};
+	} else if(action.type === 'CREATE_MESSAGE'){
+		return {
+			...state,
+			friendMessages: [...state.friendMessages, action.message]
 		};
 	} else if (action.type === 'SET_FRIEND') {
 		return {
@@ -39,10 +43,23 @@ export const addMessage = (text, senderId, receiverId) => {
 	}
 };
 
-//get messages
-export const getMessages = (messageId) => {
+//get friend messages
+export const getFriendMessages = (messageId) => {
 	return async(dispatch) => {
-		const messages = (await axios.get('/api/messages?messageId=' + messageId,
+		const messages = (await axios.get('/api/messages/friend?messageId=' + messageId,
+			{
+				headers: {
+					authorization: window.localStorage.getItem('token')
+				}
+			})).data;
+		dispatch({type: 'SET_FRIEND_MESSAGES', messages});
+	}
+};
+
+//get all messages
+export const getMessages = () => {
+	return async(dispatch) => {
+		const messages = (await axios.get('/api/messages',
 			{
 				headers: {
 					authorization: window.localStorage.getItem('token')
