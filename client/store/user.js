@@ -45,7 +45,6 @@ export const setUsers = () => {
 export const updateUsers = (user) => {
   return async(dispatch) => {
     try{
-      console.log(user)
       user = (await axios.put(`/api/users/${user.id}`,
       user, {
         headers: {
@@ -53,7 +52,6 @@ export const updateUsers = (user) => {
         }
       })).data;
       dispatch({type: "UPDATE_USERS", user})
-      history.push(`/profile/${user.id}`)
     }
     catch(ex){
       console.log(ex)

@@ -25,17 +25,36 @@ export const setConnections = () => {
 };
 export const addConnection = (following, follower) => {
     return async(dispatch) => {
-        const connection = (await axios.post('/api/connections', {
-            followingId: following.id,
-            followerId: follower.id
-        },
-        {
-            headers: {
-                authorization: window.localStorage.getItem('token')
-            }
-        })).data;
-        console.log(connection)
-        dispatch({type: 'ADD_CONNECTION', connection});
+        let connection = {};
+        console.log("following", following)
+        console.log("follower", follower)
+        if(follower.isPrivate){
+            connection = (await axios.post('/api/connections', {
+                followingId: following.id,
+                followerId: follower.id,
+                isAccepted: false
+            },
+            {
+                headers: {
+                    authorization: window.localStorage.getItem('token')
+                }
+            })).data;
+            console.log(connection)
+            dispatch({type: 'ADD_CONNECTION', connection});
+        } else {
+            connection = (await axios.post('/api/connections', {
+                followingId: following.id,
+                followerId: follower.id,
+                isAccepted: true
+            },
+            {
+                headers: {
+                    authorization: window.localStorage.getItem('token')
+                }
+            })).data;
+            console.log(connection)
+            dispatch({type: 'ADD_CONNECTION', connection});
+        }
     }
 };
 export const deleteConnection = (connection) => {
