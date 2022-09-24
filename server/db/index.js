@@ -14,7 +14,6 @@ User.hasMany(Post);
 User.hasMany(Like);
 User.hasMany(Comment);
 User.hasMany(Photo);
-User.hasMany(Connection);
 Post.belongsTo(User); //can change if we allow tagging throughout the app
 Post.hasMany(Like);
 Post.hasMany(Comment);

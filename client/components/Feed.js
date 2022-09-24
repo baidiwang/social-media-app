@@ -9,7 +9,7 @@ import PostHelper from "./PostHelper";
 /**
  * COMPONENT
  */
-const Feed = ({ posts, auth, photos, addLike }) => {
+const Feed = ({ posts, auth, photos }) => {
   return (
     <Box flex={5} p={1}>
       <h3>Welcome, {auth.username}</h3>
@@ -26,8 +26,7 @@ const mapState = (state) => {
   const followedList = [];
   state.connections.map((connection) => {
     if (
-      connection.followingId === state.auth.id &&
-      connection.isAccepted === true
+      connection.followingId === state.auth.id
     ) {
       followedList.push(connection.followerId);
     }
@@ -43,12 +42,12 @@ const mapState = (state) => {
     photos: state.photos,
   };
 };
-const mapDispatch = (dispatch) => {
-  return {
-    addLike: (authId, postId) => {
-      dispatch(addLike(authId, postId));
-    },
-  };
-};
+// const mapDispatch = (dispatch) => {
+//   return {
+//     addLike: (authId, postId) => {
+//       dispatch(addLike(authId, postId));
+//     },
+//   };
+// };
 
-export default connect(mapState, mapDispatch)(Feed);
+export default connect(mapState)(Feed);

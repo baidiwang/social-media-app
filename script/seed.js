@@ -103,30 +103,30 @@ async function seed() {
     Message.create({text: faker.random.words(10), receiverId: users[4].id, senderId: users[5].id}),
   ]);
   const connections = await Promise.all([
-    Connection.create({followingId: users[0].id, followerId: users[1].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[0].id, followerId: users[2].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[0].id, followerId: users[3].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[0].id, followerId: users[4].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[1].id, followerId: users[0].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[1].id, followerId: users[3].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[1].id, followerId: users[4].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[1].id, followerId: users[5].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[2].id, followerId: users[0].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[2].id, followerId: users[3].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[2].id, followerId: users[4].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[2].id, followerId: users[5].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[3].id, followerId: users[0].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[3].id, followerId: users[1].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[3].id, followerId: users[2].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[3].id, followerId: users[3].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[4].id, followerId: users[1].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[4].id, followerId: users[2].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[4].id, followerId: users[3].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[4].id, followerId: users[5].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[5].id, followerId: users[0].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[5].id, followerId: users[1].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[5].id, followerId: users[2].id, isAccepted: true, isBlocked: false}),
-    Connection.create({followingId: users[5].id, followerId: users[4].id, isAccepted: true, isBlocked: false})
+    Connection.create({followingId: users[0].id, followerId: users[1].id}),
+    Connection.create({followingId: users[0].id, followerId: users[2].id}),
+    Connection.create({followingId: users[0].id, followerId: users[3].id}),
+    Connection.create({followingId: users[0].id, followerId: users[4].id}),
+    Connection.create({followingId: users[1].id, followerId: users[0].id}),
+    Connection.create({followingId: users[1].id, followerId: users[3].id}),
+    Connection.create({followingId: users[1].id, followerId: users[4].id}),
+    Connection.create({followingId: users[1].id, followerId: users[5].id}),
+    Connection.create({followingId: users[2].id, followerId: users[0].id}),
+    Connection.create({followingId: users[2].id, followerId: users[3].id}),
+    Connection.create({followingId: users[2].id, followerId: users[4].id}),
+    Connection.create({followingId: users[2].id, followerId: users[5].id}),
+    Connection.create({followingId: users[3].id, followerId: users[0].id}),
+    Connection.create({followingId: users[3].id, followerId: users[1].id}),
+    Connection.create({followingId: users[3].id, followerId: users[2].id}),
+    Connection.create({followingId: users[3].id, followerId: users[3].id}),
+    Connection.create({followingId: users[4].id, followerId: users[1].id}),
+    Connection.create({followingId: users[4].id, followerId: users[2].id}),
+    Connection.create({followingId: users[4].id, followerId: users[3].id}),
+    Connection.create({followingId: users[4].id, followerId: users[5].id}),
+    Connection.create({followingId: users[5].id, followerId: users[0].id}),
+    Connection.create({followingId: users[5].id, followerId: users[1].id}),
+    Connection.create({followingId: users[5].id, followerId: users[2].id}),
+    Connection.create({followingId: users[5].id, followerId: users[4].id})
   ]);
   console.log(`seeded ${users.length} users`);
   console.log(`seeded successfully`);
@@ -175,3 +175,27 @@ if (module === require.main) {
 };
 // we export the seed function for testing purposes (see `./seed.spec.js`)
 module.exports = seed;
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
+// , isAccepted: true, isBlocked: false
