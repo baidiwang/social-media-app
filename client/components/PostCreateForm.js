@@ -38,7 +38,7 @@ class PostCreateForm extends React.Component {
         const { onChange, onChangePhoto, handleSubmit } = this;
         return (
             <form onSubmit={ handleSubmit }>
-                <button type='submit'>Add Post</button>
+                <button type='submit' disabled={photos.length === 0}>Add Post</button>
                 <input
                     placeholder='Write caption...'
                     type='text'
