@@ -27,7 +27,6 @@ router.get('/:id', isLoggedIn, async (req, res, next) => {
 })
 
 router.put('/:id', isLoggedIn, async(req,res,next) => {
-  console.log(req.body);
   try{
     const user = await User.findByPk(req.params.id);
     await user.update(req.body);

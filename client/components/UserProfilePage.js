@@ -9,12 +9,27 @@ import {Link} from 'react-router-dom';
 import { addConnection, deleteConnection } from '../store';
 
 const UserProfilePage = ({user, connection, auth, follow, unfollow}) => {
+    console.log(connection)
     return (
         <div>
             <h1>{user.username}'s profile</h1>
             <img src={user.avatar} width='160' height='160'/>
             {
-                connection.id ? <button onClick={ () => unfollow(connection)}>Unfollow</button> : <button onClick={ () => follow(auth, user)}>Follow</button>
+                auth.id === user.id ?
+                null :
+                <div>
+                {
+                    connection.id ?
+                    <div>
+                        {
+                            connection.isAccepted === true ?
+                            <button onClick={ () => unfollow(connection)}>Unfollow</button> :
+                            <button disabled>Requested</button>
+                        }
+                    </div> :
+                    <button onClick={ () => follow(auth, user)}>Follow</button>
+                }
+                </div>
             }
             <h2>About me:</h2>
             <p>{user.bio}</p>
@@ -28,6 +43,7 @@ const UserProfilePage = ({user, connection, auth, follow, unfollow}) => {
 const mapState = (state, { match })=> {
     const user = state.users.find(user => user.id === match.params.id) || {};
     const connection = state.connections.find(connection => connection.followerId === user.id && connection.followingId === state.auth.id) || {};
+    console.log(state.connections)
     return {
         user,
         connection,

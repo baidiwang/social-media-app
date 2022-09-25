@@ -1,6 +1,6 @@
 //landing page / newsfeed
 
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { Box } from "@mui/material";
@@ -20,11 +20,22 @@ import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CommentHelper from "./CommentHelper";
-import { addLike, deleteLike } from "../store";
+import { addLike, deleteLike, deletePost, deletePhoto, deleteComment } from "../store";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Popover from "@mui/material/Popover";
+import DeleteIcon from '@mui/icons-material/Delete';
+import Button from '@mui/material/Button';
+
 /**
  * COMPONENT
  */
-const PostHelper = ({ posts, auth, photos, addLike, deleteLike }) => {
+const PostHelper = ({ posts, auth, photos, addLike, deleteLike, deletePost, deleteComment }) => {
+  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(false);
+  let [targetPost, setTargetPost] = useState({}) ;
+
+  
   const checkLike = (post, auth) => {
     const like = post.likes.find((like) => like.userId === auth.id);
     return like;
@@ -33,12 +44,30 @@ const PostHelper = ({ posts, auth, photos, addLike, deleteLike }) => {
     const like = checkLike(post, auth);
     deleteLike(like.id, post.id);
   };
+
+ 
   return (
+    
     <Box flex={5} p={1}>
-      {posts.map((post) => {
-        console.log("postHelp", post);
+        {posts.map((post) => {
         return (
           <Card sx={{ margin: 5 }} key={post.id}>
+                        {auth.id === targetPost.userId ? 
+                        <Menu
+                        id="demo-positioned-menu"
+                        aria-labelledby="demo-positioned-button"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={(event) => setOpen(false)}
+                      >
+                        <MenuItem onClick={() => {
+                          console.log('here');
+                          setOpen(false)
+                          deletePost(targetPost, photos)}}>
+                          Delete
+                        </MenuItem>
+                      </Menu>
+            : null}
             <CardHeader
               avatar={
                 <Link to={`/profile/${post.user.id}`}>
@@ -48,13 +77,23 @@ const PostHelper = ({ posts, auth, photos, addLike, deleteLike }) => {
                 </Link>
               }
               action={
-                <IconButton aria-label="settings">
-                  <MoreVertIcon />
+                <IconButton aria-label="settings"
+                onClick={(event) => {
+                  setTargetPost(post);
+
+                  setOpen(true)
+                  setAnchorEl(event.currentTarget)
+                }}>
+                  <MoreVertIcon/>
+
                 </IconButton>
+                
               }
               title={<Link to={`/posts/${post.id}`}>{post.user.username}</Link>}
               subheader={post.date}
             />
+
+
             {photos
               .filter((photo) => photo.postId === post.id)
               .map((photo) => {
@@ -101,6 +140,7 @@ const PostHelper = ({ posts, auth, photos, addLike, deleteLike }) => {
             {post.comments.map((comment) => {
               return (
                 <Card key={comment.id}>
+            
                   <CardHeader
                     avatar={
                       <Link to={`/profile/${comment.user.id}`}>
@@ -110,9 +150,17 @@ const PostHelper = ({ posts, auth, photos, addLike, deleteLike }) => {
                       </Link>
                     }
                     action={
-                      <IconButton aria-label="settings">
-                        <MoreVertIcon />
-                      </IconButton>
+                     <div>
+                      {auth.id === comment.userId ? <Button variant='outlined' startIcon={<DeleteIcon/>}
+                      onClick={() => {
+
+                        deleteComment(comment)
+
+                      }} >
+                        Delete
+                        </Button> : null}
+                      </div>
+
                     }
                     title={comment.user.username}
                     subheader={comment.date}
@@ -140,8 +188,21 @@ const mapDispatch = (dispatch) => {
       dispatch(addLike(authId, postId));
     },
     deleteLike: (likeId, postId) => {
-      dispatch(deleteLike(likeId, postId));
+      dispatch(deleteLike(likeId, postId))
     },
+    deletePost: (post, photos) => {
+      console.log(post);
+      const photosToDelete = photos.filter((photo) => photo.postId === post.id)
+      console.log(photosToDelete);
+      photosToDelete.forEach((photo) => {
+        dispatch(deletePhoto(photo))
+      })
+      dispatch(deletePost(post))
+    },
+     deleteComment: (comment) => {
+      console.log(comment);
+      dispatch(deleteComment(comment))
+     }
   };
 };
 
