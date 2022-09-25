@@ -1,38 +1,67 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { Avatar, Box, Typography } from "@mui/material";
+import styled from "styled-components";
+
+export const SearchDiv = styled.div``;
+
+export const SearchResultDiv = styled.div`
+  background-color: white;
+  text-align: center;
+  text-transform: capitalize;
+  border-radius: 4px;
+`;
+
+export const SearchResults = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const Input = styled.input`
+  padding: 5px;
+  width: 250px;
+  border-radius: 8px;
+  border: none;
+`;
 
 const Search = ({ users }) => {
   const [filteredData, setFilteredData] = useState("");
   return (
-    <div className="search">
-      <div className="searchInput">
-        <input
+    <Box>
+      <SearchDiv>
+        <Input
           type="text"
-          placeholder="Search ..."
+          placeholder="Search User ..."
           onChange={(event) => setFilteredData(event.target.value)}
         />
-      </div>
+      </SearchDiv>
       {filteredData.length != 0 && (
-        <div className="searchResult">
+        <SearchResultDiv>
           {users
             .filter((user) =>
               user.username.toLowerCase().includes(filteredData)
             )
             .map((user) => {
               return (
-                <Link
-                  className="links resultItem"
-                  key={user.id}
-                  to={`/users/${user.id}`}
-                >
-                  <p>{user.username}</p>
+                <Link key={user.id} to={`/profile/${user.id}`}>
+                  <SearchResults>
+                    <Avatar
+                      sx={{
+                        height: "30px",
+                        width: "30px",
+                        margin: 2,
+                      }}
+                      src={user.avatar}
+                    />
+                    <Typography>{user.username}</Typography>
+                  </SearchResults>
                 </Link>
               );
             })}
-        </div>
+        </SearchResultDiv>
       )}
-    </div>
+    </Box>
   );
 };
 

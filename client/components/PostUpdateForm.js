@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 const PostUpdateForm = () => {
     return (
-        <hr />
+        <div>Post Update Form</div>
     )
 };
 const mapState = state => {

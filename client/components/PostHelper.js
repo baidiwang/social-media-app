@@ -37,7 +37,7 @@ const PostHelper = ({ posts, auth, photos, addLike, deleteLike, deletePost, dele
 
   
   const checkLike = (post, auth) => {
-    const like = post.likes.find(like => like.userId === auth.id);
+    const like = post.likes.find((like) => like.userId === auth.id);
     return like;
   };
   const unLike = (auth, post) => {
@@ -50,7 +50,6 @@ const PostHelper = ({ posts, auth, photos, addLike, deleteLike, deletePost, dele
     
     <Box flex={5} p={1}>
         {posts.map((post) => {
-          
         return (
           <Card sx={{ margin: 5 }} key={post.id}>
                         {auth.id === targetPost.userId ? 
@@ -90,7 +89,7 @@ const PostHelper = ({ posts, auth, photos, addLike, deleteLike, deletePost, dele
                 </IconButton>
                 
               }
-              title={post.user.username}
+              title={<Link to={`/posts/${post.id}`}>{post.user.username}</Link>}
               subheader={post.date}
             />
 
@@ -115,15 +114,12 @@ const PostHelper = ({ posts, auth, photos, addLike, deleteLike, deletePost, dele
             <CardActions disableSpacing>
               {checkLike(post, auth) ? (
                 <div>
-                    <IconButton aria-label="add to favorites">
+                  <IconButton aria-label="add to favorites">
                     <FavoriteIcon sx={{ color: pink[500] }} />
                     {post.likes.length} likes
                   </IconButton>
-                  <button onClick={() => unLike(auth, post)}>
-                    Liked
-                  </button>
+                  <button onClick={() => unLike(auth, post)}>Liked</button>
                 </div>
-                
               ) : (
                 <div>
                   <IconButton aria-label="add to favorites">
