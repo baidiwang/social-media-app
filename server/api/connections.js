@@ -1,7 +1,6 @@
 const router = require('express').Router()
 module.exports = router
 const { isLoggedIn } = require('../middleware')
-const { models: {Connection}} = require('../db')
 
 router.get('/', isLoggedIn, async (req, res, next) => {
   try {
@@ -14,6 +13,13 @@ router.get('/', isLoggedIn, async (req, res, next) => {
 router.post('/', isLoggedIn, async(req, res, next) => {
   try{
     res.send(await req.user.addConnection(req.body));
+  } catch(err){
+    next(err)
+  }
+});
+router.put('/:id', isLoggedIn, async(req, res, next) => {
+  try{
+    res.send(await req.user.updateConnection(req.body, req.params.id*1))
   } catch(err){
     next(err)
   }
