@@ -54,7 +54,9 @@ const UserProfilePage = ({user, connection, auth, followRequests, listOfFollowin
                             <li key={connection.id}>
                                 <img src={connection.following.avatar} width='40' height='40' />
                                 <Link to={`/profile/${connection.following.id}`}>{connection.following.username}</Link>
-                                <button onClick={ () => unfollow(connection)}>Remove</button>
+                                {
+                                    auth.id === user.id ? <button onClick={ () => unfollow(connection)}>Remove</button>:null
+                                }
                             </li>
                         )
                     })
@@ -69,7 +71,9 @@ const UserProfilePage = ({user, connection, auth, followRequests, listOfFollowin
                             <li key={connection.id}>
                                 <img src={connection.follower.avatar} width='40' height='40' />
                                 <Link to={`/profile/${connection.follower.id}`}>{connection.follower.username}</Link>
-                                <button onClick={ () => unfollow(connection)}>Unfollow</button>
+                                {
+                                    auth.id === user.id ? <button onClick={ () => unfollow(connection)}>Unfollow</button>:null
+                                }
                             </li>
                         )
                     })
