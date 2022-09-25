@@ -6,6 +6,8 @@ const connections = (state = [], action) => {
     }
     else if(action.type === 'ADD_CONNECTION'){
         return [action.connection, ...state];
+    } else if(action.type === 'UPDATE_CONNECTION'){
+        return state.map(connection => connection.id === action.connection.id ? action.connection : connection);
     }
     else if(action.type === 'DELETE_CONNECTION'){
         return state.filter(connection => connection.id !== action.connection.id);
@@ -55,6 +57,21 @@ export const addConnection = (following, follower) => {
             console.log(connection)
             dispatch({type: 'ADD_CONNECTION', connection});
         }
+    }
+};
+export const updateConnection = (connection, following, follower) => {
+    return async(dispatch) => {
+        connection = (await axios.put(`/api/connections/${connection.id}`, {
+            followingId: following.id,
+            followerId: follower.id,
+            isAccepted: true
+        }, {
+            headers: {
+                authorization: window.localStorage.getItem('token')
+            }
+        })).data;
+        console.log(connection)
+        dispatch({type: 'UPDATE_CONNECTION', connection})
     }
 };
 export const deleteConnection = (connection) => {
