@@ -17,8 +17,26 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import CommentHelper from "./CommentHelper";
 import { Link } from "react-router-dom";
 import SideMenu from "./SideMenu";
+import { red, grey, pink } from "@mui/material/colors";
+import { addLike, deleteLike } from "../store";
 
-const PostDetail = ({ post, postUserId, auth }) => {
+const PostDetail = ({
+  post,
+  postUserId,
+  auth,
+  postBody,
+  postId,
+  userId,
+  postDate,
+  postUser,
+  likesArr,
+  commentsArr,
+  photosArr,
+  postUserAvatar,
+  checkLike,
+  unLike,
+  addLike,
+}) => {
   const [mode, setMode] = useState("light");
   const darkTheme = createTheme({
     palette: {
@@ -27,28 +45,6 @@ const PostDetail = ({ post, postUserId, auth }) => {
   });
   console.log("post", post);
   console.log("auth", auth.id);
-  //   Getting Post body, Post user , Post avatar, and Post date
-  const postId = post.map((singlePost) => singlePost.id);
-  const postBody = post.map((singlePost) => singlePost.body);
-  const postUser = post.map((singlePost) => singlePost.user.username);
-  const userId = post.map((singlePost) => singlePost.user.id);
-  const postUserAvatar = post.map((singlePost) => singlePost.user.avatar);
-  const postDate = post.map((singlePost) => singlePost.date);
-  //   get comments Array from Post
-  const commentsArr = post.flatMap((singlePost) => {
-    return singlePost.comments;
-  });
-  //   get likes Array from Post
-  const likesArr = post.flatMap((singlePost) => {
-    return singlePost.likes;
-  });
-  //   get photos Array from Post
-  const photosArr = post.flatMap((singlePost) => {
-    return singlePost.photos;
-  });
-  console.log("commentsArr", commentsArr);
-  console.log("likesArr", likesArr);
-  console.log("photosArr", photosArr);
   return (
     <ThemeProvider theme={darkTheme}>
       <Box
@@ -101,12 +97,27 @@ const PostDetail = ({ post, postUserId, auth }) => {
             <CardContent>
               <Box>
                 <CardActions disableSpacing>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <IconButton>
-                      <FavoriteIcon />
-                    </IconButton>
-                    <Typography>{likesArr.length} likes</Typography>
-                  </Box>
+                  {!checkLike(likesArr, auth) ? (
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      <IconButton>
+                        <FavoriteIcon
+                          sx={{ color: grey[100] }}
+                          onClick={() => addLike(auth.id, postId)}
+                        />
+                      </IconButton>
+                      <Typography>{likesArr.length} likes</Typography>
+                    </Box>
+                  ) : (
+                    <Box sx={{ display: "flex", alignItems: "center" }}>
+                      <IconButton>
+                        <FavoriteIcon
+                          sx={{ color: pink[500] }}
+                          onClick={() => unLike(auth, likesArr)}
+                        />
+                      </IconButton>
+                      <Typography>{likesArr.length} likes</Typography>
+                    </Box>
+                  )}
                 </CardActions>
                 <Box marginLeft={2}>
                   <Typography variant="h6">
@@ -156,18 +167,59 @@ const PostDetail = ({ post, postUserId, auth }) => {
 };
 
 const mapState = ({ posts, users, auth }, { match }) => {
-  console.log("postsDetail", posts);
   console.log("users", users);
-  console.log("matchPost", match);
   const postId = match.params.id * 1;
   console.log("postDetail", postId);
   const post = posts.filter((post) => post.id === postId) || {};
   const postUserId = post.flatMap((singlePost) => singlePost.userId);
   console.log("singlePost", post);
   console.log("postUserId", postUserId);
+  //   Getting Post body, Post user , Post avatar, and Post date
+  const postBody = post.map((singlePost) => singlePost.body);
+  const postUser = post.map((singlePost) => singlePost.user.username);
+  const userId = post.map((singlePost) => singlePost.user.id);
+  const postUserAvatar = post.map((singlePost) => singlePost.user.avatar);
+  const postDate = post.map((singlePost) => singlePost.date);
+  //   get comments Array from Post
+  const commentsArr = post.flatMap((singlePost) => {
+    return singlePost.comments;
+  });
+  //   get likes Array from Post
+  const likesArr = post.flatMap((singlePost) => {
+    return singlePost.likes;
+  });
+  //   get photos Array from Post
+  const photosArr = post.flatMap((singlePost) => {
+    return singlePost.photos;
+  });
+  console.log("commentsArr", commentsArr);
+  console.log("likesArr", likesArr);
+  console.log("photosArr", photosArr);
+
+  const checkLike = (likesArr, auth) => {
+    const like = likesArr.find((like) => like.userId === auth.id);
+    return like;
+  };
+  const unLike = (auth, likesArr) => {
+    const like = checkLike(likesArr, auth);
+    console.log("likeFc", like.id);
+    console.log("postId", like.postId);
+    deleteLike(like.id, like.postId);
+  };
   return {
     post,
     postUserId,
+    likesArr,
+    photosArr,
+    commentsArr,
+    postBody,
+    postUser,
+    postId,
+    postUserAvatar,
+    postDate,
+    userId,
+    checkLike,
+    unLike,
     auth,
   };
 };
