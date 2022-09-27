@@ -30,7 +30,7 @@ const FAB = () => {
         <Box
           width={450}
           height={800}
-          borderRadius="8px"
+          borderRadius="12px"
           backgroundColor={"background.default"}
           color={"text.primary"}
           textAlign="center"

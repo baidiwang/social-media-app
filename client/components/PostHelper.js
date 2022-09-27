@@ -32,6 +32,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Popover from "@mui/material/Popover";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
+import CommentsFAB from "./CommentsFAB";
 
 /**
  * COMPONENT
@@ -184,7 +185,7 @@ const PostHelper = ({
                 );
               })}
               <Box display="flex" alignItems="center" justifyContent="center">
-                <CommentHelper authId={auth.id} postId={post.id} />
+                <CommentsFAB authId={auth.id} postId={post.id} />
               </Box>
             </Box>
           </Card>

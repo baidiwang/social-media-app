@@ -29,8 +29,8 @@ const CommentFAB = ({ authId, postId }) => {
         aria-describedby="modal-modal-description"
       >
         <Box
-          width={450}
-          height={800}
+          width={600}
+          height={500}
           borderRadius="8px"
           backgroundColor={"background.default"}
           color={"text.primary"}

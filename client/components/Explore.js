@@ -20,6 +20,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { red, grey, pink } from "@mui/material/colors";
 import CommentHelper from "./CommentHelper";
+import CommentsFAB from "./CommentsFAB";
 
 const Explore = ({ posts, auth }) => {
   const [mode, setMode] = useState("light");
@@ -61,18 +62,20 @@ const Explore = ({ posts, auth }) => {
                 <CardMedia
                   key={photo.id}
                   component="img"
-                  height="5%"
-                  width="5%"
+                  sx={{
+                    height: "70%",
+                    width: "70%",
+                    marginRight: "auto",
+                    marginLeft: "auto",
+                  }}
                   image={photo.photoUrl}
                 />
               );
             })}
             <CardContent>
               <CardActions disableSpacing>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  {/* <IconButton onClick={() => unLike(auth, post)}> */}
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <FavoriteIcon sx={{ color: pink[500] }} />
-                  {/* </IconButton> */}
                   <Typography>{post.likes.length} likes</Typography>
                 </Box>
               </CardActions>
@@ -116,7 +119,7 @@ const Explore = ({ posts, auth }) => {
                   );
                 })}
                 <Box display="flex" alignItems="center" justifyContent="center">
-                  <CommentHelper authId={auth.id} postId={post.id} />
+                  <CommentsFAB authId={auth.id} postId={post.id} />
                 </Box>
               </Box>
             </CardContent>
