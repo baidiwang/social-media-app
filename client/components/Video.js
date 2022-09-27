@@ -20,7 +20,6 @@ const Video = () => {
 	const [ callAccepted, setCallAccepted ] = useState(false)
 	const [ idToCall, setIdToCall ] = useState("")
 	const [ callEnded, setCallEnded] = useState(false)
-	const [ name, setName ] = useState("")
 	const myVideo = useRef()
 	const userVideo = useRef()
 	const connectionRef= useRef()
@@ -39,12 +38,10 @@ const Video = () => {
 		socket.on("callUser", (data) => {
 			setReceivingCall(true)
 			setCaller(data.from)
-			setName(data.name)
 			setCallerSignal(data.signal)
 		})
 	}, [])
 
-    console.log(me);
 
     const callUser = (id) => {
 		const peer = new Peer({
@@ -56,8 +53,7 @@ const Video = () => {
 			socket.emit("callUser", {
 				userToCall: id,
 				signalData: data,
-				from: me,
-				name: name
+				from: me
 			})
 		})
 		peer.on("stream", (stream) => {
@@ -99,27 +95,20 @@ const Video = () => {
 
     return (
         <>
-			<h1 style={{ textAlign: "center", color: '#fff' }}>Zoomish</h1>
+			<h1 style={{ textAlign: "center", color: 'black' }}>Video Chat</h1>
+			<h2 style={{ textAlign: "center", color: 'black' }}>Copy and share your ID to chat with another user! </h2>
 		<div className="container">
 			<div className="video-container">
 				<div className="video">
-					{stream &&  <video playsInline muted ref={myVideo} autoPlay style={{ width: "300px" }} />}
+					{stream &&  <video playsInline muted ref={myVideo} autoPlay style={{ width: "320px" }} />}
 				</div>
 				<div className="video">
 					{callAccepted && !callEnded ?
-					<video playsInline ref={userVideo} autoPlay style={{ width: "300px"}} />:
+					<video playsInline ref={userVideo} autoPlay style={{ width: "320px"}} />:
 					null}
 				</div>
 			</div>
 			<div className="myId">
-				<TextField
-					id="filled-basic"
-					label="Name"
-					variant="filled"
-					value={name}
-					onChange={(e) => setName(e.target.value)}
-					style={{ marginBottom: "20px" }}
-				/>
 				<CopyToClipboard text={me} style={{ marginBottom: "2rem" }}>
 					<Button variant="contained" color="primary" startIcon={<AssignmentIcon fontSize="large" />}>
 						Copy ID
@@ -149,7 +138,7 @@ const Video = () => {
 			<div>
 				{receivingCall && !callAccepted ? (
 						<div className="caller">
-						<h1 >{name} is calling...</h1>
+						<h1 >Calling incoming...</h1>
 						<Button variant="contained" color="primary" onClick={answerCall}>
 							Answer
 						</Button>
