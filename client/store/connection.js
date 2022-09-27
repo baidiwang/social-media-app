@@ -6,6 +6,8 @@ const connections = (state = [], action) => {
     }
     else if(action.type === 'ADD_CONNECTION'){
         return [action.connection, ...state];
+    } else if(action.type === 'UPDATE_CONNECTION'){
+        return state.map(connection => connection.id === action.connection.id ? action.connection : connection);
     }
     else if(action.type === 'DELETE_CONNECTION'){
         return state.filter(connection => connection.id !== action.connection.id);
@@ -25,17 +27,51 @@ export const setConnections = () => {
 };
 export const addConnection = (following, follower) => {
     return async(dispatch) => {
-        const connection = (await axios.post('/api/connections', {
+        let connection = {};
+        console.log("following", following)
+        console.log("follower", follower)
+        if(follower.isPrivate){
+            connection = (await axios.post('/api/connections', {
+                followingId: following.id,
+                followerId: follower.id,
+                isAccepted: false
+            },
+            {
+                headers: {
+                    authorization: window.localStorage.getItem('token')
+                }
+            })).data;
+            console.log(connection)
+            dispatch({type: 'ADD_CONNECTION', connection});
+        } else {
+            connection = (await axios.post('/api/connections', {
+                followingId: following.id,
+                followerId: follower.id,
+                isAccepted: true
+            },
+            {
+                headers: {
+                    authorization: window.localStorage.getItem('token')
+                }
+            })).data;
+            console.log(connection)
+            dispatch({type: 'ADD_CONNECTION', connection});
+        }
+    }
+};
+export const updateConnection = (connection, following, follower) => {
+    return async(dispatch) => {
+        connection = (await axios.put(`/api/connections/${connection.id}`, {
             followingId: following.id,
-            followerId: follower.id
-        },
-        {
+            followerId: follower.id,
+            isAccepted: true
+        }, {
             headers: {
                 authorization: window.localStorage.getItem('token')
             }
         })).data;
         console.log(connection)
-        dispatch({type: 'ADD_CONNECTION', connection});
+        dispatch({type: 'UPDATE_CONNECTION', connection})
     }
 };
 export const deleteConnection = (connection) => {

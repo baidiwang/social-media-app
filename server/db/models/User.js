@@ -42,6 +42,10 @@ const User = db.define('user', {
   },
   githubId: {
     type: Sequelize.INTEGER
+  },
+  isPrivate: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   }
 })
 
@@ -145,12 +149,47 @@ User.prototype.deleteLike = async function(id, body){
 //***************************************************************** CONNECTIONS ******************************************************************
 //get all connections
 User.prototype.getConnections = async function(){
-  return (await db.models.connection.findAll())
+  return (await db.models.connection.findAll({
+    include: [
+      {
+        model: User,
+        as: 'follower'
+      },
+      {
+        model: User,
+        as: 'following'
+      }
+    ]
+  }));
 };
+User.prototype.getSingleConnection = async function(connectionId){
+  const connection = await db.models.connection.findOne({
+    where: {
+      id: connectionId
+    },
+    include: [
+      {
+        model: User,
+        as: 'follower'
+      },
+      {
+        model: User,
+        as: 'following'
+      }
+    ]
+  });
+  return connection;
+}
 //add connection
 User.prototype.addConnection = async function(body){
-  return (await db.models.connection.create(body));
+  const connection = await db.models.connection.create(body);
+  return this.getSingleConnection(connection.id);
 };
+User.prototype.updateConnection = async function(body, id){
+  let connection = await db.models.connection.findByPk(id);
+  connection = await connection.update(body);
+  return this.getSingleConnection(connection.id);
+}
 User.prototype.deleteConnection = async function(id){
   const connection = await db.models.connection.findByPk(id*1);
   await connection.destroy();

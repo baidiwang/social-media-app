@@ -26,6 +26,12 @@ export const setPosts = () => {
         dispatch({type: 'SET_POSTS', posts})
     }
 };
+export const deletePost = (post) => {
+    return async(dispatch) => {
+        await axios.delete(`/api/posts/${post.id}`);
+        dispatch({ type: 'DELETE_POST', post})
+    }
+}
 
 export const createPost = (body, auth) => {
     return async(dispatch) => {
@@ -98,4 +104,20 @@ export const addComment = (comment, postId, authId) => {
         dispatch({type: 'UPDATE_POST', post});
     }
 };
+
+export const deleteComment = (comment) => {
+    return async(dispatch) => {
+        await axios.delete(`/api/comments/${comment.id}`);
+        const post = (await axios.get(`/api/posts/${comment.postId}`,
+        {
+            headers: {
+                authorization: window.localStorage.getItem('token')
+            }
+        })).data;
+
+        dispatch({type: 'UPDATE_POST', post})
+    }
+};
+
+
 export default posts;
