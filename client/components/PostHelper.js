@@ -1,41 +1,80 @@
 //landing page / newsfeed
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { Box } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { Box, Menu, MenuItem, Modal } from '@mui/material'
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
 import Avatar from "@mui/material/Avatar";
-import IconButton, { IconButtonProps } from "@mui/material/IconButton";
+import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { red, grey, pink } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import CommentHelper from "./CommentHelper";
-import { addLike, deleteLike, deletePost, deletePhoto, deleteComment } from "../store";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import Popover from "@mui/material/Popover";
-import DeleteIcon from '@mui/icons-material/Delete';
-import Button from '@mui/material/Button';
+import {
+  addLike,
+  deleteLike,
+  deletePost,
+  deletePhoto,
+  setPhotos,
+  setPosts,
+  deleteComment,
+} from "../store";
+import {
+  FacebookShareButton,
+  TwitterShareButton,
+  FacebookIcon,
+  TwitterIcon
+} from "react-share";
+import { io } from 'socket.io-client'
+import PostUpdateForm from './PostUpdateForm'
+
+let socket;
 
 /**
  * COMPONENT
  */
-const PostHelper = ({ posts, auth, photos, addLike, deleteLike, deletePost, deleteComment }) => {
+const PostHelper = ({
+  posts,
+  auth,
+  photos,
+  addLike,
+  deleteLike,
+  deletePost,
+  getPosts,
+  getPhotos,
+  deleteComment,
+}) => {
   const [open, setOpen] = useState(false);
+  const [editPost, setEditPost] = useState(null);
   const [anchorEl, setAnchorEl] = useState(false);
-  let [targetPost, setTargetPost] = useState({}) ;
+  let [targetPost, setTargetPost] = useState({});
+  const [anchorEls, setAnchorEls] = useState({});
 
-  
+  useEffect(() => {
+    socket = io()
+
+    socket.on("createPost", (creatorId) => {
+      getPosts();
+      getPhotos();
+    });
+
+    return () => socket.emit('forceDisconnect');
+  }, []);
+
+  useEffect(() => {
+    const anchorEls = {};
+    posts.forEach(post => {
+      anchorEls[post.id] = null;
+    });
+    setAnchorEls(anchorEls);
+  }, [posts]);
+
   const checkLike = (post, auth) => {
     const like = post.likes.find((like) => like.userId === auth.id);
     return like;
@@ -45,139 +84,211 @@ const PostHelper = ({ posts, auth, photos, addLike, deleteLike, deletePost, dele
     deleteLike(like.id, post.id);
   };
 
- 
   return (
-    
     <Box flex={5} p={1}>
         {posts.map((post) => {
+          const shareOpen = Boolean(anchorEls[post.id]);
         return (
           <Card sx={{ margin: 5 }} key={post.id}>
-                        {auth.id === targetPost.userId ? 
-                        <Menu
-                        id="demo-positioned-menu"
-                        aria-labelledby="demo-positioned-button"
-                        anchorEl={anchorEl}
-                        open={open}
-                        onClose={(event) => setOpen(false)}
-                      >
-                        <MenuItem onClick={() => {
-                          console.log('here');
-                          setOpen(false)
-                          deletePost(targetPost, photos)}}>
-                          Delete
-                        </MenuItem>
-                      </Menu>
-            : null}
+            {
+              auth.id === targetPost.userId ?
+                <Menu
+                  id="demo-positioned-menu"
+                  aria-labelledby="demo-positioned-button"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={(event) => setOpen(false)}
+                >
+                  <MenuItem onClick={() => {
+                    setEditPost(targetPost);
+                    setOpen(false)}}>
+                    Edit
+                  </MenuItem>
+                  <MenuItem onClick={() => {
+                    console.log('here');
+                    setOpen(false)
+                    deletePost(targetPost, photos)}}>
+                    Delete
+                  </MenuItem>
+                </Menu>
+                : null
+            }
             <CardHeader
               avatar={
                 <Link to={`/profile/${post.user.id}`}>
-                  <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                    {post.user.avatar}
-                  </Avatar>
+                  <Avatar
+                    src={post.user.avatar}
+                    sx={{ bgcolor: red[500] }}
+                    aria-label="recipe"
+                  ></Avatar>
                 </Link>
               }
               action={
-                <IconButton aria-label="settings"
-                onClick={(event) => {
-                  setTargetPost(post);
+                <IconButton
+                  aria-label="settings"
+                  onClick={(event) => {
+                    setTargetPost(post);
 
-                  setOpen(true)
-                  setAnchorEl(event.currentTarget)
-                }}>
-                  <MoreVertIcon/>
-
+                    setOpen(true);
+                    setAnchorEl(event.currentTarget);
+                  }}
+                >
+                  <MoreVertIcon />
                 </IconButton>
-                
               }
               title={<Link to={`/posts/${post.id}`}>{post.user.username}</Link>}
               subheader={post.date}
             />
-
-
             {photos
               .filter((photo) => photo.postId === post.id)
               .map((photo) => {
                 return (
                   <CardMedia
-                    key={photo.id}
                     component="img"
-                    height="20%"
+                    sx={{
+                      height: "70%",
+                      width: "70%",
+                      marginRight: "auto",
+                      marginLeft: "auto",
+                    }}
                     image={photo.photoUrl}
                   />
                 );
               })}
-            <CardContent>
-              <Typography variant="body2" color="text.secondary">
-                {post.body}
-              </Typography>
-            </CardContent>
             <CardActions disableSpacing>
               {checkLike(post, auth) ? (
-                <div>
-                  <IconButton aria-label="add to favorites">
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <IconButton onClick={() => unLike(auth, post)}>
                     <FavoriteIcon sx={{ color: pink[500] }} />
-                    {post.likes.length} likes
                   </IconButton>
-                  <button onClick={() => unLike(auth, post)}>Liked</button>
-                </div>
+                  <Typography> {post.likes.length} likes</Typography>
+                </Box>
               ) : (
-                <div>
-                  <IconButton aria-label="add to favorites">
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <IconButton onClick={() => addLike(auth.id, post.id)}>
                     <FavoriteIcon sx={{ color: grey[100] }} />
-                    {post.likes.length} likes
                   </IconButton>
-                  <button onClick={() => addLike(auth.id, post.id)}>
-                    Like
-                  </button>
-                </div>
+                  <Typography> {post.likes.length} likes</Typography>
+                </Box>
               )}
-              <IconButton aria-label="share">
+              <IconButton aria-label="share" onClick={(event) => {
+                anchorEls[post.id] = event.currentTarget;
+                setAnchorEls({...anchorEls});
+              }}>
                 <ShareIcon />
               </IconButton>
+              <Menu
+                anchorEl={anchorEls[post.id]}
+                open={shareOpen}
+                onClose={() => {
+                  anchorEls[post.id] = null;
+                  setAnchorEls({...anchorEls});
+                }}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                transformOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button',
+                }}
+              >
+                <MenuItem>
+                  <FacebookShareButton
+                    url={`${location.origin}/posts/${post.id}`}
+                    quote={post.body}
+                  >
+                    <Box display="flex" alignItems="center">
+                      <FacebookIcon size={32} round />
+                      <Box ml={1}>Facebook</Box>
+                    </Box>
+                  </FacebookShareButton>
+                </MenuItem>
+                <MenuItem>
+                  <TwitterShareButton
+                    title={post.body}
+                    url={`${location.origin}/posts/${post.id}`}
+                  >
+                    <Box display="flex" alignItems="center">
+                      <TwitterIcon size={32} round />
+                      <Box ml={1}>Twitter</Box>
+                    </Box>
+                  </TwitterShareButton>
+                </MenuItem>
+              </Menu>
             </CardActions>
-            ---------Comments--------------
-            <br />
-            {post.comments.map((comment) => {
-              return (
-                <Card key={comment.id}>
-            
-                  <CardHeader
-                    avatar={
-                      <Link to={`/profile/${comment.user.id}`}>
-                        <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                          {comment.user.avatar}
-                        </Avatar>
+            <Box marginLeft={2}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Link to={`/profile/${post.userId}`}>
+                  <Avatar src={post.user.avatar} />
+                </Link>
+                <Link to={`/profile/${post.userId}`}>
+                  <Typography variant="h6">{post.user.username}</Typography>
+                </Link>
+              </Box>
+              <Typography>{post.body}</Typography>
+            </Box>
+            <Box marginTop={3}>
+              {post.comments.map((comment) => {
+                return (
+                  <Box
+                    marginLeft={5}
+                    marginTop={3}
+                    marginBottom={1}
+                    key={comment.id}
+                  >
+                    <Box display="flex" alignItems="center">
+                      <Link to={`/profile/${comment.userId}`}>
+                        <Avatar
+                          sx={{ height: "30px", width: "30px" }}
+                          src={comment.user.avatar}
+                        />
                       </Link>
-                    }
-                    action={
-                     <div>
-                      {auth.id === comment.userId ? <Button variant='outlined' startIcon={<DeleteIcon/>}
-                      onClick={() => {
-
-                        deleteComment(comment)
-
-                      }} >
-                        Delete
-                        </Button> : null}
-                      </div>
-
-                    }
-                    title={comment.user.username}
-                    subheader={comment.date}
-                  />
-                  <CardContent>
-                    <Typography variant="body2" color="text.secondary">
+                      <Typography sx={{ fontSize: "12px", marginLeft: 1 }}>
+                        <Link to={`/profile/${comment.userId}`}>
+                          {comment.user.username}
+                        </Link>
+                      </Typography>
+                    </Box>
+                    <Typography sx={{ fontSize: "10px", marginLeft: "40px" }}>
                       {comment.body}
                     </Typography>
-                  </CardContent>
-                </Card>
-              );
-            })}
-            <CommentHelper authId={auth.id} postId={post.id} />
-            <hr />
+                  </Box>
+                );
+              })}
+              <Box display="flex" alignItems="center" justifyContent="center">
+                <CommentHelper authId={auth.id} postId={post.id} />
+              </Box>
+            </Box>
           </Card>
         );
       })}
+      <Modal
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+        open={!!editPost}
+        onClose={(event) => setEditPost(null)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          width={450}
+          height={800}
+          borderRadius="8px"
+          backgroundColor={"background.default"}
+          color={"text.primary"}
+          textAlign="center"
+        >
+          <Typography marginTop={2} color={"gray"} variant="h5">
+            Update The Post
+          </Typography>
+          <Box sx={{ marginTop: 5 }}>
+            <PostUpdateForm post={editPost} />
+          </Box>
+        </Box>
+      </Modal>
     </Box>
   );
 };
@@ -190,19 +301,21 @@ const mapDispatch = (dispatch) => {
     deleteLike: (likeId, postId) => {
       dispatch(deleteLike(likeId, postId))
     },
+    getPosts: () => dispatch(setPosts()),
+    getPhotos: () => dispatch(setPhotos()),
     deletePost: (post, photos) => {
       console.log(post);
-      const photosToDelete = photos.filter((photo) => photo.postId === post.id)
+      const photosToDelete = photos.filter((photo) => photo.postId === post.id);
       console.log(photosToDelete);
       photosToDelete.forEach((photo) => {
-        dispatch(deletePhoto(photo))
-      })
-      dispatch(deletePost(post))
+        dispatch(deletePhoto(photo));
+      });
+      dispatch(deletePost(post));
     },
-     deleteComment: (comment) => {
+    deleteComment: (comment) => {
       console.log(comment);
-      dispatch(deleteComment(comment))
-     }
+      dispatch(deleteComment(comment));
+    },
   };
 };
 
