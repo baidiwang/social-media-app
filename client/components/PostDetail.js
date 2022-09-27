@@ -27,6 +27,7 @@ import {
 import SideMenu from "./SideMenu";
 import { Link } from "react-router-dom";
 import CommentHelper from "./CommentHelper";
+import CommentFAB from "./CommentFAB";
 
 const SinglePost = ({
   auth,
@@ -63,7 +64,7 @@ const SinglePost = ({
         flexDirection="column"
         justifyContent="center"
         alignItems="center"
-        flex={5}
+        flex={10}
         backgroundColor={"background.default"}
         color={"text.primary"}
         width="100vw"
@@ -102,8 +103,12 @@ const SinglePost = ({
                 <CardMedia
                   key={photo.id}
                   component="img"
-                  height="5%"
-                  width="5%"
+                  sx={{
+                    height: "70%",
+                    width: "70%",
+                    marginRight: "auto",
+                    marginLeft: "auto",
+                  }}
                   image={photo.photoUrl}
                 />
               );
@@ -165,13 +170,16 @@ const SinglePost = ({
                     </Box>
                   );
                 })}
-                <Box display="flex" alignItems="center" justifyContent="center">
-                  <CommentHelper authId={auth.id} postId={post.id} />
-                </Box>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                ></Box>
               </Box>
             </CardContent>
           </Card>
         </Stack>
+        <CommentFAB authId={auth.id} postId={post.id} />
       </Box>
     </ThemeProvider>
   );

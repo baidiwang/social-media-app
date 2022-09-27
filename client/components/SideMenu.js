@@ -14,6 +14,7 @@ import MessageIcon from "@mui/icons-material/Message";
 import FeedIcon from "@mui/icons-material/Feed";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ModeNightIcon from "@mui/icons-material/ModeNight";
+import ExploreIcon from "@mui/icons-material/Explore";
 
 const SideMenu = ({ setMode, mode }) => {
   return (
@@ -26,6 +27,14 @@ const SideMenu = ({ setMode, mode }) => {
                 <FeedIcon />
               </ListItemIcon>
               <ListItemText primary="Feed"></ListItemText>
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton component="a" href="explore">
+              <ListItemIcon>
+                <ExploreIcon />
+              </ListItemIcon>
+              <ListItemText primary="Explore"></ListItemText>
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
