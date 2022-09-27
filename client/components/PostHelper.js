@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { Box, Menu, MenuItem } from '@mui/material'
+import { Box, Menu, MenuItem, Modal } from '@mui/material'
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
@@ -25,8 +25,6 @@ import {
   setPosts,
   deleteComment,
 } from "../store";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import {
   FacebookShareButton,
   TwitterShareButton,
@@ -34,6 +32,7 @@ import {
   TwitterIcon
 } from "react-share";
 import { io } from 'socket.io-client'
+import PostUpdateForm from './PostUpdateForm'
 
 let socket;
 
@@ -52,6 +51,7 @@ const PostHelper = ({
   deleteComment,
 }) => {
   const [open, setOpen] = useState(false);
+  const [editPost, setEditPost] = useState(null);
   const [anchorEl, setAnchorEl] = useState(false);
   let [targetPost, setTargetPost] = useState({});
   const [anchorEls, setAnchorEls] = useState({});
@@ -87,28 +87,32 @@ const PostHelper = ({
   return (
     <Box flex={5} p={1}>
         {posts.map((post) => {
-          const open = Boolean(anchorEls[post.id]);
+          const shareOpen = Boolean(anchorEls[post.id]);
         return (
           <Card sx={{ margin: 5 }} key={post.id}>
-            {auth.id === targetPost.userId ? (
-              <Menu
-                id="demo-positioned-menu"
-                aria-labelledby="demo-positioned-button"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={(event) => setOpen(false)}
-              >
-                <MenuItem
-                  onClick={() => {
-                    console.log("here");
-                    setOpen(false);
-                    deletePost(targetPost, photos);
-                  }}
+            {
+              auth.id === targetPost.userId ?
+                <Menu
+                  id="demo-positioned-menu"
+                  aria-labelledby="demo-positioned-button"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={(event) => setOpen(false)}
                 >
-                  Delete
-                </MenuItem>
-              </Menu>
-            ) : null}
+                  <MenuItem onClick={() => {
+                    setEditPost(targetPost);
+                    setOpen(false)}}>
+                    Edit
+                  </MenuItem>
+                  <MenuItem onClick={() => {
+                    console.log('here');
+                    setOpen(false)
+                    deletePost(targetPost, photos)}}>
+                    Delete
+                  </MenuItem>
+                </Menu>
+                : null
+            }
             <CardHeader
               avatar={
                 <Link to={`/profile/${post.user.id}`}>
@@ -175,7 +179,7 @@ const PostHelper = ({
               </IconButton>
               <Menu
                 anchorEl={anchorEls[post.id]}
-                open={open}
+                open={shareOpen}
                 onClose={() => {
                   anchorEls[post.id] = null;
                   setAnchorEls({...anchorEls});
@@ -262,6 +266,29 @@ const PostHelper = ({
           </Card>
         );
       })}
+      <Modal
+        sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+        open={!!editPost}
+        onClose={(event) => setEditPost(null)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          width={450}
+          height={800}
+          borderRadius="8px"
+          backgroundColor={"background.default"}
+          color={"text.primary"}
+          textAlign="center"
+        >
+          <Typography marginTop={2} color={"gray"} variant="h5">
+            Update The Post
+          </Typography>
+          <Box sx={{ marginTop: 5 }}>
+            <PostUpdateForm post={editPost} />
+          </Box>
+        </Box>
+      </Modal>
     </Box>
   );
 };

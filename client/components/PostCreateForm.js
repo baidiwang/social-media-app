@@ -48,7 +48,9 @@ export const Label = styled.label`
   align-items: center;
 `;
 
-export const UploadedPhotos = styled.li``;
+export const UploadedPhotos = styled.li`
+  position: relative;
+`;
 
 let socket;
 
