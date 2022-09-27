@@ -10,7 +10,7 @@ export const theme = createTheme({
       main: "#15c630",
     },
     otherColors: {
-      main: "#999",
+      main: "#3FA796",
     },
   },
   breakpoints: {

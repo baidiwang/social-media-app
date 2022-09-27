@@ -12,7 +12,12 @@ function CommentsFAB({ authId, postId }) {
 
   return (
     <Box sx={{ padding: "10px" }}>
-      <Button onClick={handleOpen}>Post a Comment</Button>
+      <Button
+        sx={{ backgroundColor: "#3FA796", color: "#F5C7A9" }}
+        onClick={handleOpen}
+      >
+        Post a Comment
+      </Button>
       <Modal
         open={open}
         onClose={handleClose}

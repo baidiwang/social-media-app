@@ -41,7 +41,7 @@ const CommentHelper = ({ authId, postId, addComment }) => {
         onChange={onChange}
         required
       />
-      <Button>Post</Button>
+      <Button disabled={!body}>Post</Button>
     </Form>
   );
 };
