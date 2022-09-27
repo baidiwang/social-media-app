@@ -198,7 +198,7 @@ const PostHelper = ({
               >
                 <MenuItem>
                   <FacebookShareButton
-                    url={"http://localhost:8080/home"}
+                    url={`${location.origin}/posts/${post.id}`}
                     quote={post.body}
                   >
                     <Box display="flex" alignItems="center">
@@ -210,7 +210,7 @@ const PostHelper = ({
                 <MenuItem>
                   <TwitterShareButton
                     title={post.body}
-                    url={"http://localhost:8080/home"}
+                    url={`${location.origin}/posts/${post.id}`}
                   >
                     <Box display="flex" alignItems="center">
                       <TwitterIcon size={32} round />
