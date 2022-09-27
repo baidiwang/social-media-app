@@ -113,37 +113,32 @@ const PostHelper = ({
               .map((photo) => {
                 return (
                   <CardMedia
-                    key={photo.id}
                     component="img"
-                    height="20%"
+                    sx={{
+                      height: "70%",
+                      width: "70%",
+                      marginRight: "auto",
+                      marginLeft: "auto",
+                    }}
                     image={photo.photoUrl}
                   />
                 );
               })}
-            <CardContent>
-              <Typography variant="body2" color="text.secondary">
-                {post.body}
-              </Typography>
-            </CardContent>
             <CardActions disableSpacing>
               {checkLike(post, auth) ? (
-                <div>
-                  <IconButton aria-label="add to favorites">
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <IconButton onClick={() => unLike(auth, post)}>
                     <FavoriteIcon sx={{ color: pink[500] }} />
-                    {post.likes.length} likes
                   </IconButton>
-                  <button onClick={() => unLike(auth, post)}>Liked</button>
-                </div>
+                  <Typography> {post.likes.length} likes</Typography>
+                </Box>
               ) : (
-                <div>
-                  <IconButton aria-label="add to favorites">
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <IconButton onClick={() => addLike(auth.id, post.id)}>
                     <FavoriteIcon sx={{ color: grey[100] }} />
-                    {post.likes.length} likes
                   </IconButton>
-                  <button onClick={() => addLike(auth.id, post.id)}>
-                    Like
-                  </button>
-                </div>
+                  <Typography> {post.likes.length} likes</Typography>
+                </Box>
               )}
               <IconButton aria-label="share">
                 <ShareIcon />
