@@ -23,6 +23,10 @@ io.on('connection', (socket) => {
 		socket.broadcast.emit("messages", message);
 	});
 
+	socket.on('createPost', async (creatorId) => {
+		socket.broadcast.emit("createPost", creatorId);
+	});
+
 	socket.on('forceDisconnect', () => {
 		socket.disconnect();
 	});

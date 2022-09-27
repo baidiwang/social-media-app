@@ -6,6 +6,7 @@ import { addPhoto, createPost, getSinglePost } from "../store";
 import { withRouter } from "react-router-dom";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import styled from "styled-components";
+import { io } from 'socket.io-client'
 
 export const Form = styled.form``;
 export const Caption = styled.textarea`
@@ -47,7 +48,11 @@ export const Label = styled.label`
   align-items: center;
 `;
 
-export const UploadedPhotos = styled.li``;
+export const UploadedPhotos = styled.li`
+  position: relative;
+`;
+
+let socket;
 
 class PostCreateForm extends React.Component {
   constructor() {
@@ -60,6 +65,15 @@ class PostCreateForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onChangePhoto = this.onChangePhoto.bind(this);
   }
+  componentDidMount() {
+    socket = io();
+  }
+  componentWillUnmount() {
+    setTimeout(() => {
+      socket.emit('forceDisconnect')
+    }, 1000);
+  }
+
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -128,6 +142,8 @@ const mapDispatch = (dispatch) => {
           await dispatch(getSinglePost(post));
         }
       });
+      console.log(socket);
+      socket.emit('createPost', auth.id);
     },
   };
 };
