@@ -4,11 +4,17 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom'
 import {Link} from 'react-router-dom';
 import { addConnection, deleteConnection, updateConnection } from '../store';
 
 const UserProfilePage = ({user, connection, auth, followRequests, listOfFollowings, listOfFollowers, follow, unfollow, acceptRequest}) => {
+  const history = useHistory();
+
+  const sendMessage = () => {
+    history.push('/conversation/' + user.id);
+  }
+
     return (
         <div>
             <h1>{user.username}'s profile</h1>
@@ -37,7 +43,10 @@ const UserProfilePage = ({user, connection, auth, followRequests, listOfFollowin
                     <div>
                         {
                             connection.isAccepted === true ?
-                            <button onClick={ () => unfollow(connection)}>Unfollow</button> :
+                            <>
+                              <button onClick={ () => unfollow(connection)}>Unfollow</button>
+                              <button style={{marginLeft: 10}} onClick={() => sendMessage()}>Send Message</button>
+                            </>:
                             <button disabled>Requested</button>
                         }
                     </div> :
