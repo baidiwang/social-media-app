@@ -19,6 +19,7 @@ import { useHistory } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import styled from "styled-components";
 import { Box } from "@mui/material";
+import { io } from 'socket.io-client'
 
 export const PhotoDeleteWrapper = styled.div`
   position: absolute;
@@ -35,11 +36,19 @@ export const Container = styled.div`
   }
 `;
 
+let socket;
+
 const PostUpdateForm = ({ post, auth, updatePostWithImages }) => {
   const [body, setBody] = useState("");
   const [photos, setPhotos] = useState([]);
 
   const history = useHistory();
+
+  useEffect(() => {
+    socket = io();
+
+    return () => socket.emit("forceDisconnect");
+  }, []);
 
   useEffect(() => {
     setBody(post.body);
@@ -122,6 +131,7 @@ const mapDispatch = (dispatch) => {
         }
       }
       await dispatch(setPosts());
+      socket.emit("createPost", auth.id);
     },
   };
 };
