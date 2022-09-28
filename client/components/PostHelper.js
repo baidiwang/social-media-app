@@ -25,8 +25,6 @@ import {
   setPosts,
   deleteComment,
 } from "../store";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import Popover from "@mui/material/Popover";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
