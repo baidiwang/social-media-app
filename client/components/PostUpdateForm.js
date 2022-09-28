@@ -92,7 +92,7 @@ const PostUpdateForm = ({ post, auth, updatePostWithImages }) => {
       <PhotoList>
         {photos.map((photo, index) => {
           return (
-            <Container>
+            <Container key={photo.id}>
               <UploadedPhotos key={index}>
                 <Image
                   sx={{ height: "80px", width: "80px", marginRight: "2px" }}
