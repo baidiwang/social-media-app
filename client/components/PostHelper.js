@@ -72,7 +72,7 @@ const PostHelper = ({ posts, auth, photos, addLike, deleteLike, deletePost, dele
               avatar={
                 <Link to={`/profile/${post.user.id}`}>
                   <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                    {post.user.avatar}
+                    src={post.user.avatar}
                   </Avatar>
                 </Link>
               }
@@ -145,7 +145,7 @@ const PostHelper = ({ posts, auth, photos, addLike, deleteLike, deletePost, dele
                     avatar={
                       <Link to={`/profile/${comment.user.id}`}>
                         <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-                          {comment.user.avatar}
+                          src ={comment.user.avatar}
                         </Avatar>
                       </Link>
                     }
