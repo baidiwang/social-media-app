@@ -47,7 +47,11 @@ const PostUpdateForm = ({ post, auth, updatePostWithImages }) => {
   useEffect(() => {
     socket = io();
 
-    return () => socket.emit("forceDisconnect");
+    return () => {
+      setTimeout(() => {
+        socket.emit("forceDisconnect");
+      }, 3000)
+    };
   }, []);
 
   useEffect(() => {
