@@ -8,26 +8,24 @@ import {
   createTheme,
   ThemeProvider,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import PostCreateForm from "./PostCreateForm";
+import CommentIcon from "@mui/icons-material/Comment";
+import CommentHelper from "./CommentHelper";
+import { useHistory } from "react-router-dom";
 
-const FAB = () => {
+const CommentFAB = ({ authId, postId }) => {
   const [open, setOpen] = useState(false);
-  const [mode, setMode] = useState("light");
   const theme = createTheme({
     palette: {
       primary: { main: "#3FA796" },
       secondary: { main: "#F5C7A9" },
-      mode: mode,
     },
   });
-
   return (
     <ThemeProvider theme={theme}>
       <Box>
         <Tooltip
           onClick={(event) => setOpen(true)}
-          title="Add Post"
+          title="Add Comment"
           sx={{
             position: "fixed",
             bottom: 20,
@@ -35,7 +33,7 @@ const FAB = () => {
           }}
         >
           <Fab color="primary" aria-label="edit">
-            <EditIcon color="secondary" />
+            <CommentIcon color="secondary" />
           </Fab>
         </Tooltip>
         <Modal
@@ -50,18 +48,18 @@ const FAB = () => {
           aria-describedby="modal-modal-description"
         >
           <Box
-            width={450}
-            height={750}
-            borderRadius="12px"
+            width={600}
+            height={500}
+            borderRadius="8px"
             backgroundColor={"background.default"}
             color={"text.primary"}
             textAlign="center"
           >
-            <Typography marginTop={2} color={"#3FA796"} variant="h5">
-              Create New Post
+            <Typography marginTop={2} color={"gray"} variant="h5">
+              Post a comment
             </Typography>
             <Box sx={{ marginTop: 5 }}>
-              <PostCreateForm />
+              <CommentHelper authId={authId} postId={postId} />
             </Box>
           </Box>
         </Modal>
@@ -70,4 +68,4 @@ const FAB = () => {
   );
 };
 
-export default FAB;
+export default CommentFAB;

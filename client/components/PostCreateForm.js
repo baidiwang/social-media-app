@@ -6,12 +6,14 @@ import { addPhoto, createPost, getSinglePost } from "../store";
 import { withRouter } from "react-router-dom";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import styled from "styled-components";
+import { io } from "socket.io-client";
 
 export const Form = styled.form``;
 export const Caption = styled.textarea`
   width: 90%;
   height: 200px;
-  background-color: lightgrey;
+  background-color: #3fa796;
+  color: #f5c7a9;
   border: none;
   outline: none;
 `;
@@ -31,12 +33,13 @@ export const Button = styled.button`
   width: 90%;
   border: none;
   cursor: pointer;
-  background-color: dodgerBlue;
+  background-color: #3fa796;
+  color: #f5c7a9;
 `;
 
 export const Image = styled.img`
-  height: 120px;
-  width: 120px;
+  height: 60px;
+  width: 60px;
   border-radius: 12px;
   margin-right: 2px;
 `;
@@ -47,7 +50,11 @@ export const Label = styled.label`
   align-items: center;
 `;
 
-export const UploadedPhotos = styled.li``;
+export const UploadedPhotos = styled.li`
+  position: relative;
+`;
+
+let socket;
 
 class PostCreateForm extends React.Component {
   constructor() {
@@ -60,6 +67,15 @@ class PostCreateForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onChangePhoto = this.onChangePhoto.bind(this);
   }
+  componentDidMount() {
+    socket = io();
+  }
+  componentWillUnmount() {
+    setTimeout(() => {
+      socket.emit("forceDisconnect");
+    }, 1000);
+  }
+
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -93,7 +109,7 @@ class PostCreateForm extends React.Component {
         />
         <Photos id="file" type="file" multiple onChange={onChangePhoto} />
         <Label htmlFor="file">
-          <AddAPhotoIcon style={{ cursor: "pointer", color: "dodgerBlue" }} />
+          <AddAPhotoIcon style={{ cursor: "pointer", color: "#3fa796" }} />
         </Label>
         <PhotoList>
           {photos.map((photo) => {
@@ -104,9 +120,7 @@ class PostCreateForm extends React.Component {
             );
           })}
         </PhotoList>
-        <Button type="submit" disabled={photos.length === 0}>
-          Post
-        </Button>
+        <Button disabled={photos.length === 0}>Submit</Button>
       </Form>
     );
   }
@@ -128,6 +142,8 @@ const mapDispatch = (dispatch) => {
           await dispatch(getSinglePost(post));
         }
       });
+      console.log(socket);
+      socket.emit("createPost", auth.id);
     },
   };
 };

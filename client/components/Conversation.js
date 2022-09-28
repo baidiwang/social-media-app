@@ -38,6 +38,7 @@ let socket;
 const Conversation = ({ user, messages, getFriendMessages, addMessage, getFriend }) => {
 	const [text, setText] = useState('');
 	const [show, setShow] = useState(false);
+	const [ me, setMe ] = useState("");
 	// const [messages, setMessages] = useState([]);
 
 	const messagesEnd = useRef();
@@ -57,6 +58,9 @@ const Conversation = ({ user, messages, getFriendMessages, addMessage, getFriend
 		socket.on("message", (data) => {
 			addMessage(data);
 		});
+		socket.on("me", (id) => {
+			setMe(id)
+		})
 
 		return () => socket.emit('forceDisconnect');
 	}, [])
@@ -85,6 +89,10 @@ const Conversation = ({ user, messages, getFriendMessages, addMessage, getFriend
 		setShow(false);
 	}
 
+	
+	const sendCall = () => {
+		addMessage({senderId: user.id, receiverId: id, text: `Join my video call: <a href='localhost:8080/videos/${me}'>here</a>`})
+	}
 	return (
 		<div className="message-container">
 			<div className="message-header">
@@ -95,7 +103,9 @@ const Conversation = ({ user, messages, getFriendMessages, addMessage, getFriend
 					/>
 				</div>
 				<div>{messages.friend && messages.friend.username}</div>
+
 				<div>
+					<button onClick={sendCall}>Video Chat</button>
 					<img className="avatar" src={messages.friend && messages.friend.avatar} alt="avatar" />
 				</div>
 			</div>

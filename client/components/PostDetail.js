@@ -1,50 +1,72 @@
-import {
-  Box,
-  CardActions,
-  CardContent,
-  CardMedia,
-  createTheme,
-  IconButton,
-  Stack,
-  ThemeProvider,
-  Typography,
-} from "@mui/material";
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Avatar, Card, CardHeader } from "@mui/material";
+import {
+  Box,
+  createTheme,
+  Stack,
+  ThemeProvider,
+  Card,
+  CardHeader,
+  Avatar,
+  IconButton,
+  CardMedia,
+  CardContent,
+  CardActions,
+  Typography,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import CommentHelper from "./CommentHelper";
-import { Link } from "react-router-dom";
-import SideMenu from "./SideMenu";
+import ShareIcon from "@mui/icons-material/Share";
 import { red, grey, pink } from "@mui/material/colors";
-import { addLike, deleteLike } from "../store";
-
-const PostDetail = ({
-  post,
-  postUserId,
-  auth,
-  postBody,
-  postId,
-  userId,
-  postDate,
-  postUser,
-  likesArr,
-  commentsArr,
-  photosArr,
-  postUserAvatar,
-  checkLike,
-  unLike,
+import {
   addLike,
+  deleteLike,
+  deletePost,
+  deletePhoto,
+  deleteComment,
+} from "../store";
+import {
+  FacebookShareButton,
+  TwitterShareButton,
+  FacebookIcon,
+  TwitterIcon,
+} from "react-share";
+import SideMenu from "./SideMenu";
+import { Link } from "react-router-dom";
+import CommentFAB from "./CommentFAB";
+
+const SinglePost = ({
+  auth,
+  post,
+  user,
+  photos,
+  likes,
+  comments,
+  addLike,
+  deleteLike,
+  deletePost,
+  deleteComment,
 }) => {
+  const [anchorEls, setAnchorEls] = useState({});
   const [mode, setMode] = useState("light");
   const darkTheme = createTheme({
     palette: {
       mode: mode,
     },
   });
-  console.log("post", post);
-  console.log("auth", auth.id);
+  const checkLike = (post, auth) => {
+    const postLikes = post.likes || [];
+    console.log("likes", postLikes);
+    const like = postLikes.find((like) => like.userId === auth.id);
+    return like;
+  };
+  const unLike = (auth, post) => {
+    const like = checkLike(post, auth);
+    deleteLike(like.id, post.id);
+  };
+  const shareOpen = Boolean(anchorEls[post.id]);
   return (
     <ThemeProvider theme={darkTheme}>
       <Box
@@ -52,13 +74,15 @@ const PostDetail = ({
         flexDirection="column"
         justifyContent="center"
         alignItems="center"
-        flex={5}
+        flex={10}
         backgroundColor={"background.default"}
         color={"text.primary"}
         width="100vw"
       >
         <Stack
           marginTop={5}
+          marginBottom={10}
+          marginRight={10}
           direction="row"
           spacing={3}
           justifyContent={"space-between"}
@@ -72,8 +96,8 @@ const PostDetail = ({
           >
             <CardHeader
               avatar={
-                <Link to={`/profile/${userId}`}>
-                  <Avatar src={postUserAvatar} />
+                <Link to={`/profile/${post.userId}`}>
+                  <Avatar src={user.avatar} />
                 </Link>
               }
               action={
@@ -81,53 +105,113 @@ const PostDetail = ({
                   <MoreVertIcon />
                 </IconButton>
               }
-              title={<Link to={`/profile/${postUserId}`}>{postUser}</Link>}
-              subheader={postDate}
+              title={
+                <Link
+                  style={{ color: "#3FA796" }}
+                  to={`/profile/${post.userId}`}
+                >
+                  <Typography variant="h6">{user.username}</Typography>
+                </Link>
+              }
+              subheader={post.date}
             />
-            {photosArr.map((photo) => {
+            {photos.map((photo) => {
               return (
                 <CardMedia
                   key={photo.id}
                   component="img"
-                  height="5%"
+                  sx={{
+                    height: "70%",
+                    width: "70%",
+                    marginRight: "auto",
+                    marginLeft: "auto",
+                  }}
                   image={photo.photoUrl}
                 />
               );
             })}
             <CardContent>
-              <Box>
-                <CardActions disableSpacing>
-                  {!checkLike(likesArr, auth) ? (
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <IconButton>
-                        <FavoriteIcon
-                          sx={{ color: grey[100] }}
-                          onClick={() => addLike(auth.id, postId)}
-                        />
-                      </IconButton>
-                      <Typography>{likesArr.length} likes</Typography>
-                    </Box>
-                  ) : (
-                    <Box sx={{ display: "flex", alignItems: "center" }}>
-                      <IconButton>
-                        <FavoriteIcon
-                          sx={{ color: pink[500] }}
-                          onClick={() => unLike(auth, likesArr)}
-                        />
-                      </IconButton>
-                      <Typography>{likesArr.length} likes</Typography>
-                    </Box>
-                  )}
-                </CardActions>
-                <Box marginLeft={2}>
-                  <Typography variant="h6">
-                    <Link to={`/profile/${userId}`}>{postUser}</Link>
-                  </Typography>
-                  <Typography>{postBody}</Typography>
+              <CardActions disableSpacing>
+                {checkLike(post, auth) ? (
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <IconButton onClick={() => unLike(auth, post)}>
+                      <FavoriteIcon sx={{ color: pink[500] }} />
+                    </IconButton>
+                    <Typography>{likes.length} likes</Typography>
+                  </Box>
+                ) : (
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <IconButton onClick={() => addLike(auth.id, post.id)}>
+                      <FavoriteIcon sx={{ color: grey[100] }} />
+                    </IconButton>
+                    <Typography>{likes.length} likes</Typography>
+                  </Box>
+                )}
+                <IconButton
+                  aria-label="share"
+                  onClick={(event) => {
+                    anchorEls[post.id] = event.currentTarget;
+                    setAnchorEls({ ...anchorEls });
+                  }}
+                >
+                  <ShareIcon />
+                </IconButton>
+                <Menu
+                  anchorEl={anchorEls[post.id]}
+                  open={shareOpen}
+                  onClose={() => {
+                    anchorEls[post.id] = null;
+                    setAnchorEls({ ...anchorEls });
+                  }}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                  transformOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                  }}
+                  MenuListProps={{
+                    "aria-labelledby": "basic-button",
+                  }}
+                >
+                  <MenuItem>
+                    <FacebookShareButton
+                      url={`${location.origin}/posts/${post.id}`}
+                      quote={post.body}
+                    >
+                      <Box display="flex" alignItems="center">
+                        <FacebookIcon size={32} round />
+                        <Box ml={1}>Facebook</Box>
+                      </Box>
+                    </FacebookShareButton>
+                  </MenuItem>
+                  <MenuItem>
+                    <TwitterShareButton
+                      title={post.body}
+                      url={`${location.origin}/posts/${post.id}`}
+                    >
+                      <Box display="flex" alignItems="center">
+                        <TwitterIcon size={32} round />
+                        <Box ml={1}>Twitter</Box>
+                      </Box>
+                    </TwitterShareButton>
+                  </MenuItem>
+                </Menu>
+              </CardActions>
+              <Box marginLeft={2}>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Link to={`/profile/${user.id}`}>
+                    <Avatar src={user.avatar} />
+                  </Link>
+                  <Link style={{ color: "#3FA796" }} to={`/profile/${user.id}`}>
+                    <Typography variant="h6">{user.username}</Typography>
+                  </Link>
                 </Box>
+                <Typography>{post.body}</Typography>
               </Box>
               <Box marginTop={3}>
-                {commentsArr.map((comment) => {
+                {comments.map((comment) => {
                   return (
                     <Box
                       marginLeft={5}
@@ -143,20 +227,28 @@ const PostDetail = ({
                           />
                         </Link>
                         <Typography sx={{ fontSize: "12px", marginLeft: 1 }}>
-                          <Link to={`/profile/${comment.userId}`}>
+                          <Link
+                            style={{ color: "#3FA796" }}
+                            to={`/profile/${comment.userId}`}
+                          >
                             {comment.user.username}
                           </Link>
                         </Typography>
                       </Box>
-                      <Typography sx={{ fontSize: "10px" }}>
+                      <Typography sx={{ fontSize: "10px", marginLeft: "40px" }}>
                         {comment.body}
                       </Typography>
                     </Box>
                   );
                 })}
-                <Box display="flex" alignItems="center" justifyContent="center">
-                  <CommentHelper authId={auth.id} postId={postId} />
-                </Box>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="center"
+                ></Box>
+              </Box>
+              <Box display="flex" alignItems="center" justifyContent="center">
+                <CommentFAB authId={auth.id} postId={post.id} />
               </Box>
             </CardContent>
           </Card>
@@ -167,60 +259,25 @@ const PostDetail = ({
 };
 
 const mapState = ({ posts, users, auth }, { match }) => {
-  console.log("users", users);
   const postId = match.params.id * 1;
-  console.log("postDetail", postId);
-  const post = posts.filter((post) => post.id === postId) || {};
-  const postUserId = post.flatMap((singlePost) => singlePost.userId);
-  console.log("singlePost", post);
-  console.log("postUserId", postUserId);
-  //   Getting Post body, Post user , Post avatar, and Post date
-  const postBody = post.map((singlePost) => singlePost.body);
-  const postUser = post.map((singlePost) => singlePost.user.username);
-  const userId = post.map((singlePost) => singlePost.user.id);
-  const postUserAvatar = post.map((singlePost) => singlePost.user.avatar);
-  const postDate = post.map((singlePost) => singlePost.date);
-  //   get comments Array from Post
-  const commentsArr = post.flatMap((singlePost) => {
-    return singlePost.comments;
-  });
-  //   get likes Array from Post
-  const likesArr = post.flatMap((singlePost) => {
-    return singlePost.likes;
-  });
-  //   get photos Array from Post
-  const photosArr = post.flatMap((singlePost) => {
-    return singlePost.photos;
-  });
-  console.log("commentsArr", commentsArr);
-  console.log("likesArr", likesArr);
-  console.log("photosArr", photosArr);
-
-  const checkLike = (likesArr, auth) => {
-    const like = likesArr.find((like) => like.userId === auth.id);
-    return like;
-  };
-  const unLike = (auth, likesArr) => {
-    const like = checkLike(likesArr, auth);
-    console.log("likeFc", like.id);
-    console.log("postId", like.postId);
-    deleteLike(like.id, like.postId);
-  };
+  console.log("match", postId);
+  const post = posts.find((post) => post.id === postId) || {};
+  console.log("post", post);
+  const user = post.user || {};
+  console.log("user", user.avatar);
+  const photos = post.photos || [];
+  console.log("photos", photos);
+  const likes = post.likes || [];
+  console.log("likes", likes.length);
+  const comments = post.comments || [];
+  console.log("comments", comments);
   return {
     post,
-    postUserId,
-    likesArr,
-    photosArr,
-    commentsArr,
-    postBody,
-    postUser,
-    postId,
-    postUserAvatar,
-    postDate,
-    userId,
-    checkLike,
-    unLike,
+    user,
     auth,
+    photos,
+    likes,
+    comments,
   };
 };
 
@@ -232,7 +289,20 @@ const mapDispatch = (dispatch) => {
     deleteLike: (likeId, postId) => {
       dispatch(deleteLike(likeId, postId));
     },
+    deletePost: (post, photos) => {
+      console.log(post);
+      const photosToDelete = photos.filter((photo) => photo.postId === post.id);
+      console.log(photosToDelete);
+      photosToDelete.forEach((photo) => {
+        dispatch(deletePhoto(photo));
+      });
+      dispatch(deletePost(post));
+    },
+    deleteComment: (comment) => {
+      console.log(comment);
+      dispatch(deleteComment(comment));
+    },
   };
 };
 
-export default connect(mapState, mapDispatch)(PostDetail);
+export default connect(mapState, mapDispatch)(SinglePost);

@@ -27,6 +27,16 @@ router.post('/', isLoggedIn, async(req, res, next) => {
   }
 });
 
+router.put('/:id',  async(req,res,next) => {
+  try{
+    const post = await Post.findByPk(req.params.id);
+    res.send(await post.update({ ...req.body }));
+  }
+  catch(err){
+    next(err);
+  }
+})
+
 router.delete('/:id',  async(req,res,next) => {
   try{
     const post = await Post.findByPk(req.params.id)

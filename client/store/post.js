@@ -49,6 +49,20 @@ export const createPost = (body, auth) => {
     }
 };
 
+export const updatePost = (postId, body) => {
+    return async(dispatch) => {
+        const post = (await axios.put('/api/posts/' + postId, {
+            body: body
+          },
+          {
+              headers: {
+                  authorization: window.localStorage.getItem('token')
+              }
+          })).data;
+        return post;
+    }
+};
+
 export const getSinglePost = (post) => {
     return async(dispatch) => {
         post = (await axios.get(`/api/posts/${post.id}`, {
