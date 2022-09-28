@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { Box, Menu, MenuItem, Modal } from '@mui/material'
+import { Box, Menu, MenuItem, Modal } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
@@ -33,10 +33,10 @@ import {
   FacebookShareButton,
   TwitterShareButton,
   FacebookIcon,
-  TwitterIcon
+  TwitterIcon,
 } from "react-share";
-import { io } from 'socket.io-client'
-import PostUpdateForm from './PostUpdateForm'
+import { io } from "socket.io-client";
+import PostUpdateForm from "./PostUpdateForm";
 
 let socket;
 
@@ -61,19 +61,19 @@ const PostHelper = ({
   const [anchorEls, setAnchorEls] = useState({});
 
   useEffect(() => {
-    socket = io()
+    socket = io();
 
     socket.on("createPost", (creatorId) => {
       getPosts();
       getPhotos();
     });
 
-    return () => socket.emit('forceDisconnect');
+    return () => socket.emit("forceDisconnect");
   }, []);
 
   useEffect(() => {
     const anchorEls = {};
-    posts.forEach(post => {
+    posts.forEach((post) => {
       anchorEls[post.id] = null;
     });
     setAnchorEls(anchorEls);
@@ -90,33 +90,37 @@ const PostHelper = ({
 
   return (
     <Box flex={5} p={1}>
-        {posts.map((post) => {
-          const shareOpen = Boolean(anchorEls[post.id]);
+      {posts.map((post) => {
+        const shareOpen = Boolean(anchorEls[post.id]);
         return (
           <Card sx={{ margin: 5 }} key={post.id}>
-            {
-              auth.id === targetPost.userId ?
-                <Menu
-                  id="demo-positioned-menu"
-                  aria-labelledby="demo-positioned-button"
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={(event) => setOpen(false)}
-                >
-                  <MenuItem onClick={() => {
+            {auth.id === targetPost.userId ? (
+              <Menu
+                id="demo-positioned-menu"
+                aria-labelledby="demo-positioned-button"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={(event) => setOpen(false)}
+              >
+                <MenuItem
+                  onClick={() => {
                     setEditPost(targetPost);
-                    setOpen(false)}}>
-                    Edit
-                  </MenuItem>
-                  <MenuItem onClick={() => {
-                    console.log('here');
-                    setOpen(false)
-                    deletePost(targetPost, photos)}}>
-                    Delete
-                  </MenuItem>
-                </Menu>
-                : null
-            }
+                    setOpen(false);
+                  }}
+                >
+                  Edit
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    console.log("here");
+                    setOpen(false);
+                    deletePost(targetPost, photos);
+                  }}
+                >
+                  Delete
+                </MenuItem>
+              </Menu>
+            ) : null}
             <CardHeader
               avatar={
                 <Link to={`/profile/${post.user.id}`}>
@@ -140,7 +144,11 @@ const PostHelper = ({
                   <MoreVertIcon />
                 </IconButton>
               }
-              title={<Link to={`/posts/${post.id}`}>{post.user.username}</Link>}
+              title={
+                <Link style={{ color: "#3FA796" }} to={`/posts/${post.id}`}>
+                  <Typography variant="h6">{post.user.username}</Typography>
+                </Link>
+              }
               subheader={post.date}
             />
             {photos
@@ -175,10 +183,13 @@ const PostHelper = ({
                   <Typography> {post.likes.length} likes</Typography>
                 </Box>
               )}
-              <IconButton aria-label="share" onClick={(event) => {
-                anchorEls[post.id] = event.currentTarget;
-                setAnchorEls({...anchorEls});
-              }}>
+              <IconButton
+                aria-label="share"
+                onClick={(event) => {
+                  anchorEls[post.id] = event.currentTarget;
+                  setAnchorEls({ ...anchorEls });
+                }}
+              >
                 <ShareIcon />
               </IconButton>
               <Menu
@@ -186,18 +197,18 @@ const PostHelper = ({
                 open={shareOpen}
                 onClose={() => {
                   anchorEls[post.id] = null;
-                  setAnchorEls({...anchorEls});
+                  setAnchorEls({ ...anchorEls });
                 }}
                 anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
+                  vertical: "top",
+                  horizontal: "left",
                 }}
                 transformOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
+                  vertical: "bottom",
+                  horizontal: "left",
                 }}
                 MenuListProps={{
-                  'aria-labelledby': 'basic-button',
+                  "aria-labelledby": "basic-button",
                 }}
               >
                 <MenuItem>
@@ -230,7 +241,9 @@ const PostHelper = ({
                   <Avatar src={post.user.avatar} />
                 </Link>
                 <Link to={`/profile/${post.userId}`}>
-                  <Typography variant="h6">{post.user.username}</Typography>
+                  <Typography variant="h6" sx={{ color: "#3FA796" }}>
+                    {post.user.username}
+                  </Typography>
                 </Link>
               </Box>
               <Typography>{post.body}</Typography>
@@ -252,7 +265,10 @@ const PostHelper = ({
                         />
                       </Link>
                       <Typography sx={{ fontSize: "12px", marginLeft: 1 }}>
-                        <Link to={`/profile/${comment.userId}`}>
+                        <Link
+                          style={{ color: "#3FA796" }}
+                          to={`/profile/${comment.userId}`}
+                        >
                           {comment.user.username}
                         </Link>
                       </Typography>
@@ -279,14 +295,14 @@ const PostHelper = ({
       >
         <Box
           width={450}
-          height={800}
+          height={750}
           borderRadius="8px"
           backgroundColor={"background.default"}
           color={"text.primary"}
           textAlign="center"
         >
-          <Typography marginTop={2} color={"gray"} variant="h5">
-            Update The Post
+          <Typography marginTop={2} color={"#3FA796"} variant="h5">
+            Update Post
           </Typography>
           <Box sx={{ marginTop: 5 }}>
             <PostUpdateForm post={editPost} />
@@ -303,7 +319,7 @@ const mapDispatch = (dispatch) => {
       dispatch(addLike(authId, postId));
     },
     deleteLike: (likeId, postId) => {
-      dispatch(deleteLike(likeId, postId))
+      dispatch(deleteLike(likeId, postId));
     },
     getPosts: () => dispatch(setPosts()),
     getPhotos: () => dispatch(setPhotos()),

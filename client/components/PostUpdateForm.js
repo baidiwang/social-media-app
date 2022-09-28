@@ -1,109 +1,128 @@
 //to edit a post
 //should be able to remove cxertain photos in the current post
 
-import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux';
-import AddAPhotoIcon from '@mui/icons-material/AddAPhoto'
-import { Button, Caption, Form, Image, Label, PhotoList, Photos, UploadedPhotos } from './PostCreateForm'
-import { addPhoto, deletePhoto, setPosts, updatePost } from '../store'
-import { useHistory } from 'react-router-dom'
-import DeleteIcon from '@mui/icons-material/Delete';
-import styled from 'styled-components'
+import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
+import {
+  Button,
+  Caption,
+  Form,
+  Image,
+  Label,
+  PhotoList,
+  Photos,
+  UploadedPhotos,
+} from "./PostCreateForm";
+import { addPhoto, deletePhoto, setPosts, updatePost } from "../store";
+import { useHistory } from "react-router-dom";
+import DeleteIcon from "@mui/icons-material/Delete";
+import styled from "styled-components";
+import { Box } from "@mui/material";
 
-const PhotoDeleteWrapper = styled.div`
+export const PhotoDeleteWrapper = styled.div`
   position: absolute;
-  bottom: 5px;
+  bottom: 0;
   left: 0;
-  color: white;
-  background-color: rgba(0, 0, 0, 0.6);
-  width: 120px;
-  margin: 0;
-  border-radius: 0 0 12px 12px;
-`
+  right: 0;
+  color: #3FA796;
+  opacity: 0;
+`;
+
+export const Container = styled.div`
+  &: hover ${PhotoDeleteWrapper} {
+    opacity: 1;
+  }
+`;
 
 const PostUpdateForm = ({ post, auth, updatePostWithImages }) => {
-    const [body, setBody] = useState("");
-    const [photos, setPhotos] = useState([]);
+  const [body, setBody] = useState("");
+  const [photos, setPhotos] = useState([]);
 
-    const history = useHistory();
+  const history = useHistory();
 
-    useEffect(() => {
-        setBody(post.body);
-        setPhotos(post.photos.map(photo => photo.photoUrl));
-    }, [post])
+  useEffect(() => {
+    setBody(post.body);
+    setPhotos(post.photos.map((photo) => photo.photoUrl));
+  }, [post]);
 
-    const onChangePhoto = (e) => {
-        console.log(e.target.files);
-        const photo = e.target.files[0];
-        const reader = new FileReader();
-        reader.addEventListener("load", () => {
-            setPhotos([...photos, reader.result])
-        });
-        reader.readAsDataURL(photo);
-    };
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        updatePostWithImages(post, photos, body, auth);
-        setBody("");
-        setPhotos([]);
-        history.push("/");
-    };
+  const onChangePhoto = (e) => {
+    console.log(e.target.files);
+    const photo = e.target.files[0];
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      setPhotos([...photos, reader.result]);
+    });
+    reader.readAsDataURL(photo);
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    updatePostWithImages(post, photos, body, auth);
+    setBody("");
+    setPhotos([]);
+    history.push("/");
+  };
 
-    return (
-      <Form onSubmit={handleSubmit}>
-          <Caption
-            type="text"
-            name="body"
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
-            required
-          />
-          <Photos id="file" type="file" multiple onChange={onChangePhoto} />
-          <Label htmlFor="file">
-              <AddAPhotoIcon style={{ cursor: "pointer", color: "dodgerBlue" }} />
-          </Label>
-          <PhotoList>
-              {photos.map((photo, index) => {
-                  return (
-                    <UploadedPhotos key={index}>
-                        <Image src={photo ? photo : null} />
-                      <PhotoDeleteWrapper onClick={() => {
-                        photos.splice(index, 1);
-                        setPhotos([...photos]);
-                      }}>
-                        <DeleteIcon />
-                      </PhotoDeleteWrapper>
-                    </UploadedPhotos>
-                  );
-              })}
-          </PhotoList>
-          <Button type="submit" disabled={photos.length === 0}>
-              Update
-          </Button>
-      </Form>
-    )
+  return (
+    <Form onSubmit={handleSubmit}>
+      <Caption
+        type="text"
+        name="body"
+        value={body}
+        onChange={(e) => setBody(e.target.value)}
+        required
+      />
+      <Photos id="file" type="file" multiple onChange={onChangePhoto} />
+      <Label htmlFor="file">
+        <AddAPhotoIcon style={{ cursor: "pointer", color: "#3FA796" }} />
+      </Label>
+      <PhotoList>
+        {photos.map((photo, index) => {
+          return (
+            <Container>
+              <UploadedPhotos key={index}>
+                <Image
+                  sx={{ height: "80px", width: "80px", marginRight: "2px" }}
+                  src={photo ? photo : null}
+                />
+                <PhotoDeleteWrapper
+                  onClick={() => {
+                    photos.splice(index, 1);
+                    setPhotos([...photos]);
+                  }}
+                >
+                  <DeleteIcon sx={{ height: "30px", width: "30px" }} />
+                </PhotoDeleteWrapper>
+              </UploadedPhotos>
+            </Container>
+          );
+        })}
+      </PhotoList>
+      <Button disabled={photos.length === 0}>Update</Button>
+    </Form>
+  );
 };
-const mapState = state => {
-    return {
-      auth: state.auth,
-    }
+const mapState = (state) => {
+  return {
+    auth: state.auth,
+  };
 };
-const mapDispatch = dispatch => {
-    return {
-      updatePostWithImages: async (originalPost, photos, body, auth) => {
-        const post = await dispatch(updatePost(originalPost.id, body));
-        for(let i = 0; i < originalPost.photos.length; i++) {
-          await dispatch(deletePhoto(originalPost.photos[i]));
-        }
-        for(let i = 0; i < photos.length; i++) {
-          if (i !== photos.length - 1) {
-            await dispatch(addPhoto(photos[i], post, auth));
-          } else {
-            await dispatch(addPhoto(photos[i], post, auth));
-          }
-        }
-        await dispatch(setPosts());
+const mapDispatch = (dispatch) => {
+  return {
+    updatePostWithImages: async (originalPost, photos, body, auth) => {
+      const post = await dispatch(updatePost(originalPost.id, body));
+      for (let i = 0; i < originalPost.photos.length; i++) {
+        await dispatch(deletePhoto(originalPost.photos[i]));
       }
-    }
+      for (let i = 0; i < photos.length; i++) {
+        if (i !== photos.length - 1) {
+          await dispatch(addPhoto(photos[i], post, auth));
+        } else {
+          await dispatch(addPhoto(photos[i], post, auth));
+        }
+      }
+      await dispatch(setPosts());
+    },
+  };
 };
 export default connect(mapState, mapDispatch)(PostUpdateForm);

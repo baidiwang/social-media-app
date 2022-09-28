@@ -7,7 +7,7 @@ import styled from "styled-components";
 export const SearchDiv = styled.div``;
 
 export const SearchResultDiv = styled.div`
-  background-color: white;
+  background-color: #3fa796;
   text-align: center;
   text-transform: capitalize;
   border-radius: 4px;
@@ -44,7 +44,11 @@ const Search = ({ users }) => {
             )
             .map((user) => {
               return (
-                <Link key={user.id} to={`/profile/${user.id}`}>
+                <Link
+                  key={user.id}
+                  style={{ color: "#F5C7A9" }}
+                  to={`/profile/${user.id}`}
+                >
                   <SearchResults>
                     <Avatar
                       sx={{

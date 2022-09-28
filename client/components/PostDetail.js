@@ -13,9 +13,12 @@ import {
   CardContent,
   CardActions,
   Typography,
+  Menu,
+  MenuItem,
 } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import ShareIcon from "@mui/icons-material/Share";
 import { red, grey, pink } from "@mui/material/colors";
 import {
   addLike,
@@ -24,9 +27,14 @@ import {
   deletePhoto,
   deleteComment,
 } from "../store";
+import {
+  FacebookShareButton,
+  TwitterShareButton,
+  FacebookIcon,
+  TwitterIcon,
+} from "react-share";
 import SideMenu from "./SideMenu";
 import { Link } from "react-router-dom";
-import CommentHelper from "./CommentHelper";
 import CommentFAB from "./CommentFAB";
 
 const SinglePost = ({
@@ -41,6 +49,7 @@ const SinglePost = ({
   deletePost,
   deleteComment,
 }) => {
+  const [anchorEls, setAnchorEls] = useState({});
   const [mode, setMode] = useState("light");
   const darkTheme = createTheme({
     palette: {
@@ -57,6 +66,7 @@ const SinglePost = ({
     const like = checkLike(post, auth);
     deleteLike(like.id, post.id);
   };
+  const shareOpen = Boolean(anchorEls[post.id]);
   return (
     <ThemeProvider theme={darkTheme}>
       <Box
@@ -71,6 +81,8 @@ const SinglePost = ({
       >
         <Stack
           marginTop={5}
+          marginBottom={10}
+          marginRight={10}
           direction="row"
           spacing={3}
           justifyContent={"space-between"}
@@ -94,7 +106,12 @@ const SinglePost = ({
                 </IconButton>
               }
               title={
-                <Link to={`/profile/${post.userId}`}>{user.username}</Link>
+                <Link
+                  style={{ color: "#3FA796" }}
+                  to={`/profile/${post.userId}`}
+                >
+                  <Typography variant="h6">{user.username}</Typography>
+                </Link>
               }
               subheader={post.date}
             />
@@ -130,13 +147,64 @@ const SinglePost = ({
                     <Typography>{likes.length} likes</Typography>
                   </Box>
                 )}
+                <IconButton
+                  aria-label="share"
+                  onClick={(event) => {
+                    anchorEls[post.id] = event.currentTarget;
+                    setAnchorEls({ ...anchorEls });
+                  }}
+                >
+                  <ShareIcon />
+                </IconButton>
+                <Menu
+                  anchorEl={anchorEls[post.id]}
+                  open={shareOpen}
+                  onClose={() => {
+                    anchorEls[post.id] = null;
+                    setAnchorEls({ ...anchorEls });
+                  }}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                  transformOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                  }}
+                  MenuListProps={{
+                    "aria-labelledby": "basic-button",
+                  }}
+                >
+                  <MenuItem>
+                    <FacebookShareButton
+                      url={`${location.origin}/posts/${post.id}`}
+                      quote={post.body}
+                    >
+                      <Box display="flex" alignItems="center">
+                        <FacebookIcon size={32} round />
+                        <Box ml={1}>Facebook</Box>
+                      </Box>
+                    </FacebookShareButton>
+                  </MenuItem>
+                  <MenuItem>
+                    <TwitterShareButton
+                      title={post.body}
+                      url={`${location.origin}/posts/${post.id}`}
+                    >
+                      <Box display="flex" alignItems="center">
+                        <TwitterIcon size={32} round />
+                        <Box ml={1}>Twitter</Box>
+                      </Box>
+                    </TwitterShareButton>
+                  </MenuItem>
+                </Menu>
               </CardActions>
               <Box marginLeft={2}>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <Link to={`/profile/${user.id}`}>
                     <Avatar src={user.avatar} />
                   </Link>
-                  <Link to={`/profile/${user.id}`}>
+                  <Link style={{ color: "#3FA796" }} to={`/profile/${user.id}`}>
                     <Typography variant="h6">{user.username}</Typography>
                   </Link>
                 </Box>
@@ -159,7 +227,10 @@ const SinglePost = ({
                           />
                         </Link>
                         <Typography sx={{ fontSize: "12px", marginLeft: 1 }}>
-                          <Link to={`/profile/${comment.userId}`}>
+                          <Link
+                            style={{ color: "#3FA796" }}
+                            to={`/profile/${comment.userId}`}
+                          >
                             {comment.user.username}
                           </Link>
                         </Typography>
@@ -176,10 +247,12 @@ const SinglePost = ({
                   justifyContent="center"
                 ></Box>
               </Box>
+              <Box display="flex" alignItems="center" justifyContent="center">
+                <CommentFAB authId={auth.id} postId={post.id} />
+              </Box>
             </CardContent>
           </Card>
         </Stack>
-        <CommentFAB authId={auth.id} postId={post.id} />
       </Box>
     </ThemeProvider>
   );

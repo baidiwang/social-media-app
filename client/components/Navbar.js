@@ -20,6 +20,8 @@ import MenuItem from "@mui/material/MenuItem";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Search from "./Search";
+import LoginModal from "./LoginModal";
+import RegisterModal from "./RegisterModal";
 
 const Navbar = ({ handleClick, isLoggedIn, auth }) => {
   const theme = createTheme({
@@ -114,12 +116,8 @@ const Navbar = ({ handleClick, isLoggedIn, auth }) => {
                   Social App
                 </Link>
                 <Box sx={{ display: "flex", gap: 5 }}>
-                  <Link style={{ color: "#F5C7A9" }} to="/login">
-                    Login
-                  </Link>
-                  <Link style={{ color: "#F5C7A9" }} to="signup">
-                    Register
-                  </Link>
+                  <LoginModal />
+                  <RegisterModal />
                 </Box>
               </Toolbar>,
             ]}

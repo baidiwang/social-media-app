@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { useHistory, withRouter } from "react-router-dom";
+import { useHistory, withRouter, Redirect } from "react-router-dom";
 import { addComment } from "../store";
 import styled from "styled-components";
 
@@ -17,12 +17,17 @@ export const Button = styled.button`
   width: 90.5%;
   border: none;
   cursor: pointer;
-  background-color: dodgerBlue;
+  background-color: #3fa796;
+  color: #f5c7a9;
 `;
 
 const CommentHelper = ({ authId, postId, addComment }) => {
+  const path = `/posts/${postId}`;
+  console.log("path", path);
+  console.log("postId", postId);
   const [body, setBody] = useState("");
   const history = useHistory();
+  console.log("history", history);
 
   const onChange = (e) => {
     setBody(e.target.value);
@@ -31,7 +36,7 @@ const CommentHelper = ({ authId, postId, addComment }) => {
     e.preventDefault();
     addComment(body, postId, authId);
     setBody("");
-    history.go(0);
+    history.push(path);
   };
   return (
     <Form onSubmit={handleSubmit}>

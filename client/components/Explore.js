@@ -30,7 +30,7 @@ const Explore = ({ posts, auth }) => {
     },
   });
   return (
-    <Box>
+    <Box sx={{ padding: 10 }}>
       {posts.map((post) => {
         return (
           <Card
@@ -54,7 +54,11 @@ const Explore = ({ posts, auth }) => {
                   <MoreVertIcon />
                 </IconButton>
               }
-              title={<Link to={`/posts/${post.id}`}>{post.user.username}</Link>}
+              title={
+                <Link style={{ color: "#3FA796" }} to={`/posts/${post.id}`}>
+                  <Typography variant="h6">{post.user.username}</Typography>
+                </Link>
+              }
               subheader={post.date}
             />
             {post.photos.map((photo) => {
@@ -84,7 +88,10 @@ const Explore = ({ posts, auth }) => {
                   <Link to={`/profile/${post.userId}`}>
                     <Avatar src={post.user.avatar} />
                   </Link>
-                  <Link to={`/profile/${post.userId}`}>
+                  <Link
+                    style={{ color: "#3FA796" }}
+                    to={`/profile/${post.userId}`}
+                  >
                     <Typography variant="h6">{post.user.username}</Typography>
                   </Link>
                 </Box>
@@ -107,7 +114,10 @@ const Explore = ({ posts, auth }) => {
                           />
                         </Link>
                         <Typography sx={{ fontSize: "12px", marginLeft: 1 }}>
-                          <Link to={`/profile/${comment.userId}`}>
+                          <Link
+                            style={{ color: "#3FA796" }}
+                            to={`/profile/${comment.userId}`}
+                          >
                             {comment.user.username}
                           </Link>
                         </Typography>
@@ -119,7 +129,7 @@ const Explore = ({ posts, auth }) => {
                   );
                 })}
                 <Box display="flex" alignItems="center" justifyContent="center">
-                  <CommentsFAB authId={auth.id} postId={post.id} />
+                  {auth.id && <CommentsFAB authId={auth.id} postId={post.id} />}
                 </Box>
               </Box>
             </CardContent>

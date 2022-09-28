@@ -9,8 +9,8 @@ import {
   ThemeProvider,
 } from "@mui/material";
 import CommentIcon from "@mui/icons-material/Comment";
-import PostCreateForm from "./PostCreateForm";
 import CommentHelper from "./CommentHelper";
+import { useHistory } from "react-router-dom";
 
 const CommentFAB = ({ authId, postId }) => {
   const [open, setOpen] = useState(false);

@@ -12,7 +12,7 @@ import FAB from "./FAB";
 /**
  * COMPONENT
  */
-export const Home = ({ username, posts }) => {
+export const Home = ({ username, posts, auth }) => {
   const [mode, setMode] = useState("light");
   const darkTheme = createTheme({
     palette: {
@@ -39,6 +39,7 @@ const mapState = (state) => {
   return {
     username: state.auth.username,
     posts: state.posts,
+    auth: state.auth,
   };
 };
 
