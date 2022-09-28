@@ -121,6 +121,8 @@ const UserProfilePage = ({
             follow={follow}
             acceptRequest={acceptRequest}
             unfollow={unfollow}
+            auth={auth}
+            user={user}
           />
         </Requests>
       </Profile>
