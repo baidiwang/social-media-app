@@ -20,9 +20,9 @@ export const InputDiv = styled.div`
 
 export const Input = styled.input`
   padding: 10px;
-  width: 30%;
+  width: 40%;
   border-radius: 8px;
-  border: 0.25px solid #3fa796;
+  border: 1px solid #f5c7a9;
   color: #3fa796;
 
   ::placeholder {
@@ -34,12 +34,13 @@ export const Input = styled.input`
 export const Button = styled.button`
   padding: 15px;
   border-radius: 8px;
-  border: none;
-  width: 40%;
+  border: 2px solid #f5c7a9;
+  width: 50%;
   background-color: #3fa796;
   color: #f5c7a9;
   margin-right: auto;
   margin-left: auto;
+  cursor: pointer;
 `;
 
 export const GitDiv = styled.div`
@@ -49,6 +50,7 @@ export const GitDiv = styled.div`
 export const Title = styled.span`
   font-size: 10px;
   text-align: center;
+  color: #f5c7a9;
 `;
 
 export const URL = styled.a`
@@ -135,7 +137,7 @@ const AuthForm = (props) => {
               />
             </InputDiv>
             {error && error.response && <div> {error.response.data} </div>}
-            <Button type="submit">{displayName}</Button>
+            <Button style={{ marginTop: 10 }}>{displayName}</Button>
           </Form>
         </Container>
       )}
