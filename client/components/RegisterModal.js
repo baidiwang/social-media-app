@@ -1,22 +1,18 @@
-import * as React from "react";
-import { Box } from "@mui/material/";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
-import CommentHelper from "./CommentHelper";
+import React, { useState } from "react";
+import { Box, Button, Modal, Typography } from "@mui/material";
+import { Signup } from "./AuthForm";
 
-function CommentsFAB({ authId, postId }) {
-  const [open, setOpen] = React.useState(false);
+const RegisterModal = () => {
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
   return (
-    <Box sx={{ padding: "10px" }}>
+    <Box>
       <Button
         sx={{ backgroundColor: "#3FA796", color: "#F5C7A9" }}
         onClick={handleOpen}
       >
-        Post a Comment
+        Register
       </Button>
       <Modal
         open={open}
@@ -36,15 +32,15 @@ function CommentsFAB({ authId, postId }) {
           textAlign="center"
         >
           <Typography marginTop={2} color={"#3FA796"} variant="h5">
-            Post a comment
+            Register
           </Typography>
           <Box sx={{ marginTop: 5 }}>
-            <CommentHelper authId={authId} postId={postId} />
+            <Signup />
           </Box>
         </Box>
       </Modal>
     </Box>
   );
-}
+};
 
-export default CommentsFAB;
+export default RegisterModal;

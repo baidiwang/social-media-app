@@ -6,13 +6,14 @@ import { addPhoto, createPost, getSinglePost } from "../store";
 import { withRouter } from "react-router-dom";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import styled from "styled-components";
-import { io } from 'socket.io-client'
+import { io } from "socket.io-client";
 
 export const Form = styled.form``;
 export const Caption = styled.textarea`
   width: 90%;
   height: 200px;
-  background-color: lightgrey;
+  background-color: #3fa796;
+  color: #f5c7a9;
   border: none;
   outline: none;
 `;
@@ -71,7 +72,7 @@ class PostCreateForm extends React.Component {
   }
   componentWillUnmount() {
     setTimeout(() => {
-      socket.emit('forceDisconnect')
+      socket.emit("forceDisconnect");
     }, 1000);
   }
 
@@ -142,7 +143,7 @@ const mapDispatch = (dispatch) => {
         }
       });
       console.log(socket);
-      socket.emit('createPost', auth.id);
+      socket.emit("createPost", auth.id);
     },
   };
 };
