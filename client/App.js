@@ -8,7 +8,7 @@ import { Box } from "@mui/material";
 
 const App = () => {
   return (
-    <Box>
+    <Box sx={{ height: "100vh", position: "relative" }}>
       <Navbar />
       <Routes />
       <Footer />

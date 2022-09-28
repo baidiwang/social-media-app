@@ -32,12 +32,13 @@ export const Button = styled.button`
   width: 90%;
   border: none;
   cursor: pointer;
-  background-color: dodgerBlue;
+  background-color: #3fa796;
+  color: #f5c7a9;
 `;
 
 export const Image = styled.img`
-  height: 120px;
-  width: 120px;
+  height: 60px;
+  width: 60px;
   border-radius: 12px;
   margin-right: 2px;
 `;
@@ -107,7 +108,7 @@ class PostCreateForm extends React.Component {
         />
         <Photos id="file" type="file" multiple onChange={onChangePhoto} />
         <Label htmlFor="file">
-          <AddAPhotoIcon style={{ cursor: "pointer", color: "dodgerBlue" }} />
+          <AddAPhotoIcon style={{ cursor: "pointer", color: "#3fa796" }} />
         </Label>
         <PhotoList>
           {photos.map((photo) => {
@@ -118,9 +119,7 @@ class PostCreateForm extends React.Component {
             );
           })}
         </PhotoList>
-        <Button type="submit" disabled={photos.length === 0}>
-          Post
-        </Button>
+        <Button disabled={photos.length === 0}>Submit</Button>
       </Form>
     );
   }

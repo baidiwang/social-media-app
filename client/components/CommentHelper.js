@@ -2,11 +2,28 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { useHistory, withRouter } from "react-router-dom";
 import { addComment } from "../store";
+import styled from "styled-components";
+
+export const Form = styled.form``;
+export const Caption = styled.textarea`
+  width: 90%;
+  height: 200px;
+  background-color: lightgrey;
+  border: none;
+  outline: none;
+`;
+export const Button = styled.button`
+  padding: 15px;
+  width: 90.5%;
+  border: none;
+  cursor: pointer;
+  background-color: dodgerBlue;
+`;
 
 const CommentHelper = ({ authId, postId, addComment }) => {
   const [body, setBody] = useState("");
   const history = useHistory();
-  console.log("history", history);
+
   const onChange = (e) => {
     setBody(e.target.value);
   };
@@ -17,16 +34,15 @@ const CommentHelper = ({ authId, postId, addComment }) => {
     history.go(0);
   };
   return (
-    <form onSubmit={handleSubmit}>
-      <input
+    <Form onSubmit={handleSubmit}>
+      <Caption
         placeholder="Write a comment..."
-        type="text"
         value={body}
         onChange={onChange}
         required
       />
-      <button>Send</button>
-    </form>
+      <Button disabled={!body}>Post</Button>
+    </Form>
   );
 };
 const mapDispatch = (dispatch) => {
