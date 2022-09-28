@@ -22,16 +22,17 @@ const LoginModal = () => {
         sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
         <Box
-          width={600}
+          width={400}
           height={500}
           marginRight="auto"
           marginLeft="auto"
           borderRadius="8px"
-          backgroundColor={"background.default"}
+          backgroundColor="#3FA796"
           color={"text.primary"}
           textAlign="center"
+          border="1px solid #3FA796"
         >
-          <Typography marginTop={2} color={"#3FA796"} variant="h5">
+          <Typography marginTop={2} color={"#F5C7A9"} variant="h4">
             Login
           </Typography>
           <Box sx={{ marginTop: 5 }}>

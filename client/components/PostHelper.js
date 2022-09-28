@@ -156,6 +156,7 @@ const PostHelper = ({
               .map((photo) => {
                 return (
                   <CardMedia
+                    key={photo.id}
                     component="img"
                     sx={{
                       height: "70%",

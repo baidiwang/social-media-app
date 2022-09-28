@@ -34,93 +34,94 @@ const Navbar = ({ handleClick, isLoggedIn, auth }) => {
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="sticky" color="primary">
-        {isLoggedIn
-          ? [
-              <Toolbar
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Link style={{ color: "#F5C7A9" }} to="/home">
-                  Social App
-                </Link>
-                <Search />
-                <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-                  <Link style={{ color: "#F5C7A9" }} to="/videos">
-                    <VideocamIcon
-                      color="secondary"
-                      style={{ fontSize: "1.5rem" }}
-                    />
-                  </Link>
-                  <Link style={{ color: "#F5C7A9" }} to="/messages">
-                    <MessageIcon
-                      color="secondary"
-                      style={{ fontSize: "1.2rem" }}
-                    />
-                  </Link>
-                  <Avatar
-                    sx={{ height: "30px", width: "30px" }}
-                    src={auth.avatar}
-                    onClick={(event) => setOpen(true)}
+        {isLoggedIn ? (
+          <Box>
+            <Toolbar
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <Link style={{ color: "#F5C7A9" }} to="/home">
+                Social App
+              </Link>
+              <Search />
+              <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+                <Link style={{ color: "#F5C7A9" }} to="/videos">
+                  <VideocamIcon
+                    color="secondary"
+                    style={{ fontSize: "1.5rem" }}
                   />
-                </Box>
-              </Toolbar>,
-              <Menu
-                id="demo-positioned-menu"
-                aria-labelledby="demo-positioned-button"
-                open={open}
-                onClose={(event) => setOpen(false)}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-              >
-                <Link to={`/profile/${auth.id}`}>
-                  <MenuItem
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 1,
-                      backgroundColor: "#3FA796",
-                    }}
-                  >
-                    <AccountCircleIcon color="secondary" />
-                    <Typography color="secondary">My Profile</Typography>
-                  </MenuItem>
                 </Link>
-                <Link to="#" onClick={handleClick}>
-                  <MenuItem
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 1,
-                      backgroundColor: "#3FA796",
-                    }}
-                  >
-                    <LogoutIcon color="secondary" />
-                    <Typography color="secondary">Logout</Typography>
-                  </MenuItem>
+                <Link style={{ color: "#F5C7A9" }} to="/messages">
+                  <MessageIcon
+                    color="secondary"
+                    style={{ fontSize: "1.2rem" }}
+                  />
                 </Link>
-              </Menu>,
-            ]
-          : [
-              <Toolbar
-                sx={{ display: "flex", justifyContent: "space-between" }}
-              >
-                <Link style={{ color: "#F5C7A9" }} to="/home">
-                  Social App
-                </Link>
-                <Box sx={{ display: "flex", gap: 5 }}>
-                  <LoginModal />
-                  <RegisterModal />
-                </Box>
-              </Toolbar>,
-            ]}
+                <Avatar
+                  sx={{ height: "30px", width: "30px" }}
+                  src={auth.avatar}
+                  onClick={(event) => setOpen(true)}
+                />
+              </Box>
+            </Toolbar>
+            <Menu
+              id="demo-positioned-menu"
+              aria-labelledby="demo-positioned-button"
+              open={open}
+              onClose={(event) => setOpen(false)}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+            >
+              <Link to={`/profile/${auth.id}`}>
+                <MenuItem
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    backgroundColor: "#3FA796",
+                  }}
+                >
+                  <AccountCircleIcon color="secondary" />
+                  <Typography color="secondary">My Profile</Typography>
+                </MenuItem>
+              </Link>
+              <Link to="#" onClick={handleClick}>
+                <MenuItem
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    backgroundColor: "#3FA796",
+                  }}
+                >
+                  <LogoutIcon color="secondary" />
+                  <Typography color="secondary">Logout</Typography>
+                </MenuItem>
+              </Link>
+            </Menu>
+          </Box>
+        ) : (
+          <Box>
+            <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Link style={{ color: "#F5C7A9" }} to="/home">
+                Social App
+              </Link>
+              <Box sx={{ display: "flex", gap: 5 }}>
+                <LoginModal />
+                <RegisterModal />
+              </Box>
+            </Toolbar>
+            ,
+          </Box>
+        )}
       </AppBar>
     </ThemeProvider>
   );
