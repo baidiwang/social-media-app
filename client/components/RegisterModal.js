@@ -22,8 +22,8 @@ const RegisterModal = () => {
         sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
         <Box
-          width={600}
-          height={500}
+          width={400}
+          height={400}
           marginRight="auto"
           marginLeft="auto"
           borderRadius="8px"

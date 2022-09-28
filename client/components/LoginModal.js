@@ -22,7 +22,7 @@ const LoginModal = () => {
         sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
         <Box
-          width={600}
+          width={400}
           height={500}
           marginRight="auto"
           marginLeft="auto"

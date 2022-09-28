@@ -42,7 +42,7 @@ const SideMenu = ({ setMode, mode }) => {
               <ListItemIcon>
                 <GroupIcon />
               </ListItemIcon>
-              <ListItemText primary="Friends"></ListItemText>
+              <ListItemText primary="People"></ListItemText>
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>

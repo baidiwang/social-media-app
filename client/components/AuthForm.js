@@ -22,7 +22,8 @@ export const Input = styled.input`
   padding: 10px;
   width: 30%;
   border-radius: 8px;
-  border: 0.25px solid black;
+  border: 0.25px solid #3fa796;
+  color: #3fa796;
 
   ::placeholder {
     color: #3fa796;
@@ -109,7 +110,7 @@ const AuthForm = (props) => {
 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
                   />
                 </GitLogo>
-                <Title>Sign in with GitHub</Title>
+                <Title>GitHub</Title>
               </URL>
             </GitDiv>
             <Button>{displayName}</Button>
