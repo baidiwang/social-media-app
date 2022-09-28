@@ -2,7 +2,8 @@ const app = require('./app')
 const {db} = require('./db')
 const server = require('http').createServer(app);
 
-const io = require('socket.io')(server);
+
+const io = require("socket.io")(server)
 
 
 io.on('connection', (socket) => {
@@ -23,9 +24,31 @@ io.on('connection', (socket) => {
 		socket.broadcast.emit("messages", message);
 	});
 
+	socket.on('createPost', async (creatorId) => {
+		socket.broadcast.emit("createPost", creatorId);
+	});
+
 	socket.on('forceDisconnect', () => {
 		socket.disconnect();
 	});
+
+	socket.emit("me", socket.id);
+
+
+	socket.on("disconnect", () => {
+		socket.broadcast.emit("callEnded")
+	});
+
+	socket.on("callUser", ({ userToCall, signalData, from, name }) => {
+		io.to(userToCall).emit("callUser", { signal: signalData, from, name });
+	});
+
+	socket.on("answerCall", (data) => {
+		io.to(data.to).emit("callAccepted", data.signal)
+	});
 });
+
+
+
 
 module.exports = server;

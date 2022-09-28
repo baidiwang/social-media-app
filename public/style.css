@@ -176,3 +176,51 @@ form div {
 .material-symbols-outlined {
   font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 48;
 }
+
+
+.container {
+	display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.myId {
+	margin-right: 5rem;
+  margin-left: 5rem;
+	border-radius: 5px;
+	background: #c9d6ff; /* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #e2e2e2, #9cd7ba); /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(
+		to right,
+		#e2e2e2,
+		#d2dfa7
+	); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+	padding: 2rem;
+	display: grid;
+	justify-content: center;
+	align-content: center;
+}
+
+.call-button {
+	text-align: center;
+	margin-top: 2rem;
+}
+
+.video-container {
+	display: flex;
+  flex-wrap: wrap;
+	justify-content: center;
+	align-content: center;
+	margin-top: 10rem;
+	margin-left: 10rem;
+  margin-right: 10rem;
+  margin-bottom: 4rem;
+}
+
+.caller {
+	text-align: center;
+	color: #fff;
+}
+
+

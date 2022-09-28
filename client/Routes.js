@@ -18,6 +18,7 @@ import PasswordResetRequest from "./components/PasswordResetRequest";
 import Friends from "./components/Friends";
 import Conversation from "./components/Conversation";
 import PostDetail from "./components/PostDetail";
+import Video from "./components/Video";
 import Explore from "./components/Explore";
 
 /**
@@ -60,6 +61,7 @@ class Routes extends Component {
             <Route exact path="/posts" component={PostCreateForm} />
             {/* <Route exact path="/posts/:id" component={PostUpdateForm} /> */}
             <Route exact path="/posts/:id" component={PostDetail} />
+            <Route exact path="/videos" component={Video}/>
             <Route exact path="/explore" component={Explore} />
           </div>
         ) : (
