@@ -323,14 +323,15 @@ const mapDispatch = (dispatch) => {
     },
     getPosts: () => dispatch(setPosts()),
     getPhotos: () => dispatch(setPhotos()),
-    deletePost: (post, photos) => {
+    deletePost: async (post, photos) => {
       console.log(post);
       const photosToDelete = photos.filter((photo) => photo.postId === post.id);
       console.log(photosToDelete);
-      photosToDelete.forEach((photo) => {
-        dispatch(deletePhoto(photo));
-      });
-      dispatch(deletePost(post));
+      for(const photo of photosToDelete) {
+        await dispatch(deletePhoto(photo));
+      }
+      await dispatch(deletePost(post));
+      socket.emit("createPost");
     },
     deleteComment: (comment) => {
       console.log(comment);
