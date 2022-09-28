@@ -141,7 +141,7 @@ const PostHelper = ({
                     setAnchorEl(event.currentTarget);
                   }}
                 >
-                  <MoreVertIcon />
+                  {auth.id === post.user.id ? <MoreVertIcon /> : null}
                 </IconButton>
               }
               title={
