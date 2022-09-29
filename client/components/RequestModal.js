@@ -191,8 +191,69 @@ const RequestModal = ({
                 <Typography marginTop={2} color={"#F5C7A9"} variant="h5">
                   No current requests! 😅
                 </Typography>
+<<<<<<< HEAD
               )}
             </RequestDiv>
+=======
+                {auth.id === user.id ? (
+                  <Box>
+                    <ul>
+                      {followRequests.map((request) => {
+                        return (
+                          <li key={request.id}>
+                            <img
+                              src={request.following.avatar}
+                              width="20"
+                              height="20"
+                            />
+                            <Link to={`/profile/${request.following.id}`}>
+                              {request.following.username}
+                            </Link>
+                            <button
+                              onClick={() => acceptRequest(request, request.following, auth)}
+                            >
+                              Accept
+                            </button>
+                            <button onClick={() => unfollow(connection)}>
+                              Delete
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </Box>
+                ) : (
+                  <div>
+                    {connection.id ? (
+                      <div>
+                        {connection.isAccepted === true ? (
+                          <>
+                            <button onClick={() => unfollow(connection)}>
+                              Unfollow
+                            </button>
+                            <button
+                              style={{ marginLeft: 10 }}
+                              onClick={() => sendMessage()}
+                            >
+                              Send Message
+                            </button>
+                          </>
+                        ) : (
+                          <button disabled>Requested</button>
+                        )}
+                      </div>
+                    ) : (
+                      <button onClick={() => follow(auth, user)}>Follow</button>
+                    )}
+                  </div>
+                )}
+              </Box>
+            ) : (
+              <Typography marginTop={2} color={"#F5C7A9"} variant="h5">
+                No current requests! 😅
+              </Typography>
+            )}
+>>>>>>> 618377fa83530e0e492fe04a4fe88b59a116828c
           </Box>
         </Box>
       </Modal>

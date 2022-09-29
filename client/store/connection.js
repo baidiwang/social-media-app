@@ -61,6 +61,8 @@ export const addConnection = (following, follower) => {
 };
 export const updateConnection = (connection, following, follower) => {
     return async(dispatch) => {
+        console.log("following", following)
+        console.log("follower", follower)
         connection = (await axios.put(`/api/connections/${connection.id}`, {
             followingId: following.id,
             followerId: follower.id,
