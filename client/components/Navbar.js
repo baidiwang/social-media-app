@@ -1,51 +1,147 @@
-import React from 'react'
-import {connect} from 'react-redux'
-import {Link} from 'react-router-dom'
-import {logout} from '../store'
-import { setUsers } from '../store/user'
+import React, { useState } from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { logout } from "../store";
+import { setUsers } from "../store/user";
+import {
+  AppBar,
+  Toolbar,
+  styled,
+  Avatar,
+  Box,
+  createTheme,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
+import MessageIcon from "@mui/icons-material/Message";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import VideocamIcon from "@mui/icons-material/Videocam";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import Search from "./Search";
+import LoginModal from "./LoginModal";
+import RegisterModal from "./RegisterModal";
 
-const Navbar = ({handleClick, isLoggedIn, auth}) => (
-  <div>
-    <h1>FS-App-Template</h1>
-    <nav>
-      {isLoggedIn ? (
-        <div>
-          {/* The navbar will show these links after you log in */}
-          <Link to="/home">Home</Link>
-          <Link to={`/profile/${auth.id}`}> My Profile </Link>
-          <a href="#" onClick={handleClick}>
-            Logout
-          </a>
-        </div>
-      ) : (
-        <div>
-          {/* The navbar will show these links before you log in */}
-          <Link to="/login">Login</Link>
-          <Link to="/signup">Sign Up</Link>
-        </div>
-      )}
-    </nav>
-    <hr />
-  </div>
-)
-
+const Navbar = ({ handleClick, isLoggedIn, auth }) => {
+  const theme = createTheme({
+    palette: {
+      primary: { main: "#3FA796" },
+      secondary: { main: "#F5C7A9" },
+    },
+  });
+  const [open, setOpen] = useState(false);
+  return (
+    <ThemeProvider theme={theme}>
+      <AppBar position="sticky" color="primary">
+        {isLoggedIn ? (
+          <Box>
+            <Toolbar
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <Link style={{ color: "#F5C7A9" }} to="/home">
+                Social App
+              </Link>
+              <Search />
+              <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+                <Link style={{ color: "#F5C7A9" }} to="/videos">
+                  <VideocamIcon
+                    color="secondary"
+                    style={{ fontSize: "1.5rem" }}
+                  />
+                </Link>
+                <Link style={{ color: "#F5C7A9" }} to="/messages">
+                  <MessageIcon
+                    color="secondary"
+                    style={{ fontSize: "1.2rem" }}
+                  />
+                </Link>
+                <Avatar
+                  sx={{ height: "30px", width: "30px" }}
+                  src={auth.avatar}
+                  onClick={(event) => setOpen(true)}
+                />
+              </Box>
+            </Toolbar>
+            <Menu
+              id="demo-positioned-menu"
+              aria-labelledby="demo-positioned-button"
+              open={open}
+              onClose={(event) => setOpen(false)}
+              anchorOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+            >
+              <Link to={`/profile/${auth.id}`}>
+                <MenuItem
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    backgroundColor: "#3FA796",
+                  }}
+                >
+                  <AccountCircleIcon color="secondary" />
+                  <Typography color="secondary">My Profile</Typography>
+                </MenuItem>
+              </Link>
+              <Link to="#" onClick={handleClick}>
+                <MenuItem
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    backgroundColor: "#3FA796",
+                  }}
+                >
+                  <LogoutIcon color="secondary" />
+                  <Typography color="secondary">Logout</Typography>
+                </MenuItem>
+              </Link>
+            </Menu>
+          </Box>
+        ) : (
+          <Box>
+            <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Link style={{ color: "#F5C7A9" }} to="/home">
+                Social App
+              </Link>
+              <Box sx={{ display: "flex", gap: 5 }}>
+                <LoginModal />
+                <RegisterModal />
+              </Box>
+            </Toolbar>
+            ,
+          </Box>
+        )}
+      </AppBar>
+    </ThemeProvider>
+  );
+};
 /**
  * CONTAINER
  */
-const mapState = state => {
-
+const mapState = (state) => {
   return {
     auth: state.auth,
-    isLoggedIn: !!state.auth.id
-  }
-}
+    isLoggedIn: !!state.auth.id,
+  };
+};
 
-const mapDispatch = dispatch => {
+const mapDispatch = (dispatch) => {
   return {
     handleClick() {
-      dispatch(logout())
-    }
-  }
-}
+      dispatch(logout());
+    },
+  };
+};
 
-export default connect(mapState, mapDispatch)(Navbar)
+export default connect(mapState, mapDispatch)(Navbar);

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import history from '../history';
 
 const users = (state = [], action)=> {
   if (action.type === 'SET_USERS'){
@@ -13,7 +14,7 @@ const users = (state = [], action)=> {
   if(action.type === 'DELETE_USER') {
     return state.filter((user)=> user.id !== action.user.id);
   }
-  return state; 
+  return state;
 };
 
 export const createUser = (credentials) => {
@@ -23,7 +24,6 @@ export const createUser = (credentials) => {
         dispatch({ type: 'CREATE_USER', user });
     }
     catch(error) {
-        console.log(error.response);
       if (error.response.data === 'Cannot add duplicate email') {
         alert('Cannot add duplicate email')
       } else {
@@ -39,14 +39,18 @@ export const setUsers = () => {
           authorization: window.localStorage.getItem('token')
         }
     })).data;
-    console.log(users)
     dispatch({type: 'SET_USERS', users});
   }
 };
 export const updateUsers = (user) => {
   return async(dispatch) => {
     try{
-      await axios.put(`/api/users/${user.id}`, user);
+      user = (await axios.put(`/api/users/${user.id}`,
+      user, {
+        headers: {
+          authorization: window.localStorage.getItem('token')
+        }
+      })).data;
       dispatch({type: "UPDATE_USERS", user})
     }
     catch(ex){
@@ -62,12 +66,12 @@ export const deleteUser = (id) => {
   }
 }
 
-export const loadUser = (user) => {
-  return async(dispatch) => {
-    await axios.get(`/api/users/${user.id}`);
-    dispatch({ type: 'SET_USER', user})
-  }
-}
+// export const loadUser = (user) => {
+//   return async(dispatch) => {
+//     await axios.get(`/api/users/${user.id}`);
+//     dispatch({ type: 'SET_USER', user})
+//   }
+// }
 
 
 export default users;

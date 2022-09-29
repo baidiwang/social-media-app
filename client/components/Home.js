@@ -1,28 +1,46 @@
 //landing page / newsfeed
 
-import React from 'react'
-import {connect} from 'react-redux'
+import React, { useState } from "react";
+import { connect } from "react-redux";
+import PostCreateForm from "./PostCreateForm";
+import { Link } from "react-router-dom";
+import { Box, createTheme, Stack, ThemeProvider } from "@mui/material";
+import Feed from "./Feed";
+import SideMenu from "./SideMenu";
+import FAB from "./FAB";
 
 /**
  * COMPONENT
  */
-export const Home = props => {
-  const {username} = props
-
+export const Home = ({ username, posts, auth }) => {
+  const [mode, setMode] = useState("light");
+  const darkTheme = createTheme({
+    palette: {
+      mode: mode,
+    },
+  });
   return (
-    <div>
-      <h3>Welcome, {username}</h3>
-    </div>
-  )
-}
+    <ThemeProvider theme={darkTheme}>
+      <Box backgroundColor={"background.default"} color={"text.primary"}>
+        <Stack direction="row" spacing={5} justifyContent={"space-between"}>
+          <SideMenu setMode={setMode} mode={mode} />
+          <Feed />
+        </Stack>
+        <FAB />
+      </Box>
+    </ThemeProvider>
+  );
+};
 
 /**
  * CONTAINER
  */
-const mapState = state => {
+const mapState = (state) => {
   return {
-    username: state.auth.username
-  }
-}
+    username: state.auth.username,
+    posts: state.posts,
+    auth: state.auth,
+  };
+};
 
-export default connect(mapState)(Home)
+export default connect(mapState)(Home);
