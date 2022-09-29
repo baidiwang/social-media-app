@@ -66,9 +66,9 @@ class Routes extends Component {
           </div>
         ) : (
           <Switch>
-            <Route path="/" exact component={Login} />
+            {/* <Route path="/" exact component={Login} />
             <Route path="/login" component={Login} />
-            <Route path="/signup" component={Signup} />
+            <Route path="/signup" component={Signup} /> */}
             <Route
               path="/passwordResetRequest"
               component={PasswordResetRequest}
