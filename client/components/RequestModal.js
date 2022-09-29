@@ -1,6 +1,71 @@
 import React, { useState } from "react";
 import { Box, Button, Modal, Typography } from "@mui/material";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import DeleteIcon from "@mui/icons-material/Delete";
+import styled from "styled-components";
+
+export const Length = styled.span`
+  font-weight: 900;
+  font-size: 18px;
+`;
+
+export const RequestDiv = styled.div``;
+
+export const RequestList = styled.ul`
+  display: flex;
+  list-style-type: none;
+  flex-direction: column;
+`;
+
+export const Requests = styled.li`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+`;
+
+export const ButtonDiv = styled.div`
+  margin-right: 10px;
+`;
+
+export const Accept = styled.button`
+  padding: 5px;
+  border-radius: 12px;
+  border: 1px solid #f5c7a9;
+  cursor: pointer;
+  background-color: #3fa796;
+  color: #f5c7a9;
+  font-weight: 900;
+  margin-right: 5px;
+
+  &: hover {
+    background-color: #f5c7a9;
+    color: #3fa796;
+  }
+`;
+
+export const Decline = styled.button`
+  padding: 5px;
+  border-radius: 12px;
+  border: 1px solid #f5c7a9;
+  cursor: pointer;
+  background-color: #3fa796;
+  color: #f5c7a9;
+  font-weight: 900;
+
+  &: hover {
+    background-color: #f5c7a9;
+    color: #3fa796;
+  }
+`;
+
+export const Image = styled.img`
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 20px;
+`;
 
 const RequestModal = ({
   followRequests,
@@ -29,7 +94,9 @@ const RequestModal = ({
         }}
         onClick={handleOpen}
       >
-        Follow Requests
+        <Typography>
+          Follow Requests <Length>({followRequests.length})</Length>
+        </Typography>
       </Button>
       <Modal
         open={open}
@@ -39,7 +106,7 @@ const RequestModal = ({
         sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
         <Box
-          width={400}
+          width={500}
           height={500}
           marginRight="auto"
           marginLeft="auto"
@@ -58,69 +125,74 @@ const RequestModal = ({
             Follow Requests
           </Typography>
           <Box sx={{ marginTop: 5 }}>
-            {followRequests.length !== 0 ? (
-              <Box>
-                <Typography marginTop={2} color={"#F5C7A9"} variant="h4">
-                  Follow Requests({followRequests.length})
+            <RequestDiv>
+              {followRequests.length !== 0 ? (
+                <Box>
+                  {auth.id === user.id ? (
+                    <Box>
+                      <RequestList>
+                        {followRequests.map((request) => {
+                          return (
+                            <Requests key={request.id}>
+                              <Link to={`/profile/${request.following.id}`}>
+                                <Image src={request.following.avatar} />
+                              </Link>
+                              <Typography
+                                sx={{ marginRight: "20px", color: "#f5c7a9" }}
+                              >
+                                {request.following.username}
+                              </Typography>
+                              <ButtonDiv>
+                                <Accept
+                                  onClick={() =>
+                                    acceptRequest(request, auth, user)
+                                  }
+                                >
+                                  <PersonAddIcon />
+                                </Accept>
+                                <Decline onClick={() => unfollow(connection)}>
+                                  <DeleteIcon />
+                                </Decline>
+                              </ButtonDiv>
+                            </Requests>
+                          );
+                        })}
+                      </RequestList>
+                    </Box>
+                  ) : (
+                    <div>
+                      {connection.id ? (
+                        <div>
+                          {connection.isAccepted === true ? (
+                            <>
+                              <button onClick={() => unfollow(connection)}>
+                                Unfollow
+                              </button>
+                              <button
+                                style={{ marginLeft: 10 }}
+                                onClick={() => sendMessage()}
+                              >
+                                Send Message
+                              </button>
+                            </>
+                          ) : (
+                            <button disabled>Requested</button>
+                          )}
+                        </div>
+                      ) : (
+                        <button onClick={() => follow(auth, user)}>
+                          Follow
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </Box>
+              ) : (
+                <Typography marginTop={2} color={"#F5C7A9"} variant="h5">
+                  No current requests! 😅
                 </Typography>
-                {auth.id === user.id ? (
-                  <Box>
-                    <ul>
-                      {followRequests.map((request) => {
-                        return (
-                          <li key={request.id}>
-                            <img
-                              src={request.following.avatar}
-                              width="20"
-                              height="20"
-                            />
-                            <Link to={`/profile/${request.following.id}`}>
-                              {request.following.username}
-                            </Link>
-                            <button
-                              onClick={() => acceptRequest(request, auth, user)}
-                            >
-                              Accept
-                            </button>
-                            <button onClick={() => unfollow(connection)}>
-                              Delete
-                            </button>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </Box>
-                ) : (
-                  <div>
-                    {connection.id ? (
-                      <div>
-                        {connection.isAccepted === true ? (
-                          <>
-                            <button onClick={() => unfollow(connection)}>
-                              Unfollow
-                            </button>
-                            <button
-                              style={{ marginLeft: 10 }}
-                              onClick={() => sendMessage()}
-                            >
-                              Send Message
-                            </button>
-                          </>
-                        ) : (
-                          <button disabled>Requested</button>
-                        )}
-                      </div>
-                    ) : (
-                      <button onClick={() => follow(auth, user)}>Follow</button>
-                    )}
-                  </div>
-                )}
-              </Box>
-            ) : (
-              <Typography marginTop={2} color={"#F5C7A9"} variant="h5">
-                No current requests! 😅
-              </Typography>
-            )}
+              )}
+            </RequestDiv>
           </Box>
         </Box>
       </Modal>
