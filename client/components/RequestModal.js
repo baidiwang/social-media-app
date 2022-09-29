@@ -78,7 +78,7 @@ const RequestModal = ({
                               {request.following.username}
                             </Link>
                             <button
-                              onClick={() => acceptRequest(request, auth, user)}
+                              onClick={() => acceptRequest(request, request.following, auth)}
                             >
                               Accept
                             </button>
