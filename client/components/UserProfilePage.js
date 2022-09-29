@@ -12,6 +12,8 @@ import RequestModal from "./RequestModal";
 import FollowersModal from "./FollowersModal";
 import FollowingModal from "./FollowingModal";
 import styled from "styled-components";
+import UsersPhotosModal from "./UsersPhotosModal";
+
 
 export const Container = styled.div`
   width: 100vw;
@@ -86,6 +88,10 @@ export const FollowingDiv = styled.div`
   margin-right: 50px;
 `;
 
+export const PhotosDiv = styled.div`
+  margin-right: 50px;
+`;
+
 const UserProfilePage = ({
   user,
   connection,
@@ -96,6 +102,7 @@ const UserProfilePage = ({
   follow,
   unfollow,
   acceptRequest,
+  photos,
 }) => {
   const history = useHistory();
 
@@ -144,6 +151,14 @@ const UserProfilePage = ({
             unfollow={unfollow}
           />
         </FollowingDiv>
+        <PhotosDiv>
+          <UsersPhotosModal
+            auth={auth}
+            user={user}
+            photos={photos}
+            connection={connection}
+          />
+        </PhotosDiv>
       </PeopleDiv>
     </Container>
   );
@@ -175,6 +190,8 @@ const mapState = (state, { match }) => {
       (connection) =>
         connection.followingId === user.id && connection.isAccepted === true
     ) || [];
+  const photos = state.photos.filter((photo) => photo.userId === user.id) || [];
+
   return {
     user,
     connection,
@@ -182,6 +199,7 @@ const mapState = (state, { match }) => {
     followRequests,
     listOfFollowers,
     listOfFollowings,
+    photos,
   };
 };
 const mapDispatch = (dispatch) => {
