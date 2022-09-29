@@ -24,16 +24,28 @@ export const me = () => async dispatch => {
         authorization: token
       }
     })
-    return dispatch(setAuth(res.data))
+    dispatch(setAuth(res.data))
+    return res.data;
   }
 }
 
 export const authenticate = (username, password, method) => async dispatch => {
   try {
-    const res = await axios.post(`/auth/${method}`, {username, password})
-    window.localStorage.setItem(TOKEN, res.data.token)
-    dispatch(me())
-    history.push('/home')
+    if(method === 'login'){
+      const res = await axios.post(`/auth/${method}`, {username, password})
+      window.localStorage.setItem(TOKEN, res.data.token)
+      dispatch(me());
+    } else {
+      const res = await axios.post(`/auth/${method}`, {username, password})
+      window.localStorage.setItem(TOKEN, res.data.token)
+      const auth = await dispatch(me());
+      history.push(`/profile/${auth.id}/update`);
+    }
+    // const res = await axios.post(`/auth/${method}`, {username, password})
+    // window.localStorage.setItem(TOKEN, res.data.token)
+    // const auth = await dispatch(me());
+    // console.log(auth)
+    // history.push(`/profile/${auth.id}/update`);
   } catch (authError) {
     return dispatch(setAuth({error: authError}))
   }

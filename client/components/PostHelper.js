@@ -141,7 +141,7 @@ const PostHelper = ({
                     setAnchorEl(event.currentTarget);
                   }}
                 >
-                  <MoreVertIcon />
+                  {auth.id === post.user.id ? <MoreVertIcon /> : null}
                 </IconButton>
               }
               title={
@@ -273,10 +273,22 @@ const PostHelper = ({
                           {comment.user.username}
                         </Link>
                       </Typography>
+                      <div className="delete-comment-button" >
+                      {auth.id === comment.userId ? <Button variant='outlined' style={{ color: "#3FA796"}} startIcon={<DeleteIcon/>}
+                      onClick={() => {
+
+                        deleteComment(comment)
+
+                      }} >
+                        Delete
+                        </Button> : null}
+                      </div>
                     </Box>
+
                     <Typography sx={{ fontSize: "10px", marginLeft: "40px" }}>
                       {comment.body}
                     </Typography>
+
                   </Box>
                 );
               })}

@@ -51,7 +51,7 @@ const Explore = ({ posts, auth }) => {
               }
               action={
                 <IconButton aria-label="settings">
-                  <MoreVertIcon />
+                  {auth.id === post.user.id ? <MoreVertIcon /> :null}
                 </IconButton>
               }
               title={
@@ -129,7 +129,7 @@ const Explore = ({ posts, auth }) => {
                   );
                 })}
                 <Box display="flex" alignItems="center" justifyContent="center">
-                  {auth.id && <CommentsFAB authId={auth.id} postId={post.id} />}
+                  {auth.id ? <CommentsFAB authId={auth.id} postId={post.id} /> : null}
                 </Box>
               </Box>
             </CardContent>
