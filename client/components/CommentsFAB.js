@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import CommentHelper from "./CommentHelper";
 
-function CommentsFAB({ authId, postId }) {
+function CommentsFAB({ authId, postId, socket }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -39,7 +39,7 @@ function CommentsFAB({ authId, postId }) {
             Post a comment
           </Typography>
           <Box sx={{ marginTop: 5 }}>
-            <CommentHelper authId={authId} postId={postId} />
+            <CommentHelper authId={authId} postId={postId} socket={socket} />
           </Box>
         </Box>
       </Modal>

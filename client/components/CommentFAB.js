@@ -12,7 +12,7 @@ import CommentIcon from "@mui/icons-material/Comment";
 import CommentHelper from "./CommentHelper";
 import { useHistory } from "react-router-dom";
 
-const CommentFAB = ({ authId, postId }) => {
+const CommentFAB = ({ authId, postId, socket }) => {
   const [open, setOpen] = useState(false);
   const theme = createTheme({
     palette: {
@@ -59,7 +59,7 @@ const CommentFAB = ({ authId, postId }) => {
               Post a comment
             </Typography>
             <Box sx={{ marginTop: 5 }}>
-              <CommentHelper authId={authId} postId={postId} />
+              <CommentHelper authId={authId} postId={postId} socket={socket} />
             </Box>
           </Box>
         </Modal>

@@ -23,8 +23,8 @@ import {
   deletePhoto,
   setPhotos,
   setPosts,
-  deleteComment,
-} from "../store";
+  deleteComment, setUsers
+} from '../store'
 import Popover from "@mui/material/Popover";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
@@ -53,6 +53,7 @@ const PostHelper = ({
   getPosts,
   getPhotos,
   deleteComment,
+  getUsers
 }) => {
   const [open, setOpen] = useState(false);
   const [editPost, setEditPost] = useState(null);
@@ -66,6 +67,12 @@ const PostHelper = ({
     socket.on("createPost", (creatorId) => {
       getPosts();
       getPhotos();
+    });
+
+    socket.on("createUser", (creatorId) => {
+      getPosts();
+      getPhotos();
+      getUsers();
     });
 
     return () => socket.emit("forceDisconnect");
@@ -293,7 +300,7 @@ const PostHelper = ({
                 );
               })}
               <Box display="flex" alignItems="center" justifyContent="center">
-                <CommentsFAB authId={auth.id} postId={post.id} />
+                <CommentsFAB authId={auth.id} postId={post.id} socket={socket} />
               </Box>
             </Box>
           </Card>
@@ -328,11 +335,13 @@ const PostHelper = ({
 
 const mapDispatch = (dispatch) => {
   return {
-    addLike: (authId, postId) => {
-      dispatch(addLike(authId, postId));
+    addLike: async (authId, postId) => {
+      await dispatch(addLike(authId, postId));
+      socket.emit("createPost");
     },
-    deleteLike: (likeId, postId) => {
-      dispatch(deleteLike(likeId, postId));
+    deleteLike: async (likeId, postId) => {
+      await dispatch(deleteLike(likeId, postId));
+      socket.emit("createPost");
     },
     getPosts: () => dispatch(setPosts()),
     getPhotos: () => dispatch(setPhotos()),
@@ -346,10 +355,14 @@ const mapDispatch = (dispatch) => {
       await dispatch(deletePost(post));
       socket.emit("createPost");
     },
-    deleteComment: (comment) => {
+    deleteComment: async (comment) => {
       console.log(comment);
-      dispatch(deleteComment(comment));
+      await dispatch(deleteComment(comment));
+      socket.emit("createPost");
     },
+    getUsers: () => {
+      dispatch(setUsers());
+    }
   };
 };
 
