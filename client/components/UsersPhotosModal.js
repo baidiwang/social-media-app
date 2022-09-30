@@ -38,6 +38,7 @@ const UsersPhotosModal = ({ user, auth, photos, connection }) => {
         sx={{
           backgroundColor: "#3FA796",
           color: "#F5C7A9",
+          border: "1px solid #F5C7A9",
         }}
         onClick={handleOpen}
       >

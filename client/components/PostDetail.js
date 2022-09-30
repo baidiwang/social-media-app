@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import {
   Box,
@@ -38,7 +38,7 @@ import {
 import SideMenu from "./SideMenu";
 import { Link } from "react-router-dom";
 import CommentFAB from "./CommentFAB";
-import { io } from 'socket.io-client'
+import { io } from "socket.io-client";
 
 let socket;
 
@@ -66,7 +66,7 @@ const SinglePost = ({
     socket = io();
 
     return () => socket.emit("forceDisconnect");
-  }, [])
+  }, []);
 
   const checkLike = (post, auth) => {
     const postLikes = post.likes || [];
@@ -214,7 +214,10 @@ const SinglePost = ({
               <Box marginLeft={2}>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <Link to={`/profile/${user.id}`}>
-                    <Avatar src={user.avatar} />
+                    <Avatar
+                      sx={{ border: "1px solid #F5C7A9" }}
+                      src={user.avatar}
+                    />
                   </Link>
                   <Link style={{ color: "#3FA796" }} to={`/profile/${user.id}`}>
                     <Typography variant="h6">{user.username}</Typography>
@@ -234,7 +237,11 @@ const SinglePost = ({
                       <Box display="flex" alignItems="center">
                         <Link to={`/profile/${comment.userId}`}>
                           <Avatar
-                            sx={{ height: "30px", width: "30px" }}
+                            sx={{
+                              height: "30px",
+                              width: "30px",
+                              border: "1px solid #F5C7A9",
+                            }}
                             src={comment.user.avatar}
                           />
                         </Link>
@@ -246,16 +253,20 @@ const SinglePost = ({
                             {comment.user.username}
                           </Link>
                         </Typography>
-                        <div className="delete-comment-button" >
-                      {auth.id === comment.userId ? <Button variant='outlined' style={{ color: "#3FA796"}} startIcon={<DeleteIcon/>}
-                      onClick={() => {
-
-                        deleteComment(comment)
-
-                      }} >
-                        Delete
-                        </Button> : null}
-                      </div>
+                        <div className="delete-comment-button">
+                          {auth.id === comment.userId ? (
+                            <Button
+                              variant="outlined"
+                              style={{ color: "#3FA796" }}
+                              startIcon={<DeleteIcon />}
+                              onClick={() => {
+                                deleteComment(comment);
+                              }}
+                            >
+                              Delete
+                            </Button>
+                          ) : null}
+                        </div>
                       </Box>
                       <Typography sx={{ fontSize: "10px", marginLeft: "40px" }}>
                         {comment.body}
