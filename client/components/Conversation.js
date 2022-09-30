@@ -90,9 +90,7 @@ const Conversation = ({ user, messages, getFriendMessages, addMessage, getFriend
 	}
 
 	
-	const sendCall = () => {
-		addMessage({senderId: user.id, receiverId: id, text: `Join my video call: <a href='localhost:8080/videos/${me}'>here</a>`})
-	}
+
 	return (
 		<div className="message-container">
 			<div className="message-header">
@@ -105,7 +103,6 @@ const Conversation = ({ user, messages, getFriendMessages, addMessage, getFriend
 				<div>{messages.friend && messages.friend.username}</div>
 
 				<div>
-					<button onClick={sendCall}>Video Chat</button>
 					<img className="avatar" src={messages.friend && messages.friend.avatar} alt="avatar" />
 				</div>
 			</div>
