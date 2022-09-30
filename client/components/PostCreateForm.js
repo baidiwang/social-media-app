@@ -134,14 +134,14 @@ const mapDispatch = (dispatch) => {
   return {
     createPostWithImages: async (photos, body, auth) => {
       const post = await dispatch(createPost(body, auth));
-      photos.map(async (photo, index) => {
-        if (index !== photos.length - 1) {
-          await dispatch(addPhoto(photo, post, auth));
+      for (let i = 0; i < photos.length; i++) {
+        if (i !== photos.length - 1) {
+          await dispatch(addPhoto(photos[i], post, auth));
         } else {
-          await dispatch(addPhoto(photo, post, auth));
+          await dispatch(addPhoto(photos[i], post, auth));
           await dispatch(getSinglePost(post));
         }
-      });
+      }
       console.log(socket);
       socket.emit("createPost", auth.id);
     },

@@ -21,7 +21,7 @@ export const Button = styled.button`
   color: #f5c7a9;
 `;
 
-const CommentHelper = ({ authId, postId, addComment }) => {
+const CommentHelper = ({ authId, postId, addComment, socket }) => {
   const path = `/posts/${postId}`;
   console.log("path", path);
   console.log("postId", postId);
@@ -34,9 +34,11 @@ const CommentHelper = ({ authId, postId, addComment }) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    addComment(body, postId, authId);
+    addComment(body, postId, authId, socket);
     setBody("");
-    history.push(path);
+    setTimeout(() => {
+      history.push(path);
+    }, 1000)
   };
   return (
     <Form onSubmit={handleSubmit}>
@@ -52,8 +54,9 @@ const CommentHelper = ({ authId, postId, addComment }) => {
 };
 const mapDispatch = (dispatch) => {
   return {
-    addComment: (comment, postId, authId) => {
-      dispatch(addComment(comment, postId, authId));
+    addComment: async (comment, postId, authId, socket) => {
+      await dispatch(addComment(comment, postId, authId));
+      await socket.emit("createPost");
     },
   };
 };

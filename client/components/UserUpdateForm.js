@@ -3,6 +3,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { updateUsers } from '../store';
+import { io } from "socket.io-client";
+
+let socket;
 
 class UserUpdateForm extends React.Component {
     constructor(){
@@ -19,7 +22,8 @@ class UserUpdateForm extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.onChangePhoto = this.onChangePhoto.bind(this);
     }
-    componentDidMount(){ 
+    componentDidMount(){
+        socket = io();
         if(this.props.auth.isPrivate === false){
             this.setState({
                 id: this.props.auth.id,
@@ -73,6 +77,10 @@ class UserUpdateForm extends React.Component {
             }
         }
     }
+    componentWillUnmount() {
+        socket.emit("forceDisconnect");
+    }
+
     handleChange(ev){
         this.setState({[ev.target.name]: ev.target.value});
     }
@@ -98,7 +106,7 @@ class UserUpdateForm extends React.Component {
         const { onSubmit, handleChange, onChangePhoto } = this;
         const {avatar, username, bio, isPrivate} = this.state;
         return (
-            
+
             <form>
                 Username: <br></br>
                 <input name="username" onChange={ handleChange } value={ username }/> <br></br>
@@ -123,7 +131,10 @@ const mapState = state => {
 };
 const mapDispatch = dispatch => {
     return {
-        updateUsers: (user) =>  dispatch(updateUsers(user)),
+        updateUsers: async (user) =>  {
+            await dispatch(updateUsers(user))
+            socket.emit('createUser')
+        },
     }
 };
 export default connect(mapState, mapDispatch)(UserUpdateForm);

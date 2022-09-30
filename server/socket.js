@@ -46,6 +46,10 @@ io.on('connection', (socket) => {
 	socket.on("answerCall", (data) => {
 		io.to(data.to).emit("callAccepted", data.signal)
 	});
+
+	socket.on("createUser", (data) => {
+		socket.broadcast.emit("createUser", data);
+	});
 });
 
 
