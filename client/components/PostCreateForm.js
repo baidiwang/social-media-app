@@ -14,8 +14,12 @@ export const Caption = styled.textarea`
   height: 200px;
   background-color: #3fa796;
   color: #f5c7a9;
-  border: none;
+  border: 2px solid #f5c7a9;
   outline: none;
+
+  ::placeholder {
+    color: #f5c7a9;
+  }
 `;
 
 export const Photos = styled.input`
@@ -31,7 +35,7 @@ export const PhotoList = styled.ul`
 export const Button = styled.button`
   padding: 15px;
   width: 90%;
-  border: none;
+  border: 1px solid #f5c7a9;
   cursor: pointer;
   background-color: #3fa796;
   color: #f5c7a9;
@@ -101,6 +105,7 @@ class PostCreateForm extends React.Component {
     return (
       <Form onSubmit={handleSubmit}>
         <Caption
+          placeholder="Whats on your mind? ..."
           type="text"
           name="body"
           value={body}

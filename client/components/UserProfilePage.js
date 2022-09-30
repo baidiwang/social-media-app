@@ -13,11 +13,12 @@ import FollowersModal from "./FollowersModal";
 import FollowingModal from "./FollowingModal";
 import styled from "styled-components";
 import UsersPhotosModal from "./UsersPhotosModal";
-
+import UserPostsModal from "./UserPostsModal";
+import UserPostsPage from "./UserPostsPage";
 
 export const Container = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 70vh;
 `;
 
 export const Profile = styled.div`
@@ -66,14 +67,17 @@ export const Bio = styled.span`
   font-weight: 500;
 `;
 
-export const Requests = styled.span``;
+export const Requests = styled.span`
+  padding-top: 50px;
+`;
 
 export const PeopleDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   color: #3fa796;
-  margin-top: 30px;
+  padding-top: 100px;
+  padding-bottom: 100px;
 `;
 
 export const Length = styled.span`
@@ -92,6 +96,10 @@ export const PhotosDiv = styled.div`
   margin-right: 50px;
 `;
 
+export const PostsDiv = styled.div`
+  margin-right: 50px;
+`;
+
 const UserProfilePage = ({
   user,
   connection,
@@ -103,6 +111,7 @@ const UserProfilePage = ({
   unfollow,
   acceptRequest,
   photos,
+  posts,
 }) => {
   const history = useHistory();
 
@@ -159,6 +168,15 @@ const UserProfilePage = ({
             connection={connection}
           />
         </PhotosDiv>
+        <PostsDiv>
+          <UserPostsModal
+            auth={auth}
+            user={user}
+            photos={photos}
+            connection={connection}
+            posts={posts}
+          />
+        </PostsDiv>
       </PeopleDiv>
     </Container>
   );
@@ -191,7 +209,7 @@ const mapState = (state, { match }) => {
         connection.followingId === user.id && connection.isAccepted === true
     ) || [];
   const photos = state.photos.filter((photo) => photo.userId === user.id) || [];
-
+  const posts = state.posts.filter((post) => post.userId === user.id) || [];
   return {
     user,
     connection,
@@ -200,6 +218,7 @@ const mapState = (state, { match }) => {
     listOfFollowers,
     listOfFollowings,
     photos,
+    posts,
   };
 };
 const mapDispatch = (dispatch) => {

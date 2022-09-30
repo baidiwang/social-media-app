@@ -54,7 +54,7 @@ class Routes extends Component {
             />
             <Route exact path="/profile/:id" component={ProfilePhotoForm} />
             {/* <Route exact path="/profile/:id" component={UserPhotosPage} /> */}
-            <Route exact path="/profile/:id" component={UserPostsPage} />
+            {/* <Route exact path="/profile/:id" component={UserPostsPage} /> */}
             <Route exact path="/messages" component={Messages} />
             <Route exact path="/conversation/:id" component={Conversation} />
             <Route exact path="/friends" component={Friends} />

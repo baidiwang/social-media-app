@@ -26,16 +26,21 @@ function CommentsFAB({ authId, postId, socket }) {
         sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
         <Box
-          width={600}
+          width={400}
           height={500}
           marginRight="auto"
           marginLeft="auto"
           borderRadius="8px"
-          backgroundColor={"background.default"}
+          backgroundColor="#3FA796"
           color={"text.primary"}
           textAlign="center"
         >
-          <Typography marginTop={2} color={"#3FA796"} variant="h5">
+          <Typography
+            sx={{ textAlign: "center", borderBottom: "1px solid #F5C7A9" }}
+            marginTop={2}
+            color={"#F5C7A9"}
+            variant="h5"
+          >
             Post a comment
           </Typography>
           <Box sx={{ marginTop: 5 }}>
