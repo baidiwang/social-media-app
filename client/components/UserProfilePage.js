@@ -17,7 +17,7 @@ import UsersPhotosModal from "./UsersPhotosModal";
 
 export const Container = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 60vh;
 `;
 
 export const Profile = styled.div`
@@ -120,6 +120,7 @@ const UserProfilePage = ({
         <AboutDiv>
           <About>About me:</About>
           <Bio>{user.bio}</Bio>
+
         </AboutDiv>
         <Requests>
           <RequestModal
@@ -159,6 +160,11 @@ const UserProfilePage = ({
             connection={connection}
           />
         </PhotosDiv>
+        <Link to={`/conversation/${user.id}`}>
+          <div className="message-link">
+            Message
+          </div>
+        </Link>
       </PeopleDiv>
     </Container>
   );

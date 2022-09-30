@@ -153,6 +153,14 @@ form div {
   background-color: transparent;
 }
 
+.message-link{
+  padding: 1rem;
+  margin-right: 3rem;
+  color: #f5c7a9;
+  background-color: #3fa796;
+  border-radius: 3px;
+}
+
 .github_logo {
   fill: white;
 }
