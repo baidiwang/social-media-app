@@ -67,9 +67,11 @@ class PostCreateForm extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onChangePhoto = this.onChangePhoto.bind(this);
   }
+
   componentDidMount() {
     socket = io();
   }
+
   componentWillUnmount() {
     setTimeout(() => {
       socket.emit("forceDisconnect");
@@ -79,6 +81,7 @@ class PostCreateForm extends React.Component {
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };
+
   onChangePhoto = (e) => {
     console.log(e.target.files);
     const photo = e.target.files[0];
@@ -88,6 +91,7 @@ class PostCreateForm extends React.Component {
     });
     reader.readAsDataURL(photo);
   };
+
   handleSubmit = (e) => {
     e.preventDefault();
     const { photos, body } = this.state;
@@ -95,6 +99,7 @@ class PostCreateForm extends React.Component {
     this.setState({ photos: [], body: "" });
     this.props.history.push("/");
   };
+
   render() {
     const { body, photos } = this.state;
     const { onChange, onChangePhoto, handleSubmit } = this;
@@ -124,12 +129,14 @@ class PostCreateForm extends React.Component {
       </Form>
     );
   }
-}
+};
+
 const mapState = (state) => {
   return {
     auth: state.auth,
   };
 };
+
 const mapDispatch = (dispatch) => {
   return {
     createPostWithImages: async (photos, body, auth) => {
@@ -147,4 +154,5 @@ const mapDispatch = (dispatch) => {
     },
   };
 };
+
 export default withRouter(connect(mapState, mapDispatch)(PostCreateForm));

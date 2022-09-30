@@ -39,12 +39,12 @@ const UserPhotosPage = ({ user, photos, auth, connection}) => {
                         }
                         </ul> :
                         <div>
-                            <p>waiting on user approval</p>
+                            <p>Waiting on User Approval.</p>
                         </div>
                     }
                     </div> :
                     <div>
-                        <p>User is private.</p>
+                        <p>User is Private.</p>
                     </div>
                 }
                 </div>
@@ -52,6 +52,7 @@ const UserPhotosPage = ({ user, photos, auth, connection}) => {
         </div>
     )
 };
+
 const mapState = (state, { match }) => {
     const user = state.users.find(user => user.id === match.params.id) || {};
     const photos = state.photos.filter(photo => photo.userId === user.id) || [];
@@ -63,9 +64,5 @@ const mapState = (state, { match }) => {
         connection
     }
 };
-const mapDispatch = dispatch => {
-    return {
 
-    }
-};
-export default connect(mapState, mapDispatch)(UserPhotosPage);
+export default connect(mapState)(UserPhotosPage);

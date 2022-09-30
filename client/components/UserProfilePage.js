@@ -148,6 +148,7 @@ const UserProfilePage = ({
     </Container>
   );
 };
+
 const mapState = (state, { match }) => {
   const user = state.users.find((user) => user.id === match.params.id) || {};
   //connection -- check if there is a request of the auth to the profile owner
@@ -184,6 +185,7 @@ const mapState = (state, { match }) => {
     listOfFollowings,
   };
 };
+
 const mapDispatch = (dispatch) => {
   return {
     follow: (auth, user) => {
@@ -197,4 +199,5 @@ const mapDispatch = (dispatch) => {
     },
   };
 };
+
 export default connect(mapState, mapDispatch)(UserProfilePage);

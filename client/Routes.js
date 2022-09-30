@@ -4,7 +4,6 @@ import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import Home from "./components/Home";
 import { me, setUsers, setPhotos, setPosts, setConnections } from "./store";
 import UserUpdateForm from "./components/UserUpdateForm";
-import ProfilePhotoForm from "./components/ProfilePhotoForm";
 import UserPhotosPage from "./components/UserPhotosPage";
 import Messages from "./components/Messages";
 import PostCreateForm from "./components/PostCreateForm";
@@ -46,7 +45,6 @@ class Routes extends Component {
               path="/profile/:id/update"
               component={UserUpdateForm}
             />
-            <Route exact path="/profile/:id" component={ProfilePhotoForm} />
             <Route exact path="/profile/:id" component={UserPhotosPage} />
             <Route exact path="/profile/:id" component={UserPostsPage} />
             <Route exact path="/messages" component={Messages} />

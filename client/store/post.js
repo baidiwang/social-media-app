@@ -24,17 +24,6 @@ export const setPosts = () => {
     
 };
 
-// export const setPosts = () => {
-//     return async(dispatch) => {
-//         const posts = (await axios.get('/api/posts', {
-//             headers: {
-//                 authorization: window.localStorage.getItem('token')
-//             }
-//         })).data;
-//         dispatch({type: 'SET_POSTS', posts})
-//     }
-// };
-
 export const deletePost = (post) => {
     return async(dispatch) => {
         await axios.delete(`/api/posts/${post.id}`);

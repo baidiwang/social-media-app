@@ -72,27 +72,6 @@ User.prototype.addPhoto = async function(photo){
   return (await db.models.photo.create(photo));
 };
 // ***************************************************************** POSTS *******************************************************************
-//get all posts including users that owned them
-// User.prototype.getPosts = async function(){
-//   const posts = await db.models.post.findAll({
-//     include: [
-//       {model: User},
-//       {model: db.models.photo},
-//       {
-//         model: db.models.like,
-//         include: [
-//           {model: User}
-//         ]
-//       },
-//       {
-//         model: db.models.comment,
-//         include: [{model: User}]
-//       }
-//     ],
-//     order: [['id', 'DESC']]
-//   });
-//   return posts;
-// };
 //get specific post
 User.prototype.getSinglePost = async function(postId){
   const post = await db.models.post.findOne({
@@ -223,8 +202,6 @@ User.prototype.getMessages = async function() {
 User.prototype.addMessage = async function(body) {
   return await db.models.message.create(body)
 }
-//***************************************************************** USERS *********************************************************************
-
 //******************************************************* PASSWORD / AUTH RELATED *************************************************************
 
 User.prototype.correctPassword = function(candidatePwd) {
@@ -260,7 +237,7 @@ User.findByToken = async function(token) {
     throw error
   }
 };
-
+//***************************************************************** EMAIL RELATED / PASSWORD RESET *********************************************************************
 const sendEmail = async (email, subject, payload, template) => {
   try {
     // create reusable transporter object using the default SMTP transport

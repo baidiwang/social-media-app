@@ -11,9 +11,6 @@ app.use(morgan('dev'))
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({limit: '50mb'}));
 
-// body parsing middleware
-app.use(express.json())
-
 // auth and api routes
 app.use('/auth', require('./auth'))
 app.use('/api', require('./api'))
@@ -45,5 +42,3 @@ app.use((err, req, res, next) => {
   console.error(err.stack)
   res.status(err.status || 500).send(err.message || 'Internal server error.')
 })
-
-

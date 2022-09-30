@@ -92,6 +92,7 @@ const mapState = (state) => {
     connections: state.connections,
   };
 };
+
 const mapDispatch = (dispatch) => {
   return {
     deleteConnection: (connection) => dispatch(deleteConnection(connection)),
@@ -99,4 +100,5 @@ const mapDispatch = (dispatch) => {
       dispatch(addConnection(following, follower)),
   };
 };
+
 export default connect(mapState, mapDispatch)(Friends);

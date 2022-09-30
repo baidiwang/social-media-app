@@ -32,14 +32,6 @@ router.get('/', async(req, res, next) => {
   }
 });
 
-// router.get('/', isLoggedIn, async (req, res, next) => {
-//   try {
-//     res.send(await req.user.getPosts());
-//   } catch (err) {
-//     next(err)
-//   }
-// });
-
 router.get('/:id', isLoggedIn, async (req, res, next) => {
   try {
     res.send(await req.user.getSinglePost(req.params.id*1));

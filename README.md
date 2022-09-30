@@ -1,6 +1,6 @@
 # FS-App-Template
 
-#heroku-link: 
+#heroku-link: https://capstone-social-media.herokuapp.com/
 
 ## Setup
 

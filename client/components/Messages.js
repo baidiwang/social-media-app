@@ -110,9 +110,11 @@ const mapState = (state) => {
     messages: state.messages,
   };
 };
+
 const mapDispatch = (dispatch) => {
   return {
     getMessages: () => dispatch(getMessages()),
   };
 };
+
 export default connect(mapState, mapDispatch)(Messages);

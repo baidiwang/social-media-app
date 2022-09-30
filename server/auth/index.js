@@ -3,7 +3,6 @@ const { models: {User }} = require('../db')
 module.exports = router
 const axios = require('axios');
 
-
 router.post('/login', async (req, res, next) => {
   try {
     res.send({ token: await User.authenticate(req.body)}); 
@@ -11,7 +10,6 @@ router.post('/login', async (req, res, next) => {
     next(err)
   }
 })
-
 
 router.post('/signup', async (req, res, next) => {
   try {
@@ -39,6 +37,7 @@ router.get('/github', (req, res, next)=> {
   res.redirect(`https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}&scope=user:email`);
   
 });
+
 router.get('/github/callback', async(req, res, next)=> {
   try {
     let response = await axios.post('https://github.com/login/oauth/access_token', {

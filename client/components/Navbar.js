@@ -126,9 +126,7 @@ const Navbar = ({ handleClick, isLoggedIn, auth }) => {
     </ThemeProvider>
   );
 };
-/**
- * CONTAINER
- */
+
 const mapState = (state) => {
   return {
     auth: state.auth,

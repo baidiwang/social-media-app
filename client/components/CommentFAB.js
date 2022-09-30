@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 import CommentIcon from "@mui/icons-material/Comment";
 import CommentHelper from "./CommentHelper";
-import { useHistory } from "react-router-dom";
 
 const CommentFAB = ({ authId, postId }) => {
   const [open, setOpen] = useState(false);

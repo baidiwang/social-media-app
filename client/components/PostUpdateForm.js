@@ -1,5 +1,5 @@
 //to edit a post
-//should be able to remove cxertain photos in the current post
+//should be able to remove certain photos in the current post
 
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
@@ -115,11 +115,13 @@ const PostUpdateForm = ({ post, auth, updatePostWithImages }) => {
     </Form>
   );
 };
+
 const mapState = (state) => {
   return {
     auth: state.auth,
   };
 };
+
 const mapDispatch = (dispatch) => {
   return {
     updatePostWithImages: async (originalPost, photos, body, auth) => {
@@ -139,4 +141,5 @@ const mapDispatch = (dispatch) => {
     },
   };
 };
+
 export default connect(mapState, mapDispatch)(PostUpdateForm);
