@@ -56,7 +56,11 @@ const Friends = ({ user, connections, deleteConnection, addConnection }) => {
     <Box>
       <List>
         {friends
-          .filter((friend) => friend.id !== user.id)
+          .filter((friend) => friend.id !== user.id && connections.some(
+            (connection) =>
+              connection.followerId === friend.id &&
+              connection.followingId === user.id
+          ))
           .map((friend) => (
             <ListItem
               disablePadding

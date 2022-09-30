@@ -1,10 +1,11 @@
 //to create user when they signup
 //need to update form according to needed column in table ie email / if we need firstName / lastName  / bio
 
-import React from "react";
+import React, { useEffect } from 'react'
 import { connect } from "react-redux";
 import { authenticate } from "../store";
 import styled from "styled-components";
+import { io } from 'socket.io-client'
 
 export const Container = styled.div``;
 
@@ -45,8 +46,16 @@ export const Title = styled.span`
   text-align: center;
 `;
 
+let socket;
+
 const UserCreateForm = (props) => {
   const { name, displayName, handleSubmit, error } = props;
+
+  useEffect(() => {
+    socket = io();
+
+    return () => socket.emit("forceDisconnect");
+  }, []);
 
   return (
     <Container>
@@ -74,14 +83,15 @@ const mapSignup = (state) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    handleSubmit(evt) {
+    async handleSubmit(evt) {
       evt.preventDefault();
       const formName = evt.target.name;
       const username = evt.target.username.value;
       const password = evt.target.password.value;
       //   const email = evt.target. email.value
       // dispatch(authenticate(username, password, email, formName))
-      dispatch(authenticate(username, password, formName));
+      await dispatch(authenticate(username, password, formName));
+      socket.emit('createUser');
     },
   };
 };
