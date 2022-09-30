@@ -106,7 +106,7 @@ const UserProfilePage = ({
   return (
     <Container>
       <Profile>
-        <Title>Your Profile</Title>
+        <Title>{user.username}</Title>
         <Link to={`/profile/${auth.id}/update`}>
           <Image src={user.avatar} />
         </Link>

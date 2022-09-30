@@ -1,8 +1,6 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
-import { Login } from "./components/AuthForm";
-import { Signup } from "./components/UserCreateForm";
 import Home from "./components/Home";
 import { me, setUsers, setPhotos, setPosts, setConnections } from "./store";
 import UserUpdateForm from "./components/UserUpdateForm";
@@ -10,7 +8,6 @@ import ProfilePhotoForm from "./components/ProfilePhotoForm";
 import UserPhotosPage from "./components/UserPhotosPage";
 import Messages from "./components/Messages";
 import PostCreateForm from "./components/PostCreateForm";
-import PostUpdateForm from "./components/PostUpdateForm";
 import UserProfilePage from "./components/UserProfilePage";
 import UserPostsPage from "./components/UserPostsPage";
 import PasswordReset from "./components/PasswordReset";
@@ -21,9 +18,6 @@ import PostDetail from "./components/PostDetail";
 import Video from "./components/Video";
 import Explore from "./components/Explore";
 
-/**
- * COMPONENT
- */
 class Routes extends Component {
   componentDidMount() {
     this.props.loadInitialData();
@@ -59,16 +53,13 @@ class Routes extends Component {
             <Route exact path="/conversation/:id" component={Conversation} />
             <Route exact path="/friends" component={Friends} />
             <Route exact path="/posts" component={PostCreateForm} />
-            {/* <Route exact path="/posts/:id" component={PostUpdateForm} /> */}
             <Route exact path="/posts/:id" component={PostDetail} />
             <Route exact path="/videos" component={Video}/>
             <Route exact path="/explore" component={Explore} />
           </div>
         ) : (
           <Switch>
-            {/* <Route path="/" exact component={Login} />
-            <Route path="/login" component={Login} />
-            <Route path="/signup" component={Signup} /> */}
+            <Route path='/' component={Explore} />
             <Route
               path="/passwordResetRequest"
               component={PasswordResetRequest}
@@ -82,11 +73,8 @@ class Routes extends Component {
       </div>
     );
   }
-}
+};
 
-/**
- * CONTAINER
- */
 const mapState = (state) => {
   return {
     // Being 'logged in' for our purposes will be defined has having a state.auth that has a truthy id.
@@ -99,6 +87,7 @@ const mapDispatch = (dispatch) => {
   return {
     loadInitialData: () => {
       dispatch(me());
+      dispatch(setPosts());
     },
     //add load data with fetch startup datas i.e. messages, users, posts, likes
     loadData: () => {

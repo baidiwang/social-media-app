@@ -12,7 +12,7 @@ const users = (state = [], action)=> {
     return state.map(user => user.id === action.user.id ? action.user : user);
   }
   if(action.type === 'DELETE_USER') {
-    return state.filter((user)=> user.id !== action.user.id);
+    return state.filter((user)=> user.id !== action.id);
   }
   return state;
 };
@@ -52,6 +52,7 @@ export const updateUsers = (user) => {
         }
       })).data;
       dispatch({type: "UPDATE_USERS", user})
+      history.push(`/profile/${user.id}`);
     }
     catch(ex){
       console.log(ex)
@@ -62,7 +63,7 @@ export const updateUsers = (user) => {
 export const deleteUser = (id) => {
   return async(dispatch) => {
       await axios.delete(`/api/users/${id}`);
-      dispatch({ type: 'DELETE_USER', user})
+      dispatch({ type: 'DELETE_USER', id})
   }
 }
 

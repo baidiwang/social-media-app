@@ -73,26 +73,26 @@ User.prototype.addPhoto = async function(photo){
 };
 // ***************************************************************** POSTS *******************************************************************
 //get all posts including users that owned them
-User.prototype.getPosts = async function(){
-  const posts = await db.models.post.findAll({
-    include: [
-      {model: User},
-      {model: db.models.photo},
-      {
-        model: db.models.like,
-        include: [
-          {model: User}
-        ]
-      },
-      {
-        model: db.models.comment,
-        include: [{model: User}]
-      }
-    ],
-    order: [['id', 'DESC']]
-  });
-  return posts;
-};
+// User.prototype.getPosts = async function(){
+//   const posts = await db.models.post.findAll({
+//     include: [
+//       {model: User},
+//       {model: db.models.photo},
+//       {
+//         model: db.models.like,
+//         include: [
+//           {model: User}
+//         ]
+//       },
+//       {
+//         model: db.models.comment,
+//         include: [{model: User}]
+//       }
+//     ],
+//     order: [['id', 'DESC']]
+//   });
+//   return posts;
+// };
 //get specific post
 User.prototype.getSinglePost = async function(postId){
   const post = await db.models.post.findOne({
