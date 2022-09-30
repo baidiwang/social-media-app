@@ -17,7 +17,7 @@ async function seed() {
     User.create({id: crypto.randomUUID() ,username: 'didi', password: 'didi', avatar: faker.image.avatar(), email: 'didi@hotmail.com', bio: faker.random.words(10), isPrivate: true}),
     User.create({id: crypto.randomUUID() ,username: 'chris', password: 'chris', avatar: faker.image.avatar(), email: 'chris@hotmail.com', bio: faker.random.words(10), isPrivate: false}),
     User.create({id: crypto.randomUUID() ,username: 'baidi', password: 'baidi', avatar: faker.image.avatar(), email: 'baidi@hotmail.com', bio: faker.random.words(10), isPrivate: false}),
-    User.create({id: crypto.randomUUID() ,username: 'erik', password: 'eric', avatar: faker.image.avatar(), email: 'ericblaney@gmail.com', bio: faker.random.words(10), isPrivate:true})
+    User.create({id: crypto.randomUUID() ,username: 'eric', password: 'eric', avatar: faker.image.avatar(), email: 'ericblaney@gmail.com', bio: faker.random.words(10), isPrivate:true})
   ]);
   //creating posts
   const posts = await Promise.all([
