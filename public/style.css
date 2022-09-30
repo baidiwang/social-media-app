@@ -231,7 +231,9 @@ form div {
 	color: #fff;
 }
 
-
+.password-reset{
+  margin: 1rem;
+}
 .delete-comment-button{
 margin-left:auto;
 margin-right: 1rem;

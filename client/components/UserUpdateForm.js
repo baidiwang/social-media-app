@@ -104,7 +104,7 @@ class UserUpdateForm extends React.Component {
     }
     render() {
         const { onSubmit, handleChange, onChangePhoto } = this;
-        const {avatar, username, bio, isPrivate} = this.state;
+        const {avatar, username, bio, email, isPrivate} = this.state;
         return (
 
             <form>
@@ -112,12 +112,18 @@ class UserUpdateForm extends React.Component {
                 <input name="username" onChange={ handleChange } value={ username }/> <br></br>
                 Bio: <br></br>
                 <input name="bio" onChange={ handleChange } value={ bio } size="60"/> <br></br>
+                Email: <br></br>
+                <input name="email" onChange={ handleChange } value={ email } size="60"/> <br></br>
+                <br></br>
                 <input type='file' onChange={ onChangePhoto } />
+                <br></br>
                 <img src={avatar} width='160' height='160' />
+                <br></br>
                 <select value={ isPrivate || 1} name='isPrivate' onChange={ handleChange }>
                         <option value={1}>set to public</option>
                         <option value={2}>set to private</option>
                     </select>
+                <br></br>
                 <button onClick={onSubmit}>Submit changes</button>
             </form>
         )
