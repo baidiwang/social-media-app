@@ -18,7 +18,10 @@ import UserPostsPage from "./UserPostsPage";
 
 export const Container = styled.div`
   width: 100vw;
+
   height: 70vh;
+
+
 `;
 
 export const Profile = styled.div`
@@ -129,6 +132,7 @@ const UserProfilePage = ({
         <AboutDiv>
           <About>About me:</About>
           <Bio>{user.bio}</Bio>
+
         </AboutDiv>
         <Requests>
           <RequestModal
@@ -168,6 +172,7 @@ const UserProfilePage = ({
             connection={connection}
           />
         </PhotosDiv>
+
         <PostsDiv>
           <UserPostsModal
             auth={auth}
@@ -177,6 +182,13 @@ const UserProfilePage = ({
             posts={posts}
           />
         </PostsDiv>
+
+        <Link to={`/conversation/${user.id}`}>
+          <div className="message-link">
+            Message
+          </div>
+        </Link>
+
       </PeopleDiv>
     </Container>
   );
