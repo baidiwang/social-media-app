@@ -34,7 +34,7 @@ class PasswordResetRequest extends React.Component {
         const { handleChange, updatepassword } = this;
         const { password_email_sent, email } = this.state;
         return (
-            <div>
+            <div className="password-reset">
                  { password_email_sent ? <div>Check your email to continue with password reset.</div> :       <form onSubmit={ updatepassword }>
       Password Reset: What is the email associated with your account? <br></br>
       Email:
