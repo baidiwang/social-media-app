@@ -155,7 +155,7 @@ form div {
   background-color: transparent;
 }
 
-.message-link{
+.message-link, .connect{
   padding: 1rem;
   margin-right: 3rem;
   color: #f5c7a9;
