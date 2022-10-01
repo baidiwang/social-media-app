@@ -4,11 +4,17 @@ import React from "react";
 import { connect } from "react-redux";
 import { Box } from "@mui/material";
 import PostHelper from "./PostHelper";
+import { Link } from 'react-router-dom';
 
 const Feed = ({ posts, auth, photos }) => {
   return (
     <Box flex={5} p={1}>
-      <PostHelper posts={posts} auth={auth} photos={photos} />
+      {
+        posts.length ? <PostHelper posts={posts} auth={auth} photos={photos} /> :
+        <div>
+          <p>You are not following anyone and you do not have any posts yet. Check out <Link to='/explore'>Explore</Link> for Public Content.</p>
+        </div>
+      }
     </Box>
   );
 };
