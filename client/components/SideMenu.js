@@ -52,14 +52,6 @@ const SideMenu = ({ setMode, mode }) => {
               <ListItemText primary="Messages"></ListItemText>
             </ListItemButton>
           </ListItem>
-          {/* <ListItem disablePadding>
-            <ListItemButton component="a" href="settings">
-              <ListItemIcon>
-                <SettingsIcon />
-              </ListItemIcon>
-              <ListItemText primary="Settings"></ListItemText>
-            </ListItemButton>
-          </ListItem> */}
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>

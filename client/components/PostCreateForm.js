@@ -119,7 +119,7 @@ class PostCreateForm extends React.Component {
         />
         <Photos id="file" type="file" multiple onChange={onChangePhoto} />
         <Label htmlFor="file">
-          <AddAPhotoIcon style={{ cursor: "pointer", color: "#3fa796" }} />
+          <AddAPhotoIcon style={{ cursor: "pointer", color: "#f5c7a9" }} />
         </Label>
         <PhotoList>
           {photos.map((photo) => {
@@ -134,7 +134,7 @@ class PostCreateForm extends React.Component {
       </Form>
     );
   }
-};
+}
 
 const mapState = (state) => {
   return {

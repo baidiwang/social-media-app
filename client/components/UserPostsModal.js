@@ -52,6 +52,7 @@ const UserPostsModal = ({ user, auth, posts, connection, photos }) => {
           color={"text.primary"}
           textAlign="center"
           border="1px solid #3FA796"
+          sx={{ overflow: "auto" }}
         >
           <Typography
             sx={{ borderBottom: "1px solid #F5C7A9" }}

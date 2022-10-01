@@ -42,8 +42,18 @@ const Navbar = ({ handleClick, isLoggedIn, auth }) => {
                 justifyContent: "space-between",
               }}
             >
-              <Link style={{ color: "#F5C7A9" }} to="/home">
-                The Scratching Post /ᐠ.ꞈ.ᐟ\
+              <Link
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  color: "#F5C7A9",
+                }}
+                to="/home"
+              >
+                <Typography sx={{ fontWeight: 900, marginRight: "10px" }}>
+                  /ᐠ.ꞈ.ᐟ\
+                </Typography>
+                Scratching Post
               </Link>
               <Search />
               <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
@@ -60,7 +70,11 @@ const Navbar = ({ handleClick, isLoggedIn, auth }) => {
                   />
                 </Link>
                 <Avatar
-                  sx={{ height: "30px", width: "30px" }}
+                  sx={{
+                    height: "30px",
+                    width: "30px",
+                    border: "2px solid #f5c7a9",
+                  }}
                   src={auth.avatar}
                   onClick={(event) => setOpen(true)}
                 />

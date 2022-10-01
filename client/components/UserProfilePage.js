@@ -7,7 +7,7 @@ import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { addConnection, deleteConnection, updateConnection } from "../store";
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import RequestModal from "./RequestModal";
 import FollowersModal from "./FollowersModal";
 import FollowingModal from "./FollowingModal";
@@ -15,6 +15,7 @@ import styled from "styled-components";
 import UsersPhotosModal from "./UsersPhotosModal";
 import UserPostsModal from "./UserPostsModal";
 import UserPostsPage from "./UserPostsPage";
+import EditProfileModal from "./EditProfileModal";
 
 export const Container = styled.div`
   width: 100vw;
@@ -34,6 +35,7 @@ export const Title = styled.span`
   font-size: 2rem;
   margin-bottom: 20px;
   border-bottom: 2px solid #f5c7a9;
+  font-weight: 900;
 `;
 
 export const Image = styled.img`
@@ -52,19 +54,22 @@ export const Image = styled.img`
 export const AboutDiv = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 `;
 
 export const About = styled.span`
   text-align: center;
   font-weight: 900;
-  font-size: 12px;
+  font-size: 14px;
+  text-decoration: underline;
+  font-family: arial;
 `;
 
 export const Bio = styled.span`
   text-align: center;
   font-size: 10px;
   font-weight: 500;
+  margin-top: 10px;
 `;
 
 export const Requests = styled.span`
@@ -129,56 +134,83 @@ const UserProfilePage = ({
 }) => {
   const history = useHistory();
 
-  const sendMessage = () => {
+  const sendMessage = (user) => {
     history.push("/messages/" + user.id);
   };
 
   return (
     <Container>
       <Profile>
-        <Title>{user.username}</Title>
-        <Link to={`/profile/${auth.id}/update`}>
-          <Image src={user.avatar} />
-        </Link>
+        <Title>{user.username}'s Profile</Title>
+        <EditProfileModal user={user} />
         <AboutDiv>
-          <About>About me:</About>
+          <About>About me</About>
           <Bio>{user.bio}</Bio>
         </AboutDiv>
-        {auth.id !== user.id ?
-        <div>
-        {connection.id ? (
+        {auth.id !== user.id ? (
           <div>
-            {connection.isAccepted === true ? (
-              <>
-                <button className='connect' onClick={() => unfollow(connection)}>
-                  Unfollow
-                </button>
-              </>
+            {connection.id ? (
+              <div>
+                {connection.isAccepted === true ? (
+                  <>
+                    <Button
+                      sx={{
+                        backgroundColor: "#3FA796",
+                        color: "#F5C7A9",
+                        border: "2px solid #F5C7A9",
+                        borderRadius: "8px",
+                        fontWeight: 900,
+                        marginRight: 1,
+                      }}
+                      onClick={() => unfollow(connection)}
+                    >
+                      Unfollow
+                    </Button>
+                    <Button
+                      sx={{
+                        backgroundColor: "#3FA796",
+                        color: "#F5C7A9",
+                        border: "2px solid #F5C7A9",
+                        borderRadius: "8px",
+                        fontWeight: 900,
+                      }}
+                      onClick={() => sendMessage(user)}
+                    >
+                      Send Message
+                    </Button>
+                  </>
+                ) : (
+                  <Button
+                    sx={{
+                      backgroundColor: "#3FA796",
+                      color: "#F5C7A9",
+                      border: "2px solid #F5C7A9",
+                      borderRadius: "8px",
+                      fontWeight: 900,
+                    }}
+                    disabled
+                  >
+                    Requested
+                  </Button>
+                )}
+              </div>
             ) : (
-              <button className='connect' disabled>Requested</button>
+              <button onClick={() => follow(auth, user)}>Follow</button>
             )}
           </div>
-        ) : (
-          <button className='connect' onClick={() => follow(auth, user)}>
-            Follow
-          </button>
-        )}
-      </div>:null}
-          {
-            auth.id === user.id ?
-            <Requests>
-              <RequestModal
-                followRequests={followRequests}
-                connection={connection}
-                follow={follow}
-                acceptRequest={acceptRequest}
-                unfollow={unfollow}
-                auth={auth}
-                user={user}
-              />
-            </Requests> : null
-          }
-
+        ):
+        <Requests>
+          <RequestModal
+            followRequests={followRequests}
+            connection={connection}
+            follow={follow}
+            acceptRequest={acceptRequest}
+            unfollow={unfollow}
+            auth={auth}
+            user={user}
+          />
+        </Requests>
+      }
       </Profile>
       {/* modal when the <p> above has been clicked will show the list of follow requests need to be accepted down below -- line 18 - line 47 */}
       <PeopleDiv>
@@ -216,13 +248,6 @@ const UserProfilePage = ({
             posts={posts}
           />
         </PostsDiv>
-
-        <Link to={`/conversation/${user.id}`}>
-          <div className="message-link">
-            Message
-          </div>
-        </Link>
-
       </PeopleDiv>
     </Container>
   );

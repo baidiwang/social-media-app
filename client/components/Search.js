@@ -23,6 +23,7 @@ export const Input = styled.input`
   width: 250px;
   border-radius: 8px;
   border: none;
+  border: 2px solid #f5c7a9;
 
   ::placeholder {
     color: #3fa796;

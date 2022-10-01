@@ -1,19 +1,29 @@
 import React, { useState } from "react";
 import { Box, Button, Modal, Typography } from "@mui/material";
-import { Login } from "./AuthForm";
+import styled from "styled-components";
+import UserUpdateForm from "./UserUpdateForm";
 
-const LoginModal = () => {
+export const Avatar = styled.img`
+  border-radius: 50%;
+  margin-bottom: 20px;
+  border: 2px solid #f5c7a9;
+  cursor: pointer;
+  height: 80px;
+  width: 80px;
+  transition: all 1s ease;
+  &:hover {
+    transform: scale(1.5);
+  }
+`;
+
+const EditProfileModal = ({ user }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   return (
     <Box>
-      <Button
-        sx={{ backgroundColor: "#3FA796", color: "#F5C7A9" }}
-        onClick={handleOpen}
-      >
-        Login
-      </Button>
+      <Avatar src={user.avatar} onClick={handleOpen} />
       <Modal
         open={open}
         onClose={handleClose}
@@ -22,8 +32,8 @@ const LoginModal = () => {
         sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
         <Box
-          width={400}
-          height={500}
+          width={800}
+          height={700}
           marginRight="auto"
           marginLeft="auto"
           borderRadius="8px"
@@ -33,11 +43,16 @@ const LoginModal = () => {
           border="1px solid #3FA796"
           sx={{ overflow: "auto" }}
         >
-          <Typography marginTop={2} color={"#F5C7A9"} variant="h4">
-            Login
+          <Typography
+            sx={{ borderBottom: "1px solid #F5C7A9" }}
+            marginTop={2}
+            color={"#F5C7A9"}
+            variant="h4"
+          >
+            Update Profile
           </Typography>
           <Box sx={{ marginTop: 5 }}>
-            <Login />
+            <UserUpdateForm />
           </Box>
         </Box>
       </Modal>
@@ -45,4 +60,4 @@ const LoginModal = () => {
   );
 };
 
-export default LoginModal;
+export default EditProfileModal;
