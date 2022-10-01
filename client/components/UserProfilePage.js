@@ -104,7 +104,21 @@ export const PhotosDiv = styled.div`
 export const PostsDiv = styled.div`
   margin-right: 50px;
 `;
+export const Accept = styled.button`
+  padding: 5px;
+  border-radius: 12px;
+  border: 1px solid #f5c7a9;
+  cursor: pointer;
+  background-color: #3fa796;
+  color: #f5c7a9;
+  font-weight: 900;
+  margin-right: 5px;
 
+  &: hover {
+    background-color: #f5c7a9;
+    color: #3fa796;
+  }
+`;
 const UserProfilePage = ({
   user,
   connection,
@@ -120,7 +134,7 @@ const UserProfilePage = ({
 }) => {
   const history = useHistory();
 
-  const sendMessage = () => {
+  const sendMessage = (user) => {
     history.push("/messages/" + user.id);
   };
 
@@ -160,7 +174,7 @@ const UserProfilePage = ({
                         borderRadius: "8px",
                         fontWeight: 900,
                       }}
-                      onClick={() => sendMessage()}
+                      onClick={() => sendMessage(user)}
                     >
                       Send Message
                     </Button>
@@ -184,7 +198,7 @@ const UserProfilePage = ({
               <button onClick={() => follow(auth, user)}>Follow</button>
             )}
           </div>
-        ) : null}
+        ):
         <Requests>
           <RequestModal
             followRequests={followRequests}
@@ -196,6 +210,7 @@ const UserProfilePage = ({
             user={user}
           />
         </Requests>
+      }
       </Profile>
       {/* modal when the <p> above has been clicked will show the list of follow requests need to be accepted down below -- line 18 - line 47 */}
       <PeopleDiv>
@@ -287,8 +302,8 @@ const mapDispatch = (dispatch) => {
     unfollow: (connection) => {
       dispatch(deleteConnection(connection));
     },
-    acceptRequest: (connection, auth, user) => {
-      dispatch(updateConnection(connection, auth, user));
+    acceptRequest: (connection, user, auth) => {
+      dispatch(updateConnection(connection, user, auth));
     },
   };
 };
