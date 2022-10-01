@@ -170,7 +170,7 @@ User.prototype.updateConnection = async function(body, id){
   return this.getSingleConnection(connection.id);
 }
 User.prototype.deleteConnection = async function(id){
-  const connection = await db.models.connection.findByPk(id*1);
+  const connection = await db.models.connection.findByPk(id);
   await connection.destroy();
 };
 //***************************************************************** MESSAGES ******************************************************************

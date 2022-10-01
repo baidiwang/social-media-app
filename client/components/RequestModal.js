@@ -151,7 +151,7 @@ const RequestModal = ({
                                 >
                                   <PersonAddIcon />
                                 </Accept>
-                                <Decline onClick={() => unfollow(connection)}>
+                                <Decline onClick={() => unfollow(request)}>
                                   <DeleteIcon />
                                 </Decline>
                               </ButtonDiv>

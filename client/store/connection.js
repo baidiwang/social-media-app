@@ -28,8 +28,6 @@ export const setConnections = () => {
 export const addConnection = (following, follower) => {
     return async(dispatch) => {
         let connection = {};
-        console.log("following", following)
-        console.log("follower", follower)
         if(follower.isPrivate){
             connection = (await axios.post('/api/connections', {
                 followingId: following.id,
@@ -41,7 +39,7 @@ export const addConnection = (following, follower) => {
                     authorization: window.localStorage.getItem('token')
                 }
             })).data;
-            console.log(connection)
+
             dispatch({type: 'ADD_CONNECTION', connection});
         } else {
             connection = (await axios.post('/api/connections', {
@@ -54,15 +52,12 @@ export const addConnection = (following, follower) => {
                     authorization: window.localStorage.getItem('token')
                 }
             })).data;
-            console.log(connection)
             dispatch({type: 'ADD_CONNECTION', connection});
         }
     }
 };
 export const updateConnection = (connection, following, follower) => {
     return async(dispatch) => {
-        console.log("following", following)
-        console.log("follower", follower)
         connection = (await axios.put(`/api/connections/${connection.id}`, {
             followingId: following.id,
             followerId: follower.id,
@@ -72,7 +67,6 @@ export const updateConnection = (connection, following, follower) => {
                 authorization: window.localStorage.getItem('token')
             }
         })).data;
-        console.log(connection)
         dispatch({type: 'UPDATE_CONNECTION', connection})
     }
 };
