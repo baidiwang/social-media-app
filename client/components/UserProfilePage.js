@@ -195,19 +195,25 @@ const UserProfilePage = ({
                 )}
               </div>
             ) : (
-              <Button
-                sx={{
-                  backgroundColor: "#3FA796",
-                  color: "#F5C7A9",
-                  border: "2px solid #F5C7A9",
-                  borderRadius: "8px",
-                  fontWeight: 900,
-                }}
-                onClick={() => follow(auth, user)}
-              >
-                Follow
-              </Button>
-            )}
+              <div>
+                {
+                  auth.isPrivate === true ?
+                  <Button
+                  sx={{
+                    backgroundColor: "#3FA796",
+                    color: "#F5C7A9",
+                    border: "2px solid #F5C7A9",
+                    borderRadius: "8px",
+                    fontWeight: 900,
+                  }}
+                  onClick={() => follow(auth, user)}
+                >
+                  Follow
+                </Button>: null
+                }
+              </div>
+            )
+          }
           </div>
         ) : (
           <Requests>
