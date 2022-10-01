@@ -159,33 +159,7 @@ const RequestModal = ({
                         })}
                       </RequestList>
                     </Box>
-                  ) : (
-                    <div>
-                      {connection.id ? (
-                        <div>
-                          {connection.isAccepted === true ? (
-                            <>
-                              <button onClick={() => unfollow(connection)}>
-                                Unfollow
-                              </button>
-                              <button
-                                style={{ marginLeft: 10 }}
-                                onClick={() => sendMessage()}
-                              >
-                                Send Message
-                              </button>
-                            </>
-                          ) : (
-                            <button disabled>Requested</button>
-                          )}
-                        </div>
-                      ) : (
-                        <button onClick={() => follow(auth, user)}>
-                          Follow
-                        </button>
-                      )}
-                    </div>
-                  )}
+                  ) : null}
                 </Box>
               ) : (
                 <Typography marginTop={2} color={"#F5C7A9"} variant="h5">

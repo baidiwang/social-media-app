@@ -35,7 +35,6 @@ import {
   FacebookIcon,
   TwitterIcon,
 } from "react-share";
-import SideMenu from "./SideMenu";
 import { Link } from "react-router-dom";
 import CommentFAB from "./CommentFAB";
 import { io } from "socket.io-client";
@@ -70,7 +69,6 @@ const SinglePost = ({
 
   const checkLike = (post, auth) => {
     const postLikes = post.likes || [];
-    console.log("likes", postLikes);
     const like = postLikes.find((like) => like.userId === auth.id);
     return like;
   };
@@ -99,7 +97,6 @@ const SinglePost = ({
           spacing={3}
           justifyContent={"space-between"}
         >
-          <SideMenu setMode={setMode} mode={mode} />
           <Card
             sx={{
               height: "80%",
@@ -293,17 +290,11 @@ const SinglePost = ({
 
 const mapState = ({ posts, users, auth }, { match }) => {
   const postId = match.params.id * 1;
-  console.log("match", postId);
   const post = posts.find((post) => post.id === postId) || {};
-  console.log("post", post);
   const user = post.user || {};
-  console.log("user", user.avatar);
   const photos = post.photos || [];
-  console.log("photos", photos);
   const likes = post.likes || [];
-  console.log("likes", likes.length);
   const comments = post.comments || [];
-  console.log("comments", comments);
   return {
     post,
     user,
@@ -325,9 +316,7 @@ const mapDispatch = (dispatch) => {
       await socket.emit("createPost");
     },
     deletePost: async (post, photos) => {
-      console.log(post);
       const photosToDelete = photos.filter((photo) => photo.postId === post.id);
-      console.log(photosToDelete);
       for (const photo of photosToDelete) {
         await dispatch(deletePhoto(photo));
       }
@@ -335,7 +324,6 @@ const mapDispatch = (dispatch) => {
       await socket.emit("createPost");
     },
     deleteComment: async (comment) => {
-      console.log(comment);
       await dispatch(deleteComment(comment));
       await socket.emit("createPost");
     },
