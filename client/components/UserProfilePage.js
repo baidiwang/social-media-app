@@ -129,8 +129,33 @@ const UserProfilePage = ({
         <AboutDiv>
           <About>About me:</About>
           <Bio>{user.bio}</Bio>
-
         </AboutDiv>
+        {auth.id !== user.id ?
+        <div>
+        {connection.id ? (
+          <div>
+            {connection.isAccepted === true ? (
+              <>
+                <button onClick={() => unfollow(connection)}>
+                  Unfollow
+                </button>
+                <button
+                  style={{ marginLeft: 10 }}
+                  onClick={() => sendMessage()}
+                >
+                  Send Message
+                </button>
+              </>
+            ) : (
+              <button disabled>Requested</button>
+            )}
+          </div>
+        ) : (
+          <button onClick={() => follow(auth, user)}>
+            Follow
+          </button>
+        )}
+      </div>:null}
         <Requests>
           <RequestModal
             followRequests={followRequests}
