@@ -145,7 +145,7 @@ const RequestModal = ({
                               <ButtonDiv>
                                 <Accept
                                   onClick={() =>
-                                    acceptRequest(request, auth, user)
+                                    acceptRequest(request, request.following, auth)
                                   }
                                 >
                                   <PersonAddIcon />
