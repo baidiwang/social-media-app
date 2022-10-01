@@ -13,7 +13,13 @@ function CommentsFAB({ authId, postId, socket }) {
   return (
     <Box sx={{ padding: "10px" }}>
       <Button
-        sx={{ backgroundColor: "#3FA796", color: "#F5C7A9" }}
+        sx={{
+          backgroundColor: "#3FA796",
+          color: "#F5C7A9",
+          border: "2px solid #F5C7A9",
+          fontWeight: 900,
+          marginBottom: 2,
+        }}
         onClick={handleOpen}
       >
         Post a Comment
@@ -34,6 +40,7 @@ function CommentsFAB({ authId, postId, socket }) {
           backgroundColor="#3FA796"
           color={"text.primary"}
           textAlign="center"
+          sx={{ overflow: "auto" }}
         >
           <Typography
             sx={{ textAlign: "center", borderBottom: "1px solid #F5C7A9" }}

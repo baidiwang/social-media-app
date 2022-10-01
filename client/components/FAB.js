@@ -57,6 +57,7 @@ const FAB = () => {
             backgroundColor="#3FA796"
             color={"text.primary"}
             textAlign="center"
+            sx={{ overflow: "auto" }}
           >
             <Typography
               sx={{ textAlign: "center", borderBottom: "1px solid #F5C7A9" }}

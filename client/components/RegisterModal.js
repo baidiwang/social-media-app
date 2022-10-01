@@ -31,6 +31,7 @@ const RegisterModal = () => {
           color={"text.primary"}
           textAlign="center"
           border="1px solid #3FA796"
+          sx={{ overflow: "auto" }}
         >
           <Typography marginTop={2} color={"#F5C7A9"} variant="h4">
             Register

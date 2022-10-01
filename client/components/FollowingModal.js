@@ -80,6 +80,7 @@ const FollowingModal = ({ unfollow, auth, user, listOfFollowings }) => {
           color={"text.primary"}
           textAlign="center"
           border="1px solid #3FA796"
+          sx={{ overflow: "auto" }}
         >
           <Typography
             sx={{ borderBottom: "2px solid #f5c7a9" }}

@@ -16,7 +16,6 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
-import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -38,6 +37,31 @@ import {
 import { Link } from "react-router-dom";
 import CommentFAB from "./CommentFAB";
 import { io } from "socket.io-client";
+import SideMenu from "./SideMenu";
+import styled from "styled-components";
+
+export const DeleteDiv = styled.div`
+  position: absolute;
+  right: 20px;
+  opacity: 0;
+`;
+
+export const Container = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  &: hover ${DeleteDiv} {
+    opacity: 1;
+  }
+`;
+
+export const Button = styled.button`
+  border-radius: 12px;
+  border: 2px solid #f5c7a9;
+  background-color: #3fa796;
+  color: #f5c7a9;
+`;
 
 let socket;
 
@@ -94,10 +118,12 @@ const SinglePost = ({
           marginBottom={10}
           marginRight={10}
           direction="row"
-          spacing={3}
+          spacing={5}
           justifyContent={"space-between"}
         >
+          <SideMenu setMode={setMode} mode={mode} />
           <Card
+            flex={10}
             sx={{
               height: "80%",
               width: "80%",
@@ -122,7 +148,13 @@ const SinglePost = ({
                   <Typography variant="h6">{user.username}</Typography>
                 </Link>
               }
-              subheader={post.date}
+              subheader={
+                <Typography
+                  sx={{ fontSize: "10px", color: "#f5c7a9", fontWeight: 900 }}
+                >
+                  {post.date}
+                </Typography>
+              }
             />
             {photos.map((photo) => {
               return (
@@ -225,50 +257,51 @@ const SinglePost = ({
               <Box marginTop={3}>
                 {comments.map((comment) => {
                   return (
-                    <Box
-                      marginLeft={5}
-                      marginTop={3}
-                      marginBottom={1}
-                      key={comment.id}
-                    >
-                      <Box display="flex" alignItems="center">
-                        <Link to={`/profile/${comment.userId}`}>
-                          <Avatar
-                            sx={{
-                              height: "30px",
-                              width: "30px",
-                              border: "1px solid #F5C7A9",
-                            }}
-                            src={comment.user.avatar}
-                          />
-                        </Link>
-                        <Typography sx={{ fontSize: "12px", marginLeft: 1 }}>
-                          <Link
-                            style={{ color: "#3FA796" }}
-                            to={`/profile/${comment.userId}`}
-                          >
-                            {comment.user.username}
-                          </Link>
-                        </Typography>
-                        <div className="delete-comment-button">
-                          {auth.id === comment.userId ? (
-                            <Button
-                              variant="outlined"
-                              style={{ color: "#3FA796" }}
-                              startIcon={<DeleteIcon />}
-                              onClick={() => {
-                                deleteComment(comment);
+                    <Container>
+                      <Box
+                        marginLeft={5}
+                        marginTop={3}
+                        marginBottom={1}
+                        key={comment.id}
+                      >
+                        <Box display="flex" alignItems="center">
+                          <Link to={`/profile/${comment.userId}`}>
+                            <Avatar
+                              sx={{
+                                height: "30px",
+                                width: "30px",
+                                border: "1px solid #F5C7A9",
                               }}
+                              src={comment.user.avatar}
+                            />
+                          </Link>
+                          <Typography sx={{ fontSize: "12px", marginLeft: 1 }}>
+                            <Link
+                              style={{ color: "#3FA796" }}
+                              to={`/profile/${comment.userId}`}
                             >
-                              Delete
-                            </Button>
-                          ) : null}
-                        </div>
+                              {comment.user.username}
+                            </Link>
+                          </Typography>
+                          <DeleteDiv>
+                            {auth.id === comment.userId ? (
+                              <Button
+                                onClick={() => {
+                                  deleteComment(comment);
+                                }}
+                              >
+                                <DeleteIcon />
+                              </Button>
+                            ) : null}
+                          </DeleteDiv>
+                        </Box>
+                        <Typography
+                          sx={{ fontSize: "10px", marginLeft: "40px" }}
+                        >
+                          {comment.body}
+                        </Typography>
                       </Box>
-                      <Typography sx={{ fontSize: "10px", marginLeft: "40px" }}>
-                        {comment.body}
-                      </Typography>
-                    </Box>
+                    </Container>
                   );
                 })}
                 <Box
