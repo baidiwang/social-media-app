@@ -135,7 +135,7 @@ const UserProfilePage = ({
   const history = useHistory();
 
   const sendMessage = (user) => {
-    history.push("/messages/" + user.id);
+    history.push("/conversation/" + user.id);
   };
 
   return (
