@@ -230,9 +230,7 @@ const mapDispatch = (dispatch) => {
     getPosts: () => dispatch(setPosts()),
     getPhotos: () => dispatch(setPhotos()),
     deletePost: async (post, photos) => {
-      console.log(post);
       const photosToDelete = photos.filter((photo) => photo.postId === post.id);
-      console.log(photosToDelete);
       for (const photo of photosToDelete) {
         await dispatch(deletePhoto(photo));
       }
@@ -240,7 +238,6 @@ const mapDispatch = (dispatch) => {
       socket.emit("createPost");
     },
     deleteComment: async (comment) => {
-      console.log(comment);
       await dispatch(deleteComment(comment));
       socket.emit("createPost");
     },

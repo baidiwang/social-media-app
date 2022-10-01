@@ -66,4 +66,4 @@ const mapState = () => {
   }
 }
 
-export default connect(mapState, null)(PasswordReset);
+export default connect(mapState)(PasswordReset);

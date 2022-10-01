@@ -154,7 +154,6 @@ const mapDispatch = (dispatch) => {
           await dispatch(getSinglePost(post));
         }
       }
-      console.log(socket);
       socket.emit("createPost", auth.id);
     },
   };

@@ -76,11 +76,17 @@ export const GitLogo = styled.svg`
 export const PasswordDiv = styled.div`
   margin-top: 10px;
 `;
-/**
- * COMPONENT
- */
+
+let socket;
+
 const AuthForm = (props) => {
   const { name, displayName, handleSubmit, error } = props;
+
+  useEffect(() => {
+    socket = io();
+
+    return () => socket.emit("forceDisconnect");
+  }, []);
 
   return (
     <Box>
@@ -176,6 +182,7 @@ const mapDispatch = (dispatch) => {
       const username = evt.target.username.value;
       const password = evt.target.password.value;
       dispatch(authenticate(username, password, formName));
+      socket.emit('createUser');
     },
   };
 };

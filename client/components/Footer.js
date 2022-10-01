@@ -21,6 +21,6 @@ const Footer = () => {
   );
 };
 const mapState = (state) => {
-  return {};
+  return state;
 };
 export default connect(mapState)(Footer);
