@@ -1,4 +1,3 @@
-const express = require('express');
 const router = require('express').Router()
 const { models: { User }} = require('../db')
 
@@ -12,4 +11,4 @@ router.post('/', async(req,res,next) => {
   catch(ex){
     next(ex);
   }
-})
+});

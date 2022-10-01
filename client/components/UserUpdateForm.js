@@ -101,6 +101,7 @@ class UserUpdateForm extends React.Component {
         } else {
             this.props.updateUsers({...this.state, isPrivate: true});
         }
+
     }
     render() {
         const { onSubmit, handleChange, onChangePhoto } = this;

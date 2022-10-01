@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-
 import axios from 'axios';
 
 class PasswordResetRequest extends React.Component {
@@ -34,6 +33,21 @@ class PasswordResetRequest extends React.Component {
         const { handleChange, updatepassword } = this;
         const { password_email_sent, email } = this.state;
         return (
+<<<<<<< HEAD
+            <div>
+                {
+                    password_email_sent ?
+                    <div>
+                        Check your email to continue with password reset.
+                    </div>:
+                    <form onSubmit={ updatepassword }>
+                        Password Reset: What is the email associated with your account? <br></br>
+                        Email:
+                        <input name='email' onChange={ handleChange } value={ email }/>
+                        <button>Reset Password</button>
+                    </form>
+                }
+=======
             <div className="password-reset">
                  { password_email_sent ? <div>Check your email to continue with password reset.</div> :       <form onSubmit={ updatepassword }>
       Password Reset: What is the email associated with your account? <br></br>
@@ -44,11 +58,10 @@ class PasswordResetRequest extends React.Component {
      }
 
 
+>>>>>>> 66746233e4462e5bb8a5409ce7e5fcdca088a86d
             </div>
         )
     }
-
 };
-
 
 export default connect(null, null)(PasswordResetRequest);

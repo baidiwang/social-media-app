@@ -2,13 +2,9 @@
 
 import React from "react";
 import { connect } from "react-redux";
-import PostCreateForm from "./PostCreateForm";
 import { Box } from "@mui/material";
-import { addLike } from "../store";
 import PostHelper from "./PostHelper";
-/**
- * COMPONENT
- */
+
 const Feed = ({ posts, auth, photos }) => {
   return (
     <Box flex={5} p={1}>
@@ -17,9 +13,6 @@ const Feed = ({ posts, auth, photos }) => {
   );
 };
 
-/**
- * CONTAINER
- */
 const mapState = (state) => {
   const followedList = [];
   state.connections.map((connection) => {
@@ -41,12 +34,5 @@ const mapState = (state) => {
     photos: state.photos,
   };
 };
-// const mapDispatch = (dispatch) => {
-//   return {
-//     addLike: (authId, postId) => {
-//       dispatch(addLike(authId, postId));
-//     },
-//   };
-// };
 
 export default connect(mapState)(Feed);

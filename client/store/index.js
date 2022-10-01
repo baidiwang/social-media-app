@@ -12,7 +12,6 @@ const reducer = combineReducers({ auth, messages, posts, photos, users, connecti
 const middleware = applyMiddleware(thunkMiddleware, createLogger({collapsed: true}));
 const store = createStore(reducer, middleware);
 
-
 export * from './auth';
 export * from './message';
 export * from './photo';

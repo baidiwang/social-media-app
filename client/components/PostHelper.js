@@ -15,7 +15,6 @@ import { red, grey, pink } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import CommentHelper from "./CommentHelper";
 import {
   addLike,
   deleteLike,
@@ -26,7 +25,6 @@ import {
   deleteComment,
   setUsers,
 } from "../store";
-import Popover from "@mui/material/Popover";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
 import CommentsFAB from "./CommentsFAB";
@@ -153,9 +151,10 @@ const PostHelper = ({
                 </IconButton>
               }
               title={
+                auth.id ?
                 <Link style={{ color: "#3FA796" }} to={`/posts/${post.id}`}>
                   <Typography variant="h6">{post.user.username}</Typography>
-                </Link>
+                </Link>:<Typography variant="h6">{post.user.username}</Typography>
               }
               subheader={post.date}
             />
@@ -180,14 +179,14 @@ const PostHelper = ({
               {checkLike(post, auth) ? (
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <IconButton onClick={() => unLike(auth, post)}>
-                    <FavoriteIcon sx={{ color: pink[500] }} />
+                    {auth.id ? <FavoriteIcon sx={{ color: pink[500] }} /> : null}
                   </IconButton>
                   <Typography> {post.likes.length} likes</Typography>
                 </Box>
               ) : (
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <IconButton onClick={() => addLike(auth.id, post.id)}>
-                    <FavoriteIcon sx={{ color: grey[100] }} />
+                    {auth.id ? <FavoriteIcon sx={{ color: grey[100] }} /> : null}
                   </IconButton>
                   <Typography> {post.likes.length} likes</Typography>
                 </Box>
@@ -311,11 +310,7 @@ const PostHelper = ({
                 );
               })}
               <Box display="flex" alignItems="center" justifyContent="center">
-                <CommentsFAB
-                  authId={auth.id}
-                  postId={post.id}
-                  socket={socket}
-                />
+                {auth.id ? <CommentsFAB authId={auth.id} postId={post.id} socket={socket} /> : null}
               </Box>
             </Box>
           </Card>
@@ -366,9 +361,7 @@ const mapDispatch = (dispatch) => {
     getPosts: () => dispatch(setPosts()),
     getPhotos: () => dispatch(setPhotos()),
     deletePost: async (post, photos) => {
-      console.log(post);
       const photosToDelete = photos.filter((photo) => photo.postId === post.id);
-      console.log(photosToDelete);
       for (const photo of photosToDelete) {
         await dispatch(deletePhoto(photo));
       }
@@ -376,7 +369,6 @@ const mapDispatch = (dispatch) => {
       socket.emit("createPost");
     },
     deleteComment: async (comment) => {
-      console.log(comment);
       await dispatch(deleteComment(comment));
       socket.emit("createPost");
     },

@@ -68,7 +68,5 @@ const mapState = (state, { match }) => {
     connection,
   };
 };
-const mapDispatch = (dispatch) => {
-  return {};
-};
-export default connect(mapState, mapDispatch)(UserPostsPage);
+
+export default connect(mapState)(UserPostsPage);

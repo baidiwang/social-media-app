@@ -18,14 +18,12 @@ const posts = (state=[], action) => {
 
 export const setPosts = () => {
     return async(dispatch) => {
-        const posts = (await axios.get('/api/posts', {
-            headers: {
-                authorization: window.localStorage.getItem('token')
-            }
-        })).data;
-        dispatch({type: 'SET_POSTS', posts})
-    }
+        const posts = (await axios.get('/api/posts')).data;
+        dispatch({type: 'SET_POSTS', posts});
+    };
+    
 };
+
 export const deletePost = (post) => {
     return async(dispatch) => {
         await axios.delete(`/api/posts/${post.id}`);
@@ -70,7 +68,6 @@ export const getSinglePost = (post) => {
                 authorization: window.localStorage.getItem('token')
             }
         })).data;
-        console.log(post)
         dispatch({type: 'CREATE_POST', post});
     }
 };
@@ -97,7 +94,6 @@ export const deleteLike = (likeId, postId) => {
                 authorization: window.localStorage.getItem('token')
             }
         })).data;
-        console.log(post)
         dispatch({type: 'UPDATE_POST', post})
     }
 };
@@ -132,6 +128,5 @@ export const deleteComment = (comment) => {
         dispatch({type: 'UPDATE_POST', post})
     }
 };
-
 
 export default posts;

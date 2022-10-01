@@ -4,7 +4,7 @@
 
 import React from "react";
 import { connect } from "react-redux";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { addConnection, deleteConnection, updateConnection } from "../store";
 import { Box } from "@mui/material";
@@ -18,10 +18,7 @@ import UserPostsPage from "./UserPostsPage";
 
 export const Container = styled.div`
   width: 100vw;
-
   height: 70vh;
-
-
 `;
 
 export const Profile = styled.div`
@@ -125,7 +122,7 @@ const UserProfilePage = ({
   return (
     <Container>
       <Profile>
-        <Title>Your Profile</Title>
+        <Title>{user.username}</Title>
         <Link to={`/profile/${auth.id}/update`}>
           <Image src={user.avatar} />
         </Link>
@@ -193,6 +190,7 @@ const UserProfilePage = ({
     </Container>
   );
 };
+
 const mapState = (state, { match }) => {
   const user = state.users.find((user) => user.id === match.params.id) || {};
   //connection -- check if there is a request of the auth to the profile owner
@@ -233,6 +231,7 @@ const mapState = (state, { match }) => {
     posts,
   };
 };
+
 const mapDispatch = (dispatch) => {
   return {
     follow: (auth, user) => {
@@ -246,4 +245,5 @@ const mapDispatch = (dispatch) => {
     },
   };
 };
+
 export default connect(mapState, mapDispatch)(UserProfilePage);
