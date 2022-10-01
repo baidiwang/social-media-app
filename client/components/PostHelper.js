@@ -62,9 +62,6 @@ export const Button = styled.button`
 
 let socket;
 
-/**
- * COMPONENT
- */
 const PostHelper = ({
   posts,
   auth,

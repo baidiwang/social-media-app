@@ -20,7 +20,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
-import { red, grey, pink } from "@mui/material/colors";
+import { grey, pink } from "@mui/material/colors";
 import {
   addLike,
   deleteLike,
@@ -74,7 +74,6 @@ const SinglePost = ({
   comments,
   addLike,
   deleteLike,
-  deletePost,
   deleteComment,
 }) => {
   const [anchorEls, setAnchorEls] = useState({});
@@ -321,7 +320,7 @@ const SinglePost = ({
   );
 };
 
-const mapState = ({ posts, users, auth }, { match }) => {
+const mapState = ({ posts, auth }, { match }) => {
   const postId = match.params.id * 1;
   const post = posts.find((post) => post.id === postId) || {};
   const user = post.user || {};

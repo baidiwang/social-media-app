@@ -34,15 +34,15 @@ class PasswordResetRequest extends React.Component {
         const { password_email_sent, email } = this.state;
         return (
             <div className="password-reset">
-                 { password_email_sent ? <div>Check your email to continue with password reset.</div> :       <form onSubmit={ updatepassword }>
-      Password Reset: What is the email associated with your account? <br></br>
-      Email:
-      <input name='email' onChange={ handleChange } value={ email }/>
-      <button>Reset Password</button>
-      </form>
-     }
-
-
+                {
+                password_email_sent ?
+                    <div>Check your email to continue with password reset.</div> :
+                    <form onSubmit={ updatepassword }>
+                        Password Reset: What is the email associated with your account? <br></br>
+                        Email: <input name='email' onChange={ handleChange } value={ email }/>
+                        <button>Reset Password</button>
+                    </form>
+                }
             </div>
         )
     }
