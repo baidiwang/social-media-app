@@ -43,8 +43,9 @@ const UserPostsModal = ({ user, auth, posts, connection, photos }) => {
         sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}
       >
         <Box
-          width={800}
-          height={650}
+          display="flex"
+          flexDirection="column"
+          flexWrap="wrap"
           marginRight="auto"
           marginLeft="auto"
           borderRadius="8px"

@@ -195,22 +195,33 @@ const UserProfilePage = ({
                 )}
               </div>
             ) : (
-              <button onClick={() => follow(auth, user)}>Follow</button>
+              <Button
+                sx={{
+                  backgroundColor: "#3FA796",
+                  color: "#F5C7A9",
+                  border: "2px solid #F5C7A9",
+                  borderRadius: "8px",
+                  fontWeight: 900,
+                }}
+                onClick={() => follow(auth, user)}
+              >
+                Follow
+              </Button>
             )}
           </div>
-        ):
-        <Requests>
-          <RequestModal
-            followRequests={followRequests}
-            connection={connection}
-            follow={follow}
-            acceptRequest={acceptRequest}
-            unfollow={unfollow}
-            auth={auth}
-            user={user}
-          />
-        </Requests>
-      }
+        ) : (
+          <Requests>
+            <RequestModal
+              followRequests={followRequests}
+              connection={connection}
+              follow={follow}
+              acceptRequest={acceptRequest}
+              unfollow={unfollow}
+              auth={auth}
+              user={user}
+            />
+          </Requests>
+        )}
       </Profile>
       {/* modal when the <p> above has been clicked will show the list of follow requests need to be accepted down below -- line 18 - line 47 */}
       <PeopleDiv>
