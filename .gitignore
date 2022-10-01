@@ -1,4 +1,4 @@
-node_modules
+node_modules/
 public/bundle.js
 public/bundle.js.map
 .DS_Store
@@ -9,3 +9,4 @@ package-lock.json
 .env
 .vscode
 .idea
+node_modules/

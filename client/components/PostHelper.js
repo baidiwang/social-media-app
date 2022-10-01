@@ -23,8 +23,8 @@ import {
   setPhotos,
   setPosts,
   deleteComment,
+  setUsers,
 } from "../store";
-import Popover from "@mui/material/Popover";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
 import CommentsFAB from "./CommentsFAB";
@@ -36,7 +36,6 @@ import {
 } from "react-share";
 import { io } from "socket.io-client";
 import PostUpdateForm from "./PostUpdateForm";
-import { SignalCellularNullRounded } from "@mui/icons-material";
 
 let socket;
 
@@ -53,6 +52,7 @@ const PostHelper = ({
   getPosts,
   getPhotos,
   deleteComment,
+  getUsers,
 }) => {
   const [open, setOpen] = useState(false);
   const [editPost, setEditPost] = useState(null);
@@ -66,6 +66,12 @@ const PostHelper = ({
     socket.on("createPost", (creatorId) => {
       getPosts();
       getPhotos();
+    });
+
+    socket.on("createUser", (creatorId) => {
+      getPosts();
+      getPhotos();
+      getUsers();
     });
 
     return () => socket.emit("forceDisconnect");
@@ -240,7 +246,10 @@ const PostHelper = ({
             <Box marginLeft={2}>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <Link to={`/profile/${post.userId}`}>
-                  <Avatar src={post.user.avatar} />
+                  <Avatar
+                    sx={{ border: "1px solid #F5C7A9" }}
+                    src={post.user.avatar}
+                  />
                 </Link>
                 <Link to={`/profile/${post.userId}`}>
                   <Typography variant="h6" sx={{ color: "#3FA796" }}>
@@ -262,7 +271,11 @@ const PostHelper = ({
                     <Box display="flex" alignItems="center">
                       <Link to={`/profile/${comment.userId}`}>
                         <Avatar
-                          sx={{ height: "30px", width: "30px" }}
+                          sx={{
+                            height: "30px",
+                            width: "30px",
+                            border: "1px solid #F5C7A9",
+                          }}
                           src={comment.user.avatar}
                         />
                       </Link>
@@ -274,27 +287,30 @@ const PostHelper = ({
                           {comment.user.username}
                         </Link>
                       </Typography>
-                      <div className="delete-comment-button" >
-                      {auth.id === comment.userId ? <Button variant='outlined' style={{ color: "#3FA796"}} startIcon={<DeleteIcon/>}
-                      onClick={() => {
-
-                        deleteComment(comment)
-
-                      }} >
-                        Delete
-                        </Button> : null}
+                      <div className="delete-comment-button">
+                        {auth.id === comment.userId ? (
+                          <Button
+                            variant="outlined"
+                            style={{ color: "#3FA796" }}
+                            startIcon={<DeleteIcon />}
+                            onClick={() => {
+                              deleteComment(comment);
+                            }}
+                          >
+                            Delete
+                          </Button>
+                        ) : null}
                       </div>
                     </Box>
 
                     <Typography sx={{ fontSize: "10px", marginLeft: "40px" }}>
                       {comment.body}
                     </Typography>
-
                   </Box>
                 );
               })}
               <Box display="flex" alignItems="center" justifyContent="center">
-                {auth.id ? <CommentsFAB authId={auth.id} postId={post.id} /> : null}
+                {auth.id ? <CommentsFAB authId={auth.id} postId={post.id} socket={socket} /> : null}
               </Box>
             </Box>
           </Card>
@@ -311,11 +327,16 @@ const PostHelper = ({
           width={450}
           height={750}
           borderRadius="8px"
-          backgroundColor={"background.default"}
+          backgroundColor={"#3FA796"}
           color={"text.primary"}
           textAlign="center"
         >
-          <Typography marginTop={2} color={"#3FA796"} variant="h5">
+          <Typography
+            sx={{ borderBottom: "1px solid #F5C7A9" }}
+            marginTop={2}
+            color={"#F5C7A9"}
+            variant="h5"
+          >
             Update Post
           </Typography>
           <Box sx={{ marginTop: 5 }}>
@@ -329,24 +350,30 @@ const PostHelper = ({
 
 const mapDispatch = (dispatch) => {
   return {
-    addLike: (authId, postId) => {
-      dispatch(addLike(authId, postId));
+    addLike: async (authId, postId) => {
+      await dispatch(addLike(authId, postId));
+      socket.emit("createPost");
     },
-    deleteLike: (likeId, postId) => {
-      dispatch(deleteLike(likeId, postId));
+    deleteLike: async (likeId, postId) => {
+      await dispatch(deleteLike(likeId, postId));
+      socket.emit("createPost");
     },
     getPosts: () => dispatch(setPosts()),
     getPhotos: () => dispatch(setPhotos()),
     deletePost: async (post, photos) => {
       const photosToDelete = photos.filter((photo) => photo.postId === post.id);
-      for(const photo of photosToDelete) {
+      for (const photo of photosToDelete) {
         await dispatch(deletePhoto(photo));
       }
       await dispatch(deletePost(post));
       socket.emit("createPost");
     },
-    deleteComment: (comment) => {
-      dispatch(deleteComment(comment));
+    deleteComment: async (comment) => {
+      await dispatch(deleteComment(comment));
+      socket.emit("createPost");
+    },
+    getUsers: () => {
+      dispatch(setUsers());
     },
   };
 };

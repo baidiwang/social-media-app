@@ -4,7 +4,7 @@
 
 import React from "react";
 import { connect } from "react-redux";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { addConnection, deleteConnection, updateConnection } from "../store";
 import { Box } from "@mui/material";
@@ -12,10 +12,13 @@ import RequestModal from "./RequestModal";
 import FollowersModal from "./FollowersModal";
 import FollowingModal from "./FollowingModal";
 import styled from "styled-components";
+import UsersPhotosModal from "./UsersPhotosModal";
+import UserPostsModal from "./UserPostsModal";
+import UserPostsPage from "./UserPostsPage";
 
 export const Container = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 70vh;
 `;
 
 export const Profile = styled.div`
@@ -64,14 +67,17 @@ export const Bio = styled.span`
   font-weight: 500;
 `;
 
-export const Requests = styled.span``;
+export const Requests = styled.span`
+  padding-top: 50px;
+`;
 
 export const PeopleDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
   color: #3fa796;
-  margin-top: 30px;
+  padding-top: 100px;
+  padding-bottom: 100px;
 `;
 
 export const Length = styled.span`
@@ -86,6 +92,14 @@ export const FollowingDiv = styled.div`
   margin-right: 50px;
 `;
 
+export const PhotosDiv = styled.div`
+  margin-right: 50px;
+`;
+
+export const PostsDiv = styled.div`
+  margin-right: 50px;
+`;
+
 const UserProfilePage = ({
   user,
   connection,
@@ -96,6 +110,8 @@ const UserProfilePage = ({
   follow,
   unfollow,
   acceptRequest,
+  photos,
+  posts,
 }) => {
   const history = useHistory();
 
@@ -113,6 +129,7 @@ const UserProfilePage = ({
         <AboutDiv>
           <About>About me:</About>
           <Bio>{user.bio}</Bio>
+
         </AboutDiv>
         <Requests>
           <RequestModal
@@ -144,6 +161,31 @@ const UserProfilePage = ({
             unfollow={unfollow}
           />
         </FollowingDiv>
+        <PhotosDiv>
+          <UsersPhotosModal
+            auth={auth}
+            user={user}
+            photos={photos}
+            connection={connection}
+          />
+        </PhotosDiv>
+
+        <PostsDiv>
+          <UserPostsModal
+            auth={auth}
+            user={user}
+            photos={photos}
+            connection={connection}
+            posts={posts}
+          />
+        </PostsDiv>
+
+        <Link to={`/conversation/${user.id}`}>
+          <div className="message-link">
+            Message
+          </div>
+        </Link>
+
       </PeopleDiv>
     </Container>
   );
@@ -176,6 +218,8 @@ const mapState = (state, { match }) => {
       (connection) =>
         connection.followingId === user.id && connection.isAccepted === true
     ) || [];
+  const photos = state.photos.filter((photo) => photo.userId === user.id) || [];
+  const posts = state.posts.filter((post) => post.userId === user.id) || [];
   return {
     user,
     connection,
@@ -183,6 +227,8 @@ const mapState = (state, { match }) => {
     followRequests,
     listOfFollowers,
     listOfFollowings,
+    photos,
+    posts,
   };
 };
 

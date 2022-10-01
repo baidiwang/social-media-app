@@ -23,6 +23,10 @@ export const Input = styled.input`
   width: 250px;
   border-radius: 8px;
   border: none;
+
+  ::placeholder {
+    color: #3fa796;
+  }
 `;
 
 const Search = ({ users }) => {
@@ -55,6 +59,7 @@ const Search = ({ users }) => {
                         height: "30px",
                         width: "30px",
                         margin: 2,
+                        border: "1px solid #F5C7A9",
                       }}
                       src={user.avatar}
                     />

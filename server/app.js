@@ -11,6 +11,12 @@ app.use(morgan('dev'))
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({limit: '50mb'}));
 
+<<<<<<< HEAD
+=======
+// body parsing middleware
+// app.use(express.json())
+
+>>>>>>> 66746233e4462e5bb8a5409ce7e5fcdca088a86d
 // auth and api routes
 app.use('/auth', require('./auth'))
 app.use('/api', require('./api'))

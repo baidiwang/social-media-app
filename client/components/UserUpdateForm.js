@@ -3,6 +3,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { updateUsers } from '../store';
+import { io } from "socket.io-client";
+
+let socket;
 
 class UserUpdateForm extends React.Component {
     constructor(){
@@ -19,7 +22,8 @@ class UserUpdateForm extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.onChangePhoto = this.onChangePhoto.bind(this);
     }
-    componentDidMount(){ 
+    componentDidMount(){
+        socket = io();
         if(this.props.auth.isPrivate === false){
             this.setState({
                 id: this.props.auth.id,
@@ -73,6 +77,10 @@ class UserUpdateForm extends React.Component {
             }
         }
     }
+    componentWillUnmount() {
+        socket.emit("forceDisconnect");
+    }
+
     handleChange(ev){
         this.setState({[ev.target.name]: ev.target.value});
     }
@@ -97,20 +105,26 @@ class UserUpdateForm extends React.Component {
     }
     render() {
         const { onSubmit, handleChange, onChangePhoto } = this;
-        const {avatar, username, bio, isPrivate} = this.state;
+        const {avatar, username, bio, email, isPrivate} = this.state;
         return (
-            
+
             <form>
                 Username: <br></br>
                 <input name="username" onChange={ handleChange } value={ username }/> <br></br>
                 Bio: <br></br>
                 <input name="bio" onChange={ handleChange } value={ bio } size="60"/> <br></br>
+                Email: <br></br>
+                <input name="email" onChange={ handleChange } value={ email } size="60"/> <br></br>
+                <br></br>
                 <input type='file' onChange={ onChangePhoto } />
+                <br></br>
                 <img src={avatar} width='160' height='160' />
+                <br></br>
                 <select value={ isPrivate || 1} name='isPrivate' onChange={ handleChange }>
                         <option value={1}>set to public</option>
                         <option value={2}>set to private</option>
                     </select>
+                <br></br>
                 <button onClick={onSubmit}>Submit changes</button>
             </form>
         )
@@ -124,7 +138,10 @@ const mapState = state => {
 };
 const mapDispatch = dispatch => {
     return {
-        updateUsers: (user) =>  dispatch(updateUsers(user)),
+        updateUsers: async (user) =>  {
+            await dispatch(updateUsers(user))
+            socket.emit('createUser')
+        },
     }
 };
 export default connect(mapState, mapDispatch)(UserUpdateForm);

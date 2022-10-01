@@ -11,7 +11,7 @@ import {
 import CommentIcon from "@mui/icons-material/Comment";
 import CommentHelper from "./CommentHelper";
 
-const CommentFAB = ({ authId, postId }) => {
+const CommentFAB = ({ authId, postId, socket }) => {
   const [open, setOpen] = useState(false);
   const theme = createTheme({
     palette: {
@@ -29,6 +29,7 @@ const CommentFAB = ({ authId, postId }) => {
             position: "fixed",
             bottom: 20,
             left: { xs: "calc(50% - 25px)", md: 30 },
+            marginBottom: 2,
           }}
         >
           <Fab color="primary" aria-label="edit">
@@ -47,18 +48,23 @@ const CommentFAB = ({ authId, postId }) => {
           aria-describedby="modal-modal-description"
         >
           <Box
-            width={600}
+            width={400}
             height={500}
             borderRadius="8px"
-            backgroundColor={"background.default"}
+            backgroundColor="#3FA796"
             color={"text.primary"}
             textAlign="center"
           >
-            <Typography marginTop={2} color={"gray"} variant="h5">
+            <Typography
+              sx={{ textAlign: "center", borderBottom: "1px solid #f5c7a9" }}
+              marginTop={2}
+              color={"#f5c7a9"}
+              variant="h5"
+            >
               Post a comment
             </Typography>
             <Box sx={{ marginTop: 5 }}>
-              <CommentHelper authId={authId} postId={postId} />
+              <CommentHelper authId={authId} postId={postId} socket={socket} />
             </Box>
           </Box>
         </Modal>

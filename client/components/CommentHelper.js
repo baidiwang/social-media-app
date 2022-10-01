@@ -5,23 +5,30 @@ import { addComment } from "../store";
 import styled from "styled-components";
 
 export const Form = styled.form``;
+
 export const Caption = styled.textarea`
   width: 90%;
   height: 200px;
-  background-color: lightgrey;
-  border: none;
+  background-color: #3fa796;
+  border: 2px solid #f5c7a9;
+  color: #f5c7a9;
   outline: none;
+
+  ::placeholder {
+    color: #f5c7a9;
+  }
 `;
 export const Button = styled.button`
   padding: 15px;
   width: 90.5%;
-  border: none;
+  border: 1px solid #f5c7a9;
   cursor: pointer;
   background-color: #3fa796;
   color: #f5c7a9;
+  margin-top: 15px;
 `;
 
-const CommentHelper = ({ authId, postId, addComment }) => {
+const CommentHelper = ({ authId, postId, addComment, socket }) => {
   const path = `/posts/${postId}`;
   console.log("path", path);
   console.log("postId", postId);
@@ -34,14 +41,16 @@ const CommentHelper = ({ authId, postId, addComment }) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    addComment(body, postId, authId);
+    addComment(body, postId, authId, socket);
     setBody("");
-    history.push(path);
+    setTimeout(() => {
+      history.push(path);
+    }, 1000);
   };
   return (
     <Form onSubmit={handleSubmit}>
       <Caption
-        placeholder="Write a comment..."
+        placeholder="Comment ..."
         value={body}
         onChange={onChange}
         required
@@ -52,8 +61,9 @@ const CommentHelper = ({ authId, postId, addComment }) => {
 };
 const mapDispatch = (dispatch) => {
   return {
-    addComment: (comment, postId, authId) => {
-      dispatch(addComment(comment, postId, authId));
+    addComment: async (comment, postId, authId, socket) => {
+      await dispatch(addComment(comment, postId, authId));
+      await socket.emit("createPost");
     },
   };
 };

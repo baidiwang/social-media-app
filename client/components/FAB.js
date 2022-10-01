@@ -32,6 +32,7 @@ const FAB = () => {
             position: "fixed",
             bottom: 20,
             left: { xs: "calc(50% - 25px)", md: 30 },
+            marginBottom: 2,
           }}
         >
           <Fab color="primary" aria-label="edit">
@@ -53,11 +54,16 @@ const FAB = () => {
             width={450}
             height={750}
             borderRadius="12px"
-            backgroundColor={"background.default"}
+            backgroundColor="#3FA796"
             color={"text.primary"}
             textAlign="center"
           >
-            <Typography marginTop={2} color={"#3FA796"} variant="h5">
+            <Typography
+              sx={{ textAlign: "center", borderBottom: "1px solid #F5C7A9" }}
+              marginTop={2}
+              color={"#F5C7A9"}
+              variant="h5"
+            >
               Create New Post
             </Typography>
             <Box sx={{ marginTop: 5 }}>

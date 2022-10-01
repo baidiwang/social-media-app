@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import {
   Box,
@@ -38,6 +38,9 @@ import {
 import SideMenu from "./SideMenu";
 import { Link } from "react-router-dom";
 import CommentFAB from "./CommentFAB";
+import { io } from "socket.io-client";
+
+let socket;
 
 const SinglePost = ({
   auth,
@@ -58,6 +61,13 @@ const SinglePost = ({
       mode: mode,
     },
   });
+
+  useEffect(() => {
+    socket = io();
+
+    return () => socket.emit("forceDisconnect");
+  }, []);
+
   const checkLike = (post, auth) => {
     const postLikes = post.likes || [];
     console.log("likes", postLikes);
@@ -204,7 +214,10 @@ const SinglePost = ({
               <Box marginLeft={2}>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <Link to={`/profile/${user.id}`}>
-                    <Avatar src={user.avatar} />
+                    <Avatar
+                      sx={{ border: "1px solid #F5C7A9" }}
+                      src={user.avatar}
+                    />
                   </Link>
                   <Link style={{ color: "#3FA796" }} to={`/profile/${user.id}`}>
                     <Typography variant="h6">{user.username}</Typography>
@@ -224,7 +237,11 @@ const SinglePost = ({
                       <Box display="flex" alignItems="center">
                         <Link to={`/profile/${comment.userId}`}>
                           <Avatar
-                            sx={{ height: "30px", width: "30px" }}
+                            sx={{
+                              height: "30px",
+                              width: "30px",
+                              border: "1px solid #F5C7A9",
+                            }}
                             src={comment.user.avatar}
                           />
                         </Link>
@@ -236,16 +253,20 @@ const SinglePost = ({
                             {comment.user.username}
                           </Link>
                         </Typography>
-                        <div className="delete-comment-button" >
-                      {auth.id === comment.userId ? <Button variant='outlined' style={{ color: "#3FA796"}} startIcon={<DeleteIcon/>}
-                      onClick={() => {
-
-                        deleteComment(comment)
-
-                      }} >
-                        Delete
-                        </Button> : null}
-                      </div>
+                        <div className="delete-comment-button">
+                          {auth.id === comment.userId ? (
+                            <Button
+                              variant="outlined"
+                              style={{ color: "#3FA796" }}
+                              startIcon={<DeleteIcon />}
+                              onClick={() => {
+                                deleteComment(comment);
+                              }}
+                            >
+                              Delete
+                            </Button>
+                          ) : null}
+                        </div>
                       </Box>
                       <Typography sx={{ fontSize: "10px", marginLeft: "40px" }}>
                         {comment.body}
@@ -260,7 +281,7 @@ const SinglePost = ({
                 ></Box>
               </Box>
               <Box display="flex" alignItems="center" justifyContent="center">
-                <CommentFAB authId={auth.id} postId={post.id} />
+                <CommentFAB authId={auth.id} postId={post.id} socket={socket} />
               </Box>
             </CardContent>
           </Card>
@@ -295,24 +316,28 @@ const mapState = ({ posts, users, auth }, { match }) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    addLike: (authId, postId) => {
-      dispatch(addLike(authId, postId));
+    addLike: async (authId, postId) => {
+      await dispatch(addLike(authId, postId));
+      await socket.emit("createPost");
     },
-    deleteLike: (likeId, postId) => {
+    deleteLike: async (likeId, postId) => {
       dispatch(deleteLike(likeId, postId));
+      await socket.emit("createPost");
     },
-    deletePost: (post, photos) => {
+    deletePost: async (post, photos) => {
       console.log(post);
       const photosToDelete = photos.filter((photo) => photo.postId === post.id);
       console.log(photosToDelete);
-      photosToDelete.forEach((photo) => {
-        dispatch(deletePhoto(photo));
-      });
-      dispatch(deletePost(post));
+      for (const photo of photosToDelete) {
+        await dispatch(deletePhoto(photo));
+      }
+      await dispatch(deletePost(post));
+      await socket.emit("createPost");
     },
-    deleteComment: (comment) => {
+    deleteComment: async (comment) => {
       console.log(comment);
-      dispatch(deleteComment(comment));
+      await dispatch(deleteComment(comment));
+      await socket.emit("createPost");
     },
   };
 };

@@ -295,7 +295,7 @@ User.requestPasswordReset = async (user_email) => {
     token: hash,
     createdAt: Date.now(),
   }).save();
-  const clientURL = "http://localhost:8080"
+  const clientURL = "https://capstone-social-media.herokuapp.com"
   const link = `${clientURL}/passwordreset/${resetToken}/${user.username}/${user.id}`;
   sendEmail(user.email,"Password Reset Request",{name: user.name,link: link,},"./template/requestResetPassword.handlebars");
   return link;

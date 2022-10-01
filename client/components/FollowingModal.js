@@ -55,6 +55,7 @@ const FollowingModal = ({ unfollow, auth, user, listOfFollowings }) => {
         sx={{
           backgroundColor: "#3FA796",
           color: "#F5C7A9",
+          border: "1px solid #F5C7A9",
         }}
         onClick={handleOpen}
       >

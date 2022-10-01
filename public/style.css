@@ -55,6 +55,8 @@ form div {
   padding: 15px;
   max-height: 100%;
   overflow-y: auto;
+  margin-bottom: 1rem;
+
 }
 
 .message-item {
@@ -153,6 +155,14 @@ form div {
   background-color: transparent;
 }
 
+.message-link{
+  padding: 1rem;
+  margin-right: 3rem;
+  color: #f5c7a9;
+  background-color: #3fa796;
+  border-radius: 3px;
+}
+
 .github_logo {
   fill: white;
 }
@@ -223,7 +233,9 @@ form div {
 	color: #fff;
 }
 
-
+.password-reset{
+  margin: 1rem;
+}
 .delete-comment-button{
 margin-left:auto;
 margin-right: 1rem;

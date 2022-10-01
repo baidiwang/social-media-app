@@ -43,7 +43,7 @@ const Navbar = ({ handleClick, isLoggedIn, auth }) => {
               }}
             >
               <Link style={{ color: "#F5C7A9" }} to="/home">
-                Social App
+                The Scratching Post /ᐠ.ꞈ.ᐟ\
               </Link>
               <Search />
               <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
@@ -112,14 +112,13 @@ const Navbar = ({ handleClick, isLoggedIn, auth }) => {
           <Box>
             <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
               <Link style={{ color: "#F5C7A9" }} to="/home">
-                Social App
+                The Scratching Post /ᐠ.ꞈ.ᐟ\
               </Link>
               <Box sx={{ display: "flex", gap: 5 }}>
                 <LoginModal />
                 <RegisterModal />
               </Box>
             </Toolbar>
-            ,
           </Box>
         )}
       </AppBar>

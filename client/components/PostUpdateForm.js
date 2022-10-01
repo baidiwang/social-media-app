@@ -19,14 +19,15 @@ import { useHistory } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import styled from "styled-components";
 import { Box } from "@mui/material";
-import { io } from 'socket.io-client'
+import { io } from "socket.io-client";
 
 export const PhotoDeleteWrapper = styled.div`
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  color: #3FA796;
+  color: #3fa796;
+  fontweight: 900;
   opacity: 0;
 `;
 
@@ -50,7 +51,7 @@ const PostUpdateForm = ({ post, auth, updatePostWithImages }) => {
     return () => {
       setTimeout(() => {
         socket.emit("forceDisconnect");
-      }, 3000)
+      }, 3000);
     };
   }, []);
 
@@ -87,7 +88,9 @@ const PostUpdateForm = ({ post, auth, updatePostWithImages }) => {
       />
       <Photos id="file" type="file" multiple onChange={onChangePhoto} />
       <Label htmlFor="file">
-        <AddAPhotoIcon style={{ cursor: "pointer", color: "#3FA796" }} />
+        <AddAPhotoIcon
+          style={{ cursor: "pointer", color: "#F5C7A9", fontWeight: 900 }}
+        />
       </Label>
       <PhotoList>
         {photos.map((photo, index) => {
@@ -95,7 +98,11 @@ const PostUpdateForm = ({ post, auth, updatePostWithImages }) => {
             <Container key={photo.id}>
               <UploadedPhotos key={index}>
                 <Image
-                  sx={{ height: "80px", width: "80px", marginRight: "2px" }}
+                  sx={{
+                    height: "80px",
+                    width: "80px",
+                    marginRight: "2px",
+                  }}
                   src={photo ? photo : null}
                 />
                 <PhotoDeleteWrapper
@@ -111,7 +118,9 @@ const PostUpdateForm = ({ post, auth, updatePostWithImages }) => {
           );
         })}
       </PhotoList>
-      <Button disabled={photos.length === 0}>Update</Button>
+      <Button style={{ fontWeight: 900 }} disabled={photos.length === 0}>
+        Update
+      </Button>
     </Form>
   );
 };
