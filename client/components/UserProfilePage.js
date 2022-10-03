@@ -2,11 +2,19 @@
 //show nav for users post / photos / followers?
 //must be able to add / edit / delete post
 
-import React from "react";
+import React, { useEffect } from 'react'
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { addConnection, deleteConnection, updateConnection } from "../store";
+import {
+  addConnection,
+  deleteConnection,
+  setConnections,
+  setPhotos,
+  setPosts,
+  setUsers,
+  updateConnection
+} from '../store'
 import { Box, Button } from "@mui/material";
 import RequestModal from "./RequestModal";
 import FollowersModal from "./FollowersModal";
@@ -16,6 +24,7 @@ import UsersPhotosModal from "./UsersPhotosModal";
 import UserPostsModal from "./UserPostsModal";
 import UserPostsPage from "./UserPostsPage";
 import EditProfileModal from "./EditProfileModal";
+import { io } from 'socket.io-client'
 
 export const Container = styled.div`
   width: 100vw;
@@ -119,6 +128,9 @@ export const Accept = styled.button`
     color: #3fa796;
   }
 `;
+
+let socket;
+
 const UserProfilePage = ({
   user,
   connection,
@@ -131,13 +143,31 @@ const UserProfilePage = ({
   acceptRequest,
   photos,
   posts,
+  getPosts,
+  getPhotos,
+  getUsers,
+  getConnections
 }) => {
   const history = useHistory();
+
+  useEffect(() => {
+    socket = io();
+
+    socket.on("createPost", (creatorId) => {
+      getPosts();
+      getPhotos();
+      getUsers();
+      getConnections();
+    });
+
+    return () => socket.emit("forceDisconnect");
+  }, []);
 
   const sendMessage = (user) => {
     history.push("/conversation/" + user.id);
   };
-
+  console.log(auth.id !== user.id)
+  console.log(connection.id)
   return (
     <Container>
       <Profile>
@@ -197,7 +227,7 @@ const UserProfilePage = ({
             ) : (
               <div>
                 {
-                  auth.isPrivate === true ?
+                  auth.isPrivate === false ?
                   <Button
                   sx={{
                     backgroundColor: "#3FA796",
@@ -313,15 +343,24 @@ const mapState = (state, { match }) => {
 
 const mapDispatch = (dispatch) => {
   return {
-    follow: (auth, user) => {
+    follow: async (auth, user) => {
       dispatch(addConnection(auth, user));
+      socket.emit("createPost");
     },
-    unfollow: (connection) => {
+    unfollow: async (connection) => {
       dispatch(deleteConnection(connection));
+      socket.emit("createPost");
     },
-    acceptRequest: (connection, user, auth) => {
+    acceptRequest: async (connection, user, auth) => {
       dispatch(updateConnection(connection, user, auth));
+      socket.emit("createPost");
     },
+    getPosts: () => dispatch(setPosts()),
+    getPhotos: () => dispatch(setPhotos()),
+    getUsers: () => {
+      dispatch(setUsers());
+    },
+    getConnections: () => dispatch(setConnections())
   };
 };
 
