@@ -347,15 +347,15 @@ const mapState = (state, { match }) => {
 const mapDispatch = (dispatch) => {
   return {
     follow: async (auth, user) => {
-      dispatch(addConnection(auth, user));
+      await dispatch(addConnection(auth, user));
       socket.emit("createPost");
     },
     unfollow: async (connection) => {
-      dispatch(deleteConnection(connection));
+      await dispatch(deleteConnection(connection));
       socket.emit("createPost");
     },
     acceptRequest: async (connection, user, auth) => {
-      dispatch(updateConnection(connection, user, auth));
+      await dispatch(updateConnection(connection, user, auth));
       socket.emit("createPost");
     },
     getPosts: () => dispatch(setPosts()),
