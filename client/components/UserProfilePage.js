@@ -160,7 +160,10 @@ const UserProfilePage = ({
       getConnections();
     });
 
-    return () => socket.emit("forceDisconnect");
+    return () => {
+      socket.emit("forceDisconnect");
+      socket = null;
+    }
   }, []);
 
   const sendMessage = (user) => {
@@ -227,7 +230,7 @@ const UserProfilePage = ({
             ) : (
               <div>
                 {
-                  auth.isPrivate === false ?
+                  auth.isPrivate === true ?
                   <Button
                   sx={{
                     backgroundColor: "#3FA796",
